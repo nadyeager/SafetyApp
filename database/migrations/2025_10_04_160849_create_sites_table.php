@@ -14,7 +14,7 @@ return new class extends Migration
     Schema::create('sites', function (Blueprint $table) {
         $table->id(); 
         $table->string('name'); 
-        $table->enum('category', ['HO', 'Cabang', 'Representative', 'Obvitnas'])->nullable();
+       $table->enum('category', ['HO', 'branch', 'representative', 'site'])->nullable();
         $table->string('address')->nullable();
         $table->timestamps();
     });

@@ -47,6 +47,6 @@ class User extends Authenticatable
 
     public function sites()
     {
-        return $this->hasMany(Site::class);
+        return $this->hasMany(Sites::class);
     }
 }

@@ -2,6 +2,18 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AccidentController;
+use App\Http\Controllers\AssessmentsController;
+use App\Http\Controllers\TrainingsController;
+use App\Http\Controllers\InspectionsController;
+use App\Http\Controllers\ManhoursController;
+use App\Http\Controllers\ManpowerController;
+use App\Http\Controllers\SafetyActivitiesController;
+use App\Http\Controllers\SitesController;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\UserDashboardController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -23,23 +35,27 @@ Route::get('/', function () {
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-//ADMIN
-    Route::middleware(['auth', 'role:admin'])->group(function () {
-        Route::get('/admin/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
-    });
+/// ADMIN
+Route::middleware(['auth', 'admin'])->group(function () {
+     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::resource('/sites', SitesController::class);
 
-
+});
 
 
 
 
 //USER
-Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/user/dashboard', function () {
-        return view('user.dashboard');
-    })->name('user.dashboard');
+Route::middleware(['auth', 'user'])->group(function () {
+     Route::get('/user/dashboard',[UserDashboardController::class, 'index'])->name('user.dashboard');
+    Route::resource('/accidents', AccidentController::class);
+    Route::resource('/inspections', InspectionsController::class);
+    Route::resource('/trainings', TrainingsController::class);
+    Route::resource('/assessments', AssessmentsController::class);
+    Route::resource('/safety-activities', SafetyActivitiesController::class);
+    Route::resource('/manpowers', ManpowerController::class);
+    Route::resource('/manhours', ManhoursController::class);
+
     
 });
 

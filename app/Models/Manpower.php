@@ -18,9 +18,10 @@ class Manpower extends Model
         'year',
     ];
 
+
     public function site()
     {
-        return $this->belongsTo(Site::class);
+        return $this->belongsTo(Sites::class);
     }
 
 }

@@ -3,17 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Site;
 
-class SitesController extends Controller
+class ManhourController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $sites = Site::all();
-       return view('sites.index', compact('sites'));
+        //
     }
 
     /**
@@ -21,7 +19,7 @@ class SitesController extends Controller
      */
     public function create()
     {
-        return view('sites.create');
+        //
     }
 
     /**
