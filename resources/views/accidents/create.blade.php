@@ -7,7 +7,7 @@
     <form action="{{ route: accidents.store }}" method="POST">
         <div class="border border-collapse border-spacing-2">
             <tr>
-                <th clas
+                <th clas ></th>
             </tr>
         </div>
     </form>
