@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+       
     ];
 
     /**
@@ -47,6 +48,6 @@ class User extends Authenticatable
 
     public function sites()
     {
-        return $this->hasMany(Sites::class);
+        return $this->belongsTo(Sites::class);
     }
 }

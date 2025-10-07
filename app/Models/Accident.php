@@ -18,6 +18,7 @@ class Accident extends Model
         'status',
     ];
 
+
     public function site()
     {
         return $this->belongsTo(Sites::class);

@@ -48,6 +48,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 //USER
 Route::middleware(['auth', 'user'])->group(function () {
      Route::get('/user/dashboard',[UserDashboardController::class, 'index'])->name('user.dashboard');
+     Route::get('sites', [SitesController::class, 'index'])->name('sites.index');
     Route::resource('/accidents', AccidentController::class);
     Route::resource('/inspections', InspectionsController::class);
     Route::resource('/trainings', TrainingsController::class);

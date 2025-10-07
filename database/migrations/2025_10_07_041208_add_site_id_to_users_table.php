@@ -9,16 +9,14 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-           $table->unsignedBigInteger('site_id')->nullable()->after('role'); // tambah kolom site_id
-           $table->foreign('site_id')
-              ->references('id')
-              ->on('sites')
-              ->onDelete('cascade');
+            $table->unsignedBigInteger('site_id')->after('id')->nullable(); // tambahkan kolom
+            $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
         });
     }
+
 
     /**
      * Reverse the migrations.
