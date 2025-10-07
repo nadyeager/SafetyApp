@@ -10,6 +10,7 @@
       <div class="hidden md:flex md:items-center md:space-x-6">
         <a href="{{ route('user.dashboard') }}" class="text-white hover:text-gray-300">Dashboard</a>
         <a href="{{ route('accidents.index') }}" class="text-white hover:text-gray-300">Accidents</a>
+        <a href="{{ route('inspections.index') }}" class="text-white hover:text-gray-300">Inspections</a>
         <form action="{{ route('logout') }}" method="POST">
           @csrf
           <button type="submit" class="text-white hover:text-red-400 bg-transparent border-0 cursor-pointer">Logout</button>
