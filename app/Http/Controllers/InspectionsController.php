@@ -58,7 +58,7 @@ class InspectionsController extends Controller
 
         return redirect()->route('inspections.index')->with('success', 'Inspection created successfully.');
     }
-
+ 
     /**
      * Show the form for editing the specified resource.
      */
