@@ -13,6 +13,8 @@ use App\Http\Controllers\SafetyActivitiesController;
 use App\Http\Controllers\SitesController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
 
 
 /*
@@ -26,22 +28,42 @@ use App\Http\Controllers\UserDashboardController;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login');
+// Root redirect ke login
+Route::get('/dashboard', function() {
+    if(auth()->check()){
+        return auth()->user()->role === 'admin'
+            ? redirect('/admin/dashboard')
+            : redirect('/user/dashboard');
+    }
+    return view('login');
 });
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Login routes
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+
+
+
+
 
 
 /// ADMIN
 Route::middleware(['auth', 'admin'])->group(function () {
      Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::resource('/sites', SitesController::class);
+    Route::get('/admin/users', [AdminDashboardController::class, 'indexUser'])
+         ->name('admin.user.index');
+
+    Route::get('/admin/users/edit', [AdminDashboardController::class, 'edit'])
+         ->name('admin.user.edit');
+
+    Route::put('/admin/users/', [AdminDashboardController::class, 'update'])
+         ->name('admin.user.update');
 
 });
-
 
 
 
@@ -65,5 +87,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 
 require __DIR__.'/auth.php';

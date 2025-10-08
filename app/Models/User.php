@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'site_id',
         'role',
        
     ];
@@ -48,6 +49,6 @@ class User extends Authenticatable
 
     public function sites()
     {
-        return $this->belongsTo(Sites::class);
+        return $this->belongsTo(Sites::class, 'site_id');
     }
 }

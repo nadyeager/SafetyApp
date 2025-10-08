@@ -10,11 +10,11 @@ class SitesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $sites = Sites::all();
-        return view('sites.index', compact('sites'));
-    }
+    // public function index()
+    // {
+    //     $sites = Sites::all();
+    //     return view('sites.index', compact('sites'));
+    // }
 
     /**
      * Show the form for creating a new resource.
