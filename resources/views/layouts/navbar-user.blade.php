@@ -12,6 +12,7 @@
         <a href="{{ route('accidents.index') }}" class="text-white hover:text-gray-300">Accidents</a>
         <a href="{{ route('inspections.index') }}" class="text-white hover:text-gray-300">Inspections</a>
         <a href="{{ route('trainings.index') }}" class="text-white hover:text-gray-300">Trainings</a>
+        <a href="{{ route('assessments.index') }}" class="text-white hover:text-gray-300">Assessments</a>
         <form action="{{ route('logout') }}" method="POST">
           @csrf
           <button type="submit" class="text-white hover:text-red-400 bg-transparent border-0 cursor-pointer">Logout</button>
