@@ -1,75 +1,71 @@
 @extends('layouts.app')
 
-@section('title', 'Buat Accident Investigation')
-
+@section('title', 'Detail Accident')
 @section('content')
 <div class="container">
+    <h2>Detail Accident</h2>
 
-    {{-- Pesan sukses / error --}}
-    @if (session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 p-3 rounded mb-3">
-            {{ session('success') }}
+    <div class="card mb-4">
+        <div class="card-body">
+            <p><strong>Tanggal:</strong> {{ $accident->date }}</p>
+            <p><strong>Tipe:</strong> {{ ucfirst($accident->type) }}</p>
+            <p><strong>Deskripsi:</strong> {{ $accident->description }}</p>
+            <p><strong>Status Accident:</strong> {{ ucfirst($accident->status) }}</p>
         </div>
-    @endif
+    </div>
 
-    @if ($errors->any())
-        <div class="bg-red-100 border border-red-400 text-red-700 p-3 rounded mb-3">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <hr>
 
-    @if (!$investigation)
-        <h1>Buat Accident Investigation</h1>
-
+    {{-- INVESTIGATION --}}
+    @if(!$accident->investigation)
+        <h4>Buat Investigation</h4>
         <form action="{{ route('investigations.store') }}" method="POST">
             @csrf
             <input type="hidden" name="accident_id" value="{{ $accident->id }}">
 
-            <div>
-                <x-input-label for="investigator" :value="__('Investigator')" />
-                <x-text-input id="investigator" name="investigator" type="text"
-                    class="mt-1 block w-full" :value="old('investigator')" required autofocus />
-                <x-input-error :messages="$errors->get('investigator')" class="mt-2" />
+            <div class="mb-3">
+                <label>Investigator</label>
+                <input type="text" name="investigator" class="form-control" required>
             </div>
 
-            <div>
-                <x-input-label for="root_cause" :value="__('Root Cause')" />
-                <x-text-input id="root_cause" name="root_cause" type="text"
-                    class="mt-1 block w-full" :value="old('root_cause')" required />
-                <x-input-error :messages="$errors->get('root_cause')" class="mt-2" />
+            <div class="mb-3">
+                <label>Root Cause</label>
+                <input type="text" name="root_cause" class="form-control" required>
             </div>
 
-            <div>
-                <x-input-label for="corrective_action" :value="__('Corrective Action')" />
-                <x-text-input id="corrective_action" name="corrective_action" type="text"
-                    class="mt-1 block w-full" :value="old('corrective_action')" required />
-                <x-input-error :messages="$errors->get('corrective_action')" class="mt-2" />
+            <div class="mb-3">
+                <label>Corrective Action</label>
+                <input type="text" name="corrective_action" class="form-control" required>
             </div>
 
-            <div>
-                <x-input-label for="status" :value="__('Status')" />
-                <select name="status" id="status" class="mt-1 block w-full border-gray-300 rounded">
-                    <option value="open" {{ old('status') == 'open' ? 'selected' : '' }}>Open</option>
-                    <option value="close" {{ old('status') == 'close' ? 'selected' : '' }}>Close</option>
+            <div class="mb-3">
+                <label>Status</label>
+                <select name="status" class="form-select" required>
+                    <option value="open">Open</option>
+                    <option value="close">Close</option>
                 </select>
-                <x-input-error :messages="$errors->get('status')" class="mt-2" />
             </div>
 
-            <div class="mt-4">
-                <button type="submit"
-                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                    Simpan
-                </button>
-            </div>
+            <button type="submit" class="btn btn-primary">Simpan Investigation</button>
         </form>
     @else
-        <h5>Investigasi sudah dibuat</h5>
-        <p><strong>Investigator:</strong> {{ $investigation->investigator }}</p>
-        <p><strong>Status:</strong> {{ ucfirst($investigation->status) }}</p>
+        <h4>Investigation</h4>
+        <div class="card p-3 mb-3">
+            <p><strong>Investigator:</strong> {{ $accident->investigation->investigator }}</p>
+            <p><strong>Root Cause:</strong> {{ $accident->investigation->root_cause }}</p>
+            <p><strong>Corrective Action:</strong> {{ $accident->investigation->corrective_action }}</p>
+            <p><strong>Status:</strong> {{ ucfirst($accident->investigation->status) }}</p>
+        </div>
+
+        <a href="{{ route('investigations.edit', $accident->investigation->id) }}" class="btn btn-warning">Edit</a>
+        <form action="{{ route('investigations.destroy', $accident->investigation->id) }}" method="POST" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin mau hapus?')">Hapus</button>
+        </form>
     @endif
+
+    <br>
+    <a href="{{ route('accidents.index') }}" class="btn btn-secondary mt-3">Kembali</a>
 </div>
 @endsection
