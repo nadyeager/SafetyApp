@@ -22,13 +22,14 @@
     <!-- Pilih site -->
     <div class="mb-4">
         <label class="block font-medium">Pilih Site:</label>
-       <select name="site_id" class="border rounded w-full px-3 py-2">
+      <select name="site_id" class="border rounded w-full px-3 py-2">
     @foreach($sites as $site)
         <option value="{{ $site->id }}" {{ $user->site_id == $site->id ? 'selected' : '' }}>
             {{ $site->name }}
         </option>
     @endforeach
 </select>
+
 
     </div>
 

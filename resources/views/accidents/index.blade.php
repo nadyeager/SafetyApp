@@ -33,6 +33,7 @@
                         @csrf @method('DELETE')
                         <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin mau hapus?')">Delete</button>
                     </form>
+                    <a href="{{ route('accidents.show', $accident->id) }}" class="btn btn-sm btn-info">Detail</a>
                 </td>
             </tr>
             @endforeach

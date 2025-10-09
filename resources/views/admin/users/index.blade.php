@@ -17,7 +17,7 @@
         <tr class="hover:bg-gray-100">
             <td class="border px-4 py-2">{{ $user->name }}</td>
             <td class="border px-4 py-2">{{ $user->email }}</td>
-            <td class="border px-4 py-2">{{ $user->sites->name ?? '-' }}</td>
+            <td class="border px-4 py-2">{{ $user->site->name ?? '-' }}</td>
             <td class="border px-4 py-2">
                 <a href="{{ route('admin.user.edit', $user->id) }}" 
                    class="text-blue-600 hover:underline">

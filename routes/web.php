@@ -14,6 +14,7 @@ use App\Http\Controllers\SitesController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Accident_InvestigationsController;
 
 
 
@@ -50,19 +51,19 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 
 
 
-/// ADMIN
+// ADMIN
 Route::middleware(['auth', 'admin'])->group(function () {
-     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
+        ->name('admin.dashboard');
+
     Route::resource('/sites', SitesController::class);
+
+    // Daftar user
     Route::get('/admin/users', [AdminDashboardController::class, 'indexUser'])
-         ->name('admin.user.index');
+        ->name('admin.user.index');
 
-    Route::get('/admin/users/edit', [AdminDashboardController::class, 'edit'])
-         ->name('admin.user.edit');
-
-    Route::put('/admin/users/', [AdminDashboardController::class, 'update'])
-         ->name('admin.user.update');
-
+Route::get('/admin/users/{user}/edit', [AdminDashboardController::class, 'edit'])->name('admin.user.edit');
+Route::put('/admin/users/{user}', [AdminDashboardController::class, 'update'])->name('admin.user.update');
 });
 
 
@@ -72,6 +73,7 @@ Route::middleware(['auth', 'user'])->group(function () {
      Route::get('/user/dashboard',[UserDashboardController::class, 'index'])->name('user.dashboard');
      Route::get('sites', [SitesController::class, 'index'])->name('sites.index');
     Route::resource('/accidents', AccidentController::class);
+    Route::resource('/investigations', Accident_InvestigationsController::class);
     Route::resource('/inspections', InspectionsController::class);
     Route::resource('/trainings', TrainingsController::class);
     Route::resource('/assessments', AssessmentsController::class);

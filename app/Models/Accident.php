@@ -18,6 +18,10 @@ class Accident extends Model
         'status',
     ];
 
+    public function investigation()
+{
+    return $this->hasOne(Accident_Investigations::class, 'accident_id');
+}
 
     public function site()
     {

@@ -19,7 +19,7 @@ class AdminDashboardController extends Controller
 {
     $this->authorizeAdmin();
 
-    $users = User::with('sites')
+    $users = User::with('site')
                 ->where('role', 'user') 
                 ->get();
 

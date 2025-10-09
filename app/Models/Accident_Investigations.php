@@ -9,6 +9,8 @@ class Accident_Investigations extends Model
 {
     use HasFactory;
 
+    protected $table = 'accident_investigations';
+
     protected $fillable = [
         'accident_id',
         'investigator',
@@ -19,6 +21,6 @@ class Accident_Investigations extends Model
 
     public function accident()
     {
-        return $this->belongsTo(Accident::class);
+        return $this->belongsTo(Accident::class, 'accident_id');
     }
 }

@@ -47,7 +47,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function sites()
+    public function site()
     {
         return $this->belongsTo(Sites::class, 'site_id');
     }

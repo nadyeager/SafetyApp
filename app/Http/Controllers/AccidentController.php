@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Accident;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Accident_Investigations;
 
 class AccidentController extends Controller
 {
@@ -57,6 +58,12 @@ class AccidentController extends Controller
         ]);
 
         return redirect()->route('accidents.index')->with('success', 'Accident created successfully.');
+    }
+
+    public function show(Accident $accident)
+    {
+        $investigation = $accident->investigation;
+        return view('accidents.detail', compact('accident', 'investigation'));
     }
 
     /**
