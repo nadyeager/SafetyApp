@@ -18,7 +18,7 @@ class TrainingsController extends Controller
             $trainings = Trainings::with(['site', 'user'])->latest()->paginate(10);
         } else {
             $trainings = Trainings::with(['site', 'user'])
-                ->where('site_id', Auth::user()->site_id)
+                ->where('user_id', Auth::id())
                 ->latest()
                 ->paginate(10);
         }

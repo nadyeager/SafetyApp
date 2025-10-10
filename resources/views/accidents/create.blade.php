@@ -7,21 +7,6 @@
 
 <form action="{{ route('accidents.store') }}" method="POST" class="space-y-4">
     @csrf
-
-    {{-- Site_ID --}}
-    {{-- <div>
-        <x-input-label for="site_id" :value="__('Site')" class="text-black" />
-        <select name="site_id" id="site_id" class="mt-1 block w-full border-gray-300 rounded">
-            <option value="">-- pilih --</option>
-            @foreach($sites as $s)
-                <option value="{{ $s->id }}" {{ old('site_id') == $s->id ? 'selected' : '' }}>
-                    {{ $s->name }}
-                </option>
-            @endforeach
-        </select>
-        <x-input-error :messages="$errors->get('site_id')" class="mt-2" />
-    </div> --}}
-
     {{-- Type --}}
     <div>
         <x-input-label for="type" :value="__('Type')" class="text-black" />

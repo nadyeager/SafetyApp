@@ -18,7 +18,7 @@ class InspectionsController extends Controller
             $inspections = Inspections::with(['site', 'user'])->latest()->paginate(10);
         } else {
             $inspections = Inspections::with(['site', 'user'])
-                ->where('site_id', Auth::user()->site_id)
+                ->where('user_id', Auth::id())
                 ->latest()
                 ->paginate(10);
         }

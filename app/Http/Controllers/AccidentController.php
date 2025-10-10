@@ -20,7 +20,7 @@ class AccidentController extends Controller
         } else {
            
             $accidents = Accident::with(['site', 'user'])
-                ->where('site_id', Auth::user()->site_id)
+                ->where('user_id', Auth::id())
                 ->latest()
                 ->paginate(10);
         }
@@ -39,7 +39,7 @@ class AccidentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Accident $accident)
     {
         $request->validate([
             'type' => 'required|in:fatal,major,minor,traffic,non-work',

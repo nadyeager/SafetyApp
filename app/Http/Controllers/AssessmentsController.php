@@ -18,7 +18,7 @@ class AssessmentsController extends Controller
             $assessments = Assessments::with(['site','user'])->latest()->paginate(10);
         } else {
             $assessments = Assessments::with(['site','user'])
-                ->where('site_id', Auth::user()->site_id)
+                ->where('user_id', Auth::id())
                 ->latest()
                 ->paginate(10);
         }

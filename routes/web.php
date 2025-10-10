@@ -75,12 +75,12 @@ Route::middleware(['auth', 'user'])->group(function () {
   Route::resource('accidents', AccidentController::class);
 Route::resource('investigations', Accident_InvestigationsController::class)
     ->only(['index', 'store', 'edit', 'update', 'destroy']);
-    Route::resource('/inspections', InspectionsController::class);
-    Route::resource('/trainings', TrainingsController::class);
-    Route::resource('/assessments', AssessmentsController::class);
-    Route::resource('/safety-activities', SafetyActivitiesController::class);
-    Route::resource('/manpowers', ManpowerController::class);
-    Route::resource('/manhours', ManhoursController::class);
+    Route::resource('inspections', InspectionsController::class);
+    Route::resource('trainings', TrainingsController::class);
+    Route::resource('assessments', AssessmentsController::class);
+    Route::resource('safety-activities', SafetyActivitiesController::class);
+    Route::resource('manpowers', ManpowerController::class);
+    Route::resource('manhours', ManhoursController::class);
 
     
 });
