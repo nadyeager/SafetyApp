@@ -20,7 +20,7 @@ class ManpowerController extends Controller
     }
 
     $manpower = $query->paginate(10); 
-    return view('manpower.index', compact('manpower'));
+    return view('manpowers.index', compact('manpower'));
 }
 
     /**
