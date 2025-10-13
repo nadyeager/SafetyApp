@@ -28,6 +28,7 @@ use App\Http\Controllers\Accident_InvestigationsController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::redirect('/', '/login');
 
 // Root redirect ke login
 Route::get('/', function() {
