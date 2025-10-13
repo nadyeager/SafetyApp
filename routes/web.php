@@ -30,13 +30,13 @@ use App\Http\Controllers\Accident_InvestigationsController;
 */
 
 // Root redirect ke login
-Route::get('/dashboard', function() {
+Route::get('/', function() {
     if(auth()->check()){
         return auth()->user()->role === 'admin'
             ? redirect('/admin/dashboard')
             : redirect('/user/dashboard');
     }
-    return view('login');
+    return view('auth.login');
 });
 
 
