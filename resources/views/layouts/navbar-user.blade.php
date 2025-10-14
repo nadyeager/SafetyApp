@@ -6,6 +6,11 @@
         <span class="font-medium">Monday - Friday</span>
         <span class="text-gray-600">| 08.00 - 17.00</span>
       </div>
+       <div class="flex items-center">
+          <a href="{{ route('user.dashboard') ?? url('/') }}" class="flex items-center space-x-3">
+            <img src="{{ asset('images/logo.png') }}" alt="logo" class="w-[90px] h-[60px] object-contain" />
+          </a>
+        </div>
       <div id="top-date-time" class="text-right text-sm font-medium"></div>
     </div>
     <script>
@@ -48,9 +53,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16">
             <div class="flex items-center">
-          <a href="{{ route('user.dashboard') ?? url('/') }}" class="flex items-center space-x-3">
-            <img src="{{ asset('images/logo.png') }}" alt="logo" class="w-[90px] h-[60px] object-contain" />
-          </a>
+
         </div>
       <!-- Brand -->
       <!-- <div class="flex-shrink-0 flex items-center">
@@ -88,7 +91,7 @@
   </div>
 
   <!-- Mobile Menu -->
-  <div x-show="open" @click.away="open = false" class="md:hidden bg-gray-700">
+  <div x-show="open" @click.away="open = false" class="md:hidden bg-blue-400">
     <div class="px-2 pt-2 pb-3 space-y-1">
       <a href="{{ route('user.dashboard') }}" class="block px-3 py-2 text-white hover:bg-gray-600 rounded">Dashboard</a>
       <a href="{{ route('accidents.index') }}" class="block px-3 py-2 text-white hover:bg-gray-600 rounded">Accidents</a>

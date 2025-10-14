@@ -28,16 +28,16 @@ use App\Http\Controllers\Accident_InvestigationsController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::redirect('/', '/login');
+// Route::redirect('/', '/login');
 
 // Root redirect ke login
-Route::get('/dashboard', function() {
+Route::get('/', function() {
     if(auth()->check()){
         return auth()->user()->role === 'admin'
             ? redirect('/admin/dashboard')
             : redirect('/user/dashboard');
     }
-    return view('login');
+    return view('auth.login');
 });
 
 
