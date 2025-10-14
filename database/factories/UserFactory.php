@@ -21,7 +21,11 @@ class UserFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
      protected $model = \App\Models\User::class;
+
+
+
     public function definition(): array
     {
         return [
@@ -30,7 +34,9 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'role' => 'user',
+
             'site_id' => \App\Models\Sites::inRandomOrder()->first()->id, 
+
             'remember_token' => Str::random(10),
         ];
     }

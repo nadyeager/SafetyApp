@@ -5,7 +5,9 @@ import Chart from 'chart.js/auto';
 document.addEventListener('DOMContentLoaded', () => {
 
     // ====================================================
+
     // 🧍‍♂️ TOTAL MANPOWER (Horizontal Bar)
+
     // ====================================================
     const chartElement = document.getElementById('manpowerChart');
     if (chartElement) {
@@ -44,7 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const labels = JSON.parse(chartElement2.dataset.labels || '[]');
         const data = JSON.parse(chartElement2.dataset.data || '[]');
 
+
         new Chart(chartElement2, { // ⚠️ sebelumnya typo: new chartElement → harus Chart
+
             type: 'doughnut',
             data: {
                 labels: labels,
@@ -74,7 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ====================================================
+
     // ⛰️ TOTAL MANHOURS (Area Chart - “Gunung”)
+
+
     // ====================================================
     const chartElement3 = document.getElementById('manhoursChart');
     if (chartElement3) {
@@ -126,7 +133,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const labels = JSON.parse(chartElement4.dataset.labels || '[]');
         const data = JSON.parse(chartElement4.dataset.data || '[]');
 
+
         new Chart(chartElement4, { // ⚠️ sebelumnya typo: new chart → harus Chart
+
             type: 'pie',
             data: {
                 labels: labels,
@@ -176,5 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ====================================================
 import Alpine from 'alpinejs';
 window.Alpine = Alpine;
+
 Alpine.start();
  
+

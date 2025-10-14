@@ -14,8 +14,10 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
+`
     UserSeeder::class,
 ]);
+
         // $this->call([
         //     AdminUserSeeder::class,
         //     SitesSeeder::class,
@@ -31,5 +33,5 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-    }
+        }
 }
