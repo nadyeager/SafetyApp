@@ -21,7 +21,7 @@
             <h3 class="text-lg font-medium text-gray-700 mb-4">
                 Total Manpower
             </h3>
-            <canvas id="manpowerChart"
+            <canvas id="manpowerChart"   
                 data-labels='@json($labelsManpower)'
                 data-data='@json($dataManpower)'
                 width="400"
