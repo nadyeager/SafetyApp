@@ -13,8 +13,11 @@ class Inspections extends Model
         'site_id',
         'user_id',
         'type',
+        'notes',
+        'corrective_action',
         'status',
         'date',
+        'close_date',
     ];
 
     public function site()

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.navbar-admin')
 
 @section('content')
 <h2 class="text-2xl font-semibold mb-4 text-black">Daftar User</h2>

@@ -6,52 +6,68 @@
     <title>Admin Dashboard</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-100 font-sans antialiased">
-    <div class="min-h-screen flex">
+<body class="bg-gray-100 font-sans antialiased" x-data="{ sidebarOpen: false }">
+    <!-- Overlay hitam di mobile -->
+    <div 
+        class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+        x-show="sidebarOpen"
+        @click="sidebarOpen = false"
+        x-transition.opacity
+    ></div>
+
+    <!-- Wrapper utama -->
+    <div class="flex h-screen overflow-hidden">
 
         <!-- Sidebar -->
-        <aside class="w-64 bg-white shadow-lg flex flex-col">
-            <div class="p-4 border-b">
-                <h1 class="text-xl font-bold text-gray-800">🧱 Admin Panel</h1>
+        <aside 
+            class="w-64 bg-white shadow-lg flex flex-col fixed inset-y-0 left-0 z-50 transform 
+                   transition-transform duration-300 ease-in-out
+                   md:translate-x-0"
+            :class="{ '-translate-x-full': !sidebarOpen }"
+        >
+            <!-- Header -->
+            <div class="p-4 border-b flex items-center justify-between">
+                <h1 class="text-xl font-bold text-gray-800">Dashboard Admin</h1>
+                <!-- Tombol close di mobile -->
+                <button class="md:hidden text-gray-500" @click="sidebarOpen = false">✖</button>
             </div>
 
-            <nav class="flex-1 p-4 space-y-2">
-                <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">
-                    📊 Dashboard
-                </a>
-
-                <a href="{{ route('admin.user.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">
-                    👥 Kelola User
-                </a>
-
-                <a href="{{ route('sites.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">
-                    🏢 Kelola Site
-                </a>
-
-                {{-- <a href="{{ route('admin.user.edit') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">
-                    📁 edit users
-                </a> --}}
-
-                {{-- <a href="{{ route('settings.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">
-                    ⚙️ Pengaturan
-                </a> --}}
+            <!-- Navigasi -->
+            <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+                <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Dashboard</a>
+                <a href="{{ route('admin.accident.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Accident Data</a>
+                {{-- <a href="#" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Man Hours Data</a>
+                <a href="#" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Accident Reports</a>
+                <a href="#" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Safety Observations</a>
+                <a href="#" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Sites Management</a> --}}
+                <a href="{{ route('admin.user.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Users</a>
             </nav>
 
-            <div class="p-4 border-t">
+            <!-- Tombol Logout -->
+            <div class="p-4 border-t mt-auto">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-200">
-                        🚪 Logout
+                        Logout
                     </button>
                 </form>
             </div>
         </aside>
 
-        <!-- Konten Utama -->
-        <main class="flex-1 p-6">
-            @yield('content')
-        </main>
+        <!-- Konten utama -->
+        <div class="flex-1 flex flex-col md:ml-64">
+            <!-- Navbar atas -->
+            <header class="bg-white shadow p-4 flex items-center justify-between">
+                <button class="md:hidden text-gray-700" @click="sidebarOpen = true">☰</button>
+                <h2 class="text-lg font-bold text-green-600 items-center justify-start">Safety App</h2>
+            </header>
 
+            <!-- Isi dashboard -->
+            <main class="flex-1 overflow-y-auto p-6">
+                @yield('content')
+            </main>
+        </div>
     </div>
 </body>
+
 </html>

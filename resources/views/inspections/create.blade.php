@@ -28,22 +28,20 @@
                 </select>
             </div>
 
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Notes</label>
+                <textarea name="notes" rows="4" class="mt-1 block w-full border-gray-300 rounded">{{ old('notes') }}</textarea>
+            </div>
+
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700">Date</label>
                 <input type="date" name="date" value="{{ old('date', date('Y-m-d')) }}" class="mt-1 block w-full border-gray-300 rounded" />
             </div>
 
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700">Notes</label>
-                <textarea name="notes" rows="4" class="mt-1 block w-full border-gray-300 rounded">{{ old('notes') }}</textarea>
-            </div>
-
-            <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700">Status</label>
-                <select name="status" class="mt-1 block w-full border-gray-300 rounded">
-                    <option value="open" {{ old('status') == 'open' ? 'selected' : '' }}>Open</option>
-                    <option value="close" {{ old('status') == 'close' ? 'selected' : '' }}>Close</option>
-                </select>
+                <input type="hidden" name="status" value="open">
+                <p class="mt-1 text-gray-700">Open</p>
             </div>
 
             <div class="flex items-center space-x-2">

@@ -62,9 +62,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Daftar user
     Route::get('/admin/users', [AdminDashboardController::class, 'indexUser'])
         ->name('admin.user.index');
+        Route::get('/admin/dashboard/accident',[AdminDashboardController::class, 'indexAccident'] )->name('admin.accident.index');
 
 Route::get('/admin/users/{user}/edit', [AdminDashboardController::class, 'edit'])->name('admin.user.edit');
 Route::put('/admin/users/{user}', [AdminDashboardController::class, 'update'])->name('admin.user.update');
+Route::resource('investigations', Accident_InvestigationsController::class);
 });
 
 
@@ -74,8 +76,6 @@ Route::middleware(['auth', 'user'])->group(function () {
      Route::get('/user/dashboard',[UserDashboardController::class, 'index'])->name('user.dashboard');
      Route::get('sites', [SitesController::class, 'index'])->name('sites.index');
   Route::resource('accidents', AccidentController::class);
-Route::resource('investigations', Accident_InvestigationsController::class)
-    ->only(['index', 'store', 'edit', 'update', 'destroy']);
     Route::resource('inspections', InspectionsController::class);
     Route::resource('trainings', TrainingsController::class);
     Route::resource('assessments', AssessmentsController::class);

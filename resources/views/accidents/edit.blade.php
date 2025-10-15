@@ -2,7 +2,7 @@
 
 @section('content')
 
-<form action="{{ route('accidents.update', $accident->id) }}" method="POST">
+<form action="{{ route('accidents.update', $accident->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -11,11 +11,11 @@
         <x-input-label for="type" :value="__('Type')" />
         <select name="type" id="type" class="mt-1 block w-full border-gray-300 rounded">
             <option value="">-- pilih --</option>
-            <option value="fatal" {{ old('type', $accident->type) == 'fatal' ? 'selected' : '' }}>Fatal</option>
-            <option value="major" {{ old('type', $accident->type) == 'major' ? 'selected' : '' }}>Major</option>
-            <option value="minor" {{ old('type', $accident->type) == 'minor' ? 'selected' : '' }}>Minor</option>
-            <option value="traffic" {{ old('type', $accident->type) == 'traffic' ? 'selected' : '' }}>Traffic</option>
-            <option value="non-work" {{ old('type', $accident->type) == 'non-work' ? 'selected' : '' }}>Non Work</option>
+            <option value="Fatality" {{ old('type', $accident->type) == 'Fatality' ? 'selected' : '' }}>Fatality</option>
+            <option value="Major injury" {{ old('type', $accident->type) == 'Major injury' ? 'selected' : '' }}>Major injury</option>
+            <option value="Minor injury" {{ old('type', $accident->type) == 'Minor injury' ? 'selected' : '' }}>Minor injury</option>
+            <option value="Traffic Accident" {{ old('type', $accident->type) == 'Traffic Accident' ? 'selected' : '' }}>Traffic Accident</option>
+            <option value="Non Work Accident" {{ old('type', $accident->type) == 'Non Work Accident' ? 'selected' : '' }}>Non Work Accident</option>
         </select>
         <x-input-error :messages="$errors->get('type')" class="mt-2" />
     </div>
@@ -38,14 +38,21 @@
         <x-input-error :messages="$errors->get('date')" class="mt-2" />
     </div>
 
+    {{-- gambar --}}
+    <div>
+        <x-input-label for="image" :value="__('Image')" />
+      @if ($accident->image)
+      <img src="{{ asset('storage/' . $accident->image) }}" alt="{{ $accident->image }}" width="100" class="mb-2">
+    @endif
+    <x-text-input id="image" name="image" type="file" class="block mt-1 w-full" />
+    <x-input-error :messages="$errors->get('image')" class="mt-2" />
+   </div>
+
     {{-- Status --}}
     <div>
         <x-input-label for="status" :value="__('Status')" />
-        <select name="status" id="status" class="mt-1 block w-full border-gray-300 rounded">
-            <option value="open" {{ old('status', $accident->status) == 'open' ? 'selected' : '' }}>Open</option>
-            <option value="close" {{ old('status', $accident->status) == 'close' ? 'selected' : '' }}>Close</option>
-        </select>
-        <x-input-error :messages="$errors->get('status')" class="mt-2" />
+       <input type="hidden" name="status" value="open">
+       <p class="mt-1 text-gray-700">Open</p>
     </div>
 
     {{-- Submit --}}

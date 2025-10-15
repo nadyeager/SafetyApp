@@ -111,4 +111,19 @@ class InspectionsController extends Controller
 
         return redirect()->route('inspections.index')->with('success', 'Inspection deleted successfully.');
     }
+
+    public function closeInspection(Request $request, Inspections $inspection)
+    {
+         if (!in_array(auth()->user()->role, ['admin', 'site_admin'])) {
+        return back()->with('error', 'Kamu tidak punya izin menutup inspeksi.');
+    }
+
+    $inspection->update([
+        'corrective_action' => $request->corrective_action,
+        'status' => 'close',
+        'close_date' => now(),
+    ]);
+
+    return back()->with('success', 'Laporan inspeksi berhasil ditutup.');
+}
 }

@@ -9,24 +9,28 @@
     <table class="table mt-3">
         <thead>
             <tr>
+                <th>Sites</th>
+                <th>Name</th>
                 <th>Type</th>
                 <th>Description</th>
                 <th>Date</th>
+                <th>Image</th>
                 <th>Status</th>
-                <th>Site</th>
-                <th>User</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach($accidents as $accident)
             <tr>
+                <td>{{ $accident->site->name ?? '-' }}</td>
+                <td>{{ $accident->user->name ?? '-' }}</td>
                 <td>{{ $accident->type }}</td>
                 <td>{{ $accident->description }}</td>
                 <td>{{ $accident->date }}</td>
+                <td>
+                    <img src="{{ asset('storage/' . $accident->image) }}" alt="{{ $accident->image }}" width="100">
+                </td>
                 <td>{{ $accident->status }}</td>
-                <td>{{ $accident->site->name ?? '-' }}</td>
-                <td>{{ $accident->user->name ?? '-' }}</td>
                 <td>
                     <a href="{{ route('accidents.edit', $accident) }}" class="btn btn-sm btn-warning">Edit</a>
                     <form action="{{ route('accidents.destroy', $accident) }}" method="POST" style="display:inline-block;">

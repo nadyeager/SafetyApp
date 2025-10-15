@@ -1,7 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.navbar-admin')
 
 @section('content')
-<div class="container mx-auto space-y-6 ">
+<div class="space-y-6 ">
 
     <div class="bg-white rounded-xl shadow p-6 flex items-center justify-between">
     <div>
@@ -11,6 +11,39 @@
     </div>
      <div class="text-sm text-gray-500">Dashboard Admin</div>
     </div>
+
+   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+  <div class="bg-white shadow rounded-xl p-4">
+    <p class="text-sm text-gray-500">Total Manpower</p>
+    <h3 class="text-2xl font-bold text-blue-600">1,254</h3>
+  </div>
+  <div class="bg-white shadow rounded-xl p-4">
+    <p class="text-sm text-gray-500">Total Manhours</p>
+    <h3 class="text-2xl font-bold text-gray-700">58,220</h3>
+  </div>
+<div class="bg-white shadow rounded-xl p-4">
+    <p class="text-sm text-gray-500">Total Incident</p>
+    <h3 class="text-2xl font-bold text-yellow-600">1,254</h3>
+  </div>
+  <div class="bg-white shadow rounded-xl p-4">
+    <p class="text-sm text-gray-500">Lost Time Injury</p>
+    <h3 class="text-2xl font-bold text-red-600">1,254</h3>
+  </div>
+  <div class="bg-white shadow rounded-xl p-4">
+    <p class="text-sm text-gray-500">Days Without Incident</p>
+    <h3 class="text-2xl font-bold text-green-600">1000</h3>
+  </div>
+   <div class="bg-white shadow rounded-xl p-4">
+    <p class="text-sm text-gray-500">Total Sites</p>
+    <h3 class="text-2xl font-bold text-pink-600">1000</h3>
+  </div>
+   <div class="bg-white shadow rounded-xl p-4">
+    <p class="text-sm text-gray-500">Safety Observation Reports</p>
+    <h3 class="text-2xl font-bold text-yellow-300">1000</h3>
+  </div>
+
+   </div>
+
 
 
     {{-- Grid 2 kolom untuk chart --}}

@@ -42,11 +42,14 @@ class AccidentController extends Controller
     public function store(Request $request, Accident $accident)
     {
         $request->validate([
-            'type' => 'required|in:fatal,major,minor,traffic,non-work',
+            'type' => 'required|in:Fatality,Major injury,Minor injury,Traffic Accident,Non Work Accident',
             'description' => 'required|string',
             'date' => 'required|date',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|in:open,close',
         ]);
+
+        $imagePath = $request->file('image') ? $request->file('image')->store('accidents_image', 'public') : null;
 
         Accident::create([
             'site_id' => Auth::user()->site_id, // otomatis ambil site user
@@ -54,6 +57,7 @@ class AccidentController extends Controller
             'type' => $request->type,
             'description' => $request->description,
             'date' => $request->date,
+            'image' => $imagePath,
             'status' => $request->status,
         ]);
 
@@ -92,13 +96,21 @@ class AccidentController extends Controller
             'type' => 'required|in:fatal,major,minor,traffic,non-work',
             'description' => 'required|string',
             'date' => 'required|date',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|in:open,close',
         ]);
+
+        $imagePath = $accident->image;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image') ?  $request->file('image')->store('accident_image', 'public') : $accident->image;
+        }
 
         $accident->update([
             'type' => $request->type,
             'description' => $request->description,
             'date' => $request->date,
+            'image' => $request->file('image') ? $imagePath : $imagePath,
             'status' => $request->status,
         ]);
 

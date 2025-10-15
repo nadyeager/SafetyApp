@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Sites;
 use App\Models\Manpower;
 use App\Models\Manhours;
+use App\Models\Accident;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -73,6 +74,12 @@ class AdminDashboardController extends Controller
     return view('admin.users.index', compact('users'));
 }
 
+public function indexAccident() {
+
+    $accidents = Accident::with(['site', 'user'])->latest()->paginate(10);
+    return view('admin.accident', compact('accidents'));
+}
+
 
     // Form edit site user
     public function edit(User $user)
@@ -82,6 +89,8 @@ class AdminDashboardController extends Controller
         $sites = Sites::all();
         return view('admin.users.edit', compact('user', 'sites'));
     }
+
+    
 
     // Update site user
    public function update(Request $request, User $user)
