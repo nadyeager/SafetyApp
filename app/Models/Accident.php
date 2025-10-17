@@ -21,7 +21,7 @@ class Accident extends Model
 
     public function investigation()
 {
-    return $this->hasOne(Accident_Investigations::class, 'accident_id');
+    return $this->hasMany(Accident_Investigations::class, 'accident_id');
 }
 
     public function site()

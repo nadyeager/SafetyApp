@@ -7,6 +7,8 @@ use App\Models\Sites;
 use App\Models\Manpower;
 use App\Models\Manhours;
 use App\Models\Accident;
+use App\Models\Accident_Investigations;
+use App\Models\Inspections;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -63,6 +65,7 @@ class AdminDashboardController extends Controller
         'lastUpdatedMonth',)); // resources/views/admin/dashboard.blade.php
     }
 
+    // Daftar user
    public function indexUser()
 {
     $this->authorizeAdmin();
@@ -74,12 +77,29 @@ class AdminDashboardController extends Controller
     return view('admin.users.index', compact('users'));
 }
 
+// Daftar accident
 public function indexAccident() {
 
     $accidents = Accident::with(['site', 'user'])->latest()->paginate(10);
-    return view('admin.accident', compact('accidents'));
+    return view('admin.accident.index', compact('accidents'));
 }
 
+public function filteredAccident(Request $request) {
+    
+    $query = Accident::query();
+
+    if ($request->status)  {
+         $query->where('status', $request->status);
+}
+
+if ($request->type) {
+    $query->where('type', $request->type);
+}
+
+$accidents = $query->get();
+
+return view('admin.accident.index', compact('accidents'));
+}
 
     // Form edit site user
     public function edit(User $user)
@@ -117,4 +137,59 @@ public function indexAccident() {
             abort(403, 'Anda tidak memiliki akses.');
         }
     }
+
+    //accident show
+    public function show(Accident $accident)
+    {
+        $accident_investigations = Accident_Investigations::where('accident_id', $accident->id)->get();
+        return view('admin.accident.show', compact('accident', 'accident_investigations'));
+    }
+
+    //index inspection admin
+
+    public function indexInspection(Request $request, Inspections $inspection) {
+
+        $month = $request->input('month', now()->format('Y-m'));
+        $monthNumber = date('m', strtotime($month));
+ 
+        $managementOpen = Inspections::type('management')->status('open')->whereMonth('date', $monthNumber)->count();
+        $managementClose = Inspections::type('management')->status('close')->whereMonth('date', $monthNumber)->count();
+        $routineOpen = Inspections::type('routine')->status('open')->whereMonth('date', $monthNumber)->count();
+        $routineClose = Inspections::type('routine')->status('close')->whereMonth('date', $monthNumber)->count();
+
+        $inspection = Inspections::with(['site', 'user'])
+        ->whereMonth('date', $monthNumber)
+        ->latest()
+        ->get();
+
+        return view('admin.inspection.index', compact('inspection', 'managementOpen', 'managementClose', 'routineOpen', 'routineClose'));
+    }
+
+    public function showInspection(Inspections $inspection) {
+        return view('admin.inspection.show', compact('inspection'));
+    }
+
+    public function updateInspection(Request $request, Inspections $inspection) {
+        $request->validate([
+            'type' => 'required|in:management,routine',
+            'notes' => 'required|string',
+            'corrective_action' => 'required|string',
+            'date' => 'required|date',
+            'status'=> 'required|in:open,close',
+            'close_date' => 'required|date',
+        ]);
+
+        $inspection->update([
+            'type' => $request->type,
+            'notes' => $request->notes,
+            'corrective_action' => $request->corrective_action,
+            'date' => $request->date,
+            'status' => $request->status,
+            'close_date' => $request->close_date,
+            
+        ]);
+
+        return redirect()->route('admin.inspection.index')->with('success', 'Inspection updated successfully.');
+    }
+
 }

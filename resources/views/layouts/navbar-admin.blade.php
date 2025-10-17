@@ -35,7 +35,8 @@
             <!-- Navigasi -->
             <nav class="flex-1 overflow-y-auto p-4 space-y-2">
                 <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Dashboard</a>
-                <a href="{{ route('admin.accident.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Accident Data</a>
+                <a href="{{ route('admin.accident.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Accident Investigations</a>
+                <a href="{{ route('admin.inspection.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Inspections</a>
                 {{-- <a href="#" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Man Hours Data</a>
                 <a href="#" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Accident Reports</a>
                 <a href="#" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Safety Observations</a>

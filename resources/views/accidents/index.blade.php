@@ -9,8 +9,6 @@
     <table class="table mt-3">
         <thead>
             <tr>
-                <th>Sites</th>
-                <th>Name</th>
                 <th>Type</th>
                 <th>Description</th>
                 <th>Date</th>
@@ -21,9 +19,7 @@
         </thead>
         <tbody>
             @foreach($accidents as $accident)
-            <tr>
-                <td>{{ $accident->site->name ?? '-' }}</td>
-                <td>{{ $accident->user->name ?? '-' }}</td>
+            <tr>    
                 <td>{{ $accident->type }}</td>
                 <td>{{ $accident->description }}</td>
                 <td>{{ $accident->date }}</td>
