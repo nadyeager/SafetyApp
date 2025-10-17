@@ -1,14 +1,14 @@
 <div class="w-full">
   <!-- Top thin green strip -->
-  <div class="bg-green-200 text-gray-800 text-xs sm:text-sm">
+  <div class="bg-green-50 text-gray-800 text-xs sm:text-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-8">
-      <div class="flex items-center space-x-2">
+      <!-- <div class="flex items-center space-x-2">
         <span class="font-medium">Monday - Friday</span>
         <span class="text-gray-600">| 08.00 - 17.00</span>
-      </div>
+      </div> -->
        <div class="flex items-center">
           <a href="{{ route('user.dashboard') ?? url('/') }}" class="flex items-center space-x-3">
-            <img src="{{ asset('images/logo.png') }}" alt="logo" class="w-[90px] h-[60px] object-contain" />
+            <img src="{{ asset('images/logo2.png') }}" alt="logo" class="w-[200px] h-[90px] object-contain" />
           </a>
         </div>
       <div id="top-date-time" class="text-right text-sm font-medium"></div>
