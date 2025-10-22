@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.navbar-user')
 
 @section('tittle', 'Edit Manpower')
 

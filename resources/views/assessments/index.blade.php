@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.navbar-user')
 
 @section('title', 'Assessments')
 
@@ -30,7 +30,7 @@
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Score</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Site</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Inspector</th>
-                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                    <!-- <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th> -->
                 </tr>
             </thead>
 
@@ -55,7 +55,7 @@
                         <td class="px-4 py-3 text-sm text-gray-700">
                             {{ optional($assessment->user)->name ?? '-' }}
                         </td>
-                        <td class="px-4 py-3 text-sm">
+                        <!-- <td class="px-4 py-3 text-sm">
                             <div class="flex space-x-3">
                                 <a href="{{ route('assessments.edit', $assessment) }}" 
                                    class="text-blue-600 hover:text-blue-800 font-medium">
@@ -71,7 +71,7 @@
                                     </button>
                                 </form>
                             </div>
-                        </td>
+                        </td> -->
                     </tr>
                 @empty
                     <tr>

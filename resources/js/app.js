@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }]
             },
             options: {
-                indexAxis: 'y', // biar horizontal
+                indexAxis: 'x', // biar horizontal
                 responsive: true,
                 scales: {
                     x: {

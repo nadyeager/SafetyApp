@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.navbar-user')
 
 @section('title', 'Safety Activities')
 
@@ -23,13 +23,13 @@
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">#</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">No</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Date</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Type</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Site</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">User</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Notes</th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
+                    <!-- <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th> -->
                 </tr>
             </thead>
 
@@ -42,7 +42,7 @@
                         <td class="px-4 py-3 text-sm text-gray-700">{{ optional($act->site)->name ?? '-' }}</td>
                         <td class="px-4 py-3 text-sm text-gray-700">{{ optional($act->user)->name ?? '-' }}</td>
                         <td class="px-4 py-3 text-sm text-gray-700">{{ \Illuminate\Support\Str::limit($act->notes, 80) }}</td>
-                        <td class="px-4 py-3 text-sm">
+                        <!-- <td class="px-4 py-3 text-sm">
                             <div class="flex space-x-3">
                                 <a href="{{ route('safety-activities.edit', $act) }}" 
                                    class="text-blue-600 hover:text-blue-800 font-medium">Edit</a>
@@ -56,7 +56,7 @@
                                     </button>
                                 </form>
                             </div>
-                        </td>
+                        </td> -->
                     </tr>
                 @empty
                     <tr>

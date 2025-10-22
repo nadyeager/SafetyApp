@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.navbar-user')
 
 @section('title', 'Trainings')
 
@@ -30,7 +30,7 @@
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Expired Date</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Site</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Created By</th>
-                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                    <!-- <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th> -->
                 </tr>
             </thead>
 
@@ -46,7 +46,7 @@
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-700">{{ optional($training->site)->name ?? '-' }}</td>
                         <td class="px-4 py-3 text-sm text-gray-700">{{ optional($training->user)->name ?? '-' }}</td>
-                        <td class="px-4 py-3 text-sm">
+                        <!-- <td class="px-4 py-3 text-sm">
                             <div class="flex space-x-3">
                                 <a href="{{ route('trainings.edit', $training) }}" 
                                    class="text-blue-600 hover:text-blue-800 font-medium">Edit</a>
@@ -58,7 +58,7 @@
                                     <button class="text-red-600 hover:text-red-800 font-medium">Delete</button>
                                 </form>
                             </div>
-                        </td>
+                        </td> -->
                     </tr>
                 @empty
                     <tr>

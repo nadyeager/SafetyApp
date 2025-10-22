@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.navbar-user')
 
 @section('title', 'Inspections')
 
@@ -32,7 +32,7 @@
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Close Date</th>
                       <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                    <!-- <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th> -->
                 </tr>
             </thead>
 
@@ -57,7 +57,7 @@
                                 <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full font-medium">Close</span>
                             @endif
                         </td>
-                        <td class="px-4 py-3 text-sm flex space-x-3">
+                        <!-- <td class="px-4 py-3 text-sm flex space-x-3">
                             <a href="{{ route('inspections.edit', $i) }}" class="text-blue-600 hover:text-blue-800 font-medium">
                                 Edit
                             </a>
@@ -68,7 +68,7 @@
                                     Delete
                                 </button>
                             </form>
-                        </td>
+                        </td> -->
                     </tr>
                 @empty
                     <tr>

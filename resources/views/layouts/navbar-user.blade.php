@@ -47,7 +47,7 @@
       <div class="p-4 border-t mt-auto">
         <form method="POST" action="{{ route('logout') }}">
           @csrf
-          <button type="submit" class="w-full text-left px-3 py-2 rounded-lg hover:bg-blue-100">
+          <button type="submit" class="w-full text-left px-3 py-2 rounded-lg hover:bg-red-300">
             🚪 Logout
           </button>
         </form>
@@ -60,10 +60,30 @@
       <!-- Navbar Atas -->
       <header class="bg-white shadow p-4 flex items-center justify-between fixed top-0 left-0 right-0 md:left-64 z-30">
         <button class="md:hidden text-gray-700" @click="sidebarOpen = true">☰</button>
-        <h2 class="text-lg font-bold text-blue-700">Dashboard User</h2>
+        <div id="top-date-time" class="text-right text-bs font-medium"></div>
+
         <div class="flex items-center space-x-3">
           <span class="text-gray-600 text-sm">Halo, {{ Auth::user()->name ?? 'User' }}</span>
         </div>
+
+          <script>
+        function updateTopDateTime() {
+          const now = new Date();
+          const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+          const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+          const dayName = days[now.getDay()];
+          const date = now.getDate();
+          const month = months[now.getMonth()];
+          const year = now.getFullYear();
+          const hours = String(now.getHours()).padStart(2,'0');
+          const minutes = String(now.getMinutes()).padStart(2,'0');
+          const formatted = `${dayName}, ${date} ${month} ${year} | ${hours}:${minutes}`;
+          const el = document.getElementById('top-date-time');
+          if (el) el.textContent = formatted;
+        }
+        setInterval(updateTopDateTime, 1000);
+        updateTopDateTime();
+      </script>
       </header>
 
       <!-- Isi Halaman -->
