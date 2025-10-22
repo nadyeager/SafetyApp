@@ -15,7 +15,7 @@ return new class extends Migration
     $table->id();
     $table->foreignId('site_id')->constrained('sites')->cascadeOnDelete();
     $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-    $table->string('name'); // ex: POP, POM, AK3U, First Aid
+    $table->enum('name', ['Training POP', 'Training POM', 'Training POU', 'Certification AK3U', 'Certification AK3 listrik', 'Certification First Aid', 'Certification Accident Investigation']); // ex: POP, POM, AK3U, First Aid
     $table->enum('type', ['mandatory', 'non-mandatory']);
     $table->string('provider')->nullable(); // kasih nullable biar fleksibel
     $table->date('expired_date')->nullable();

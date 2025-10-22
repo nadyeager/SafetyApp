@@ -6,16 +6,29 @@
     @csrf
     @method('PUT')
 
+    {{-- Category --}}
+    <div>
+        <x-input-label for="category" :value="__('Category')" class="text-black" />
+        <select name="category" id="category" class="mt-1 block w-full border-gray-300 rounded">
+            <option value="">-- pilih --</option>
+            <option value="work accident" {{ old('category', $accident->category) == 'work accident' ? 'selected' : '' }}>Work Accident</option>
+            <option value="traffic accident" {{ old('category', $accident->category) == 'traffic accident' ? 'selected' : '' }}>Traffic Accident</option>
+            <option value="non-work accident" {{ old('category', $accident->category) == 'non-work accident' ? 'selected' : '' }}>Non Work Accident</option>
+        </select>
+        <x-input-error :messages="$errors->get('category')" class="mt-2" />
+    </div>
+
     {{-- Type --}}
     <div>
-        <x-input-label for="type" :value="__('Type')" />
+        <x-input-label for="type" :value="__('Type')" class="text-black" />
         <select name="type" id="type" class="mt-1 block w-full border-gray-300 rounded">
             <option value="">-- pilih --</option>
             <option value="Fatality" {{ old('type', $accident->type) == 'Fatality' ? 'selected' : '' }}>Fatality</option>
             <option value="Major injury" {{ old('type', $accident->type) == 'Major injury' ? 'selected' : '' }}>Major injury</option>
             <option value="Minor injury" {{ old('type', $accident->type) == 'Minor injury' ? 'selected' : '' }}>Minor injury</option>
-            <option value="Traffic Accident" {{ old('type', $accident->type) == 'Traffic Accident' ? 'selected' : '' }}>Traffic Accident</option>
-            <option value="Non Work Accident" {{ old('type', $accident->type) == 'Non Work Accident' ? 'selected' : '' }}>Non Work Accident</option>
+           <option value="Property damage" {{ old('type', $accident->type) == 'Property damage' ? 'selected' : '' }}>Property damage</option>
+           <option value="Non Work Accident" {{ old('type', $accident->type) == 'Non Work Accident' ? 'selected' : '' }}>Non Work Accident</option>
+           <option value="Occupational disease" {{ old('type', $accident->type) == 'Occupational disease' ? 'selected' : '' }}>Occupational disease</option>
         </select>
         <x-input-error :messages="$errors->get('type')" class="mt-2" />
     </div>

@@ -2,47 +2,35 @@
 
 @section('content')
 
-<form method="GET" class="mb-4">
-    <div class="d-flex align-items-center gap-2">
+<h1 class="text-2xl font-bold mb-4"><span class="text-blue-600">Inspection</span> Information</h1>
+
+<form method="GET">
+    <div class="d-flex align-items-center gap-2 mb-4">
         <label for="month">Pilih Bulan</label>
         <input type="month" name="month" id="month" value="{{ request('month', now()->format('Y-m')) }}" class="form-control w-auto">
         <button class="btn btn-primary">Tampilkan</button>
     </div>
 
-    <div class="row">
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm border-left-primary">
-                <div class="card-body">
+    <div class="space-y-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white shadow rounded-xl p-4">
                     <h6>Management - Open</h6>
                     <h3>{{  $managementOpen }}</h3>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm border-left-success">
-                <div class="card-body">
+            <div class="bg-white shadow rounded-xl p-4">
                     <h6>Management - Closed</h6>
                     <h3>{{  $managementClose }}</h3>
                 </div>
-            </div>
-        </div> 
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm border-left-warning">
-                <div class="card-body">
+            
+            <div class="bg-white shadow rounded-xl p-4">
                     <h6>Routine - Open</h6>
                     <h3>{{  $routineOpen }}</h3>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm border-left-danger">
-                <div class="card-body">
+        <div class="bg-white shadow rounded-xl p-4">
                     <h6>Routine - Closed</h6>
                     <h3>{{  $routineClose }}</h3>
-                </div>
-            </div>
-        </div>
     </div>
+            </div>
     <table class="table table-striped mt-4">
         <thead>
             <tr>

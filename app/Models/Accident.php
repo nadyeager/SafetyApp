@@ -12,6 +12,7 @@ class Accident extends Model
     protected $fillable = [
         'site_id',
         'user_id',
+        'category',
         'type',
         'description',
         'date',

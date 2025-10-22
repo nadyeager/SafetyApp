@@ -47,7 +47,7 @@ class TrainingsController extends Controller
     {
         // rules dasar
         $rules = [
-            'name' => 'required|string|max:255',
+            'name' => 'required|in:Training POP,Training POM,Training POU,Certification AK3U,Certification AK3 listrik,Certification First Aid,Certification Accident Investigation',
             'type' => 'required|in:mandatory,non-mandatory',
             'provider' => 'nullable|string|max:255',
             'expired_date' => 'nullable|date',
@@ -103,7 +103,7 @@ class TrainingsController extends Controller
         }
 
         $rules = [
-            'name' => 'required|string|max:255',
+            'name' => 'required|in:Training POP,Training POM,Training POU,Certification AK3U,Certification AK3 listrik,Certification First Aid,Certification Accident Investigation',
             'type' => 'required|in:mandatory,non-mandatory',
             'provider' => 'nullable|string|max:255',
             'expired_date' => 'nullable|date',

@@ -42,7 +42,8 @@ class AccidentController extends Controller
     public function store(Request $request, Accident $accident)
     {
         $request->validate([
-            'type' => 'required|in:Fatality,Major injury,Minor injury,Traffic Accident,Non Work Accident',
+            'category' => 'required|in:work accident,traffic accident,non-work accident',
+            'type' => $request->category === 'traffic accident' ? 'nullable' : 'required',
             'description' => 'required|string',
             'date' => 'required|date',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -54,6 +55,7 @@ class AccidentController extends Controller
         Accident::create([
             'site_id' => Auth::user()->site_id, // otomatis ambil site user
             'user_id' => Auth::id(),
+            'category' => $request->category,
             'type' => $request->type,
             'description' => $request->description,
             'date' => $request->date,
@@ -93,7 +95,8 @@ class AccidentController extends Controller
         }
 
         $request->validate([
-            'type' => 'required|in:fatal,major,minor,traffic,non-work',
+            'category' => 'required|in:work accident,traffic accident,non-work accident',
+            'type' => $request->category === 'traffic accident' ? 'nullable' : 'required',
             'description' => 'required|string',
             'date' => 'required|date',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -107,6 +110,7 @@ class AccidentController extends Controller
         }
 
         $accident->update([
+            'category' => $request->category,
             'type' => $request->type,
             'description' => $request->description,
             'date' => $request->date,

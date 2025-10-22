@@ -35,7 +35,7 @@
             </thead>
 
             <tbody class="bg-white divide-y divide-gray-100">
-                @forelse($trainings as $i => $training)
+                @forelse($trainings as $i => $training) 
                     <tr class="hover:bg-gray-50 transition">
                         <td class="px-4 py-3 text-sm text-gray-700">{{ $trainings->firstItem() + $i }}</td>
                         <td class="px-4 py-3 text-sm text-gray-700">{{ $training->name }}</td>

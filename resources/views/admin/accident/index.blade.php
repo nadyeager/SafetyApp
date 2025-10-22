@@ -1,92 +1,200 @@
 @extends('layouts.navbar-admin')
 
 @section('content')
-    <div class="container">
-        <h1>Laporan Semua Accidents</h1>
-        <form method="GET" action="{{ route('admin.accident.filter') }}" class="mb-4 d-flex gap-2">
-            <select name="status" class="form-select w-auto">
-                <option value="">Semua Status</option>
-                <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>Open</option>
-                 <option value="close" {{ request('status') == 'close' ? 'selected' : '' }}>Close</option>
-            </select>
+<div class="container">
+    <h1 class="text-2xl font-bold mb-4">
+        Work <span class="text-red-600">Accident</span> Information
+    </h1>
 
-            <select name="type" class="form-select w-auto">
-                <option value="">Semua Type</option>
-                <option value="Fatality" {{ request('type') == 'Fatality' ? 'selected' : '' }}>Fatality</option>
-                <option value="Major injury" {{ request('type') == 'Major injury' ? 'selected' : '' }}>Major injury</option>
-                <option value="Minor injury" {{ request('type') == 'Minor injury' ? 'selected' : '' }}>Minor injury</option>
-                <option value="Traffic Accident" {{ request('type') == 'Traffic Accident' ? 'selected' : '' }}>Traffic Accident</option>
-                <option value="Non Work Accident" {{ request('type') == 'Non Work Accident' ? 'selected' : '' }}>Non Work Accident</option>
-            </select>
+    {{-- Filter Form --}}
+    {{-- <form method="GET" action="{{ route('admin.accident.filter') }}" class="mb-4 d-flex gap-2">
+        <select name="status" class="form-select w-auto">
+            <option value="">Semua Status</option>
+            <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>Open</option>
+            <option value="close" {{ request('status') == 'close' ? 'selected' : '' }}>Close</option>
+        </select>
 
-            <button type="submit" class="btn btn-primary">Filter</button>
-            <a href="{{ route('admin.accident.filter') }}" class="btn btn-secondary">Reset</a>
+        <select name="type" class="form-select w-auto">
+            <option value="">Semua Type</option>
+            <option value="Fatality" {{ request('type') == 'Fatality' ? 'selected' : '' }}>Fatality</option>
+            <option value="Major injury" {{ request('type') == 'Major injury' ? 'selected' : '' }}>Major injury</option>
+            <option value="Minor injury" {{ request('type') == 'Minor injury' ? 'selected' : '' }}>Minor injury</option>
+            <option value="Traffic Accident" {{ request('type') == 'Traffic Accident' ? 'selected' : '' }}>Traffic Accident</option>
+            <option value="Non Work Accident" {{ request('type') == 'Non Work Accident' ? 'selected' : '' }}>Non Work Accident</option>
+        </select>
 
+        <button type="submit" class="btn btn-primary">Filter</button>
+        <a href="{{ route('admin.accident.filter') }}" class="btn btn-secondary">Reset</a>
+    </form> --}}
 
-               
-        <table class="table">
-            <thead>
+    {{-- Statistic Cards --}}
+    @php 
+        $statsCard = [
+            'Total Accidents' => $totalAccidents,
+            'Total Work Accidents' => $totalWorkAccidents,
+            'Total Traffic Accidents' => $totalTrafficAccidents,
+            'Total Non Work Accidents' => $totalNonWorkAccidents,
+            'Total Investigation' => $totalInvestigation,
+            'Total Closed Accidents' => $totalClosedAccidents,
+            'Total Opened Accidents' => $totalOpenedAccidents,
+        ];
+    @endphp
+
+    <div class="space-y-4 mt-4 mb-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            @foreach($statsCard as $label => $value)
+            <div class="bg-white shadow rounded-xl p-4 text-center">
+                <h6>{{ $label }}</h6>
+                <h3>{{ $value }}</h3>
+            </div>
+            @endforeach
+        </div>
+    </div>
+
+    
+
+    {{-- Work Accident Section --}}
+    <h2 class="text-2xl font-bold mt-6 mb-4">Work Accident</h2>
+
+    @foreach ($workAccidents as $type => $items)
+        <h3 class="text-lg font-semibold mt-6 mb-2">{{ $type }}</h3>
+
+        <table class="w-full border mb-6 text-sm">
+            <thead class="bg-gray-100">
                 <tr>
-                    <th>No</th>
-                    <th>Sites</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <th class="border px-4 py-2">No</th>
+                    <th class="border px-4 py-2">Site</th>
+                    <th class="border px-4 py-2">Name</th>
+                    <th class="border px-4 py-2">Type</th>
+                    <th class="border px-4 py-2">Date</th>
+                    <th class="border px-4 py-2">Status</th>
+                    <th class="border px-4 py-2">Action</th>
                 </tr>
             </thead>
-                <tbody>
-                    @foreach ($accidents as $a)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $a->site->name }}</td>
-                        <td>{{ $a->user->name }}</td>
-                        <td>{{ $a->type }}</td>
-                        <td>{{ $a->date }}</td>
-                        <td>
-                            <span class="status-btn" data-id="{{ $a->id }}" style="cursor:pointer; color:blue;"> {{ $a->status }}</span></td>
-                        <td>
-                            <a href="{{ route('investigations.create', $a->id) }}" class="btn btn-sm btn-info">Investigate</a>
-                            <a href="{{ route('admin.accident.show', $a->id) }}" class="btn btn-sm btn-info">View</a>
-                          
-                        </td>
-
-                    </tr>  
-                </tbody>
-                 @endforeach
+            <tbody>
+                @foreach ($items as $item)
+                <tr>
+                    <td class="border px-4 py-2">{{ $loop->iteration }}</td>
+                    <td class="border px-4 py-2">{{ $item->site->name }}</td>
+                    <td class="border px-4 py-2">{{ $item->user->name }}</td>
+                    <td class="border px-4 py-2">{{ $item->type }}</td>
+                    <td class="border px-4 py-2">{{ $item->date }}</td>
+                    <td class="border px-4 py-2">
+                        <span class="status-btn" data-id="{{ $item->id }}" style="cursor:pointer; color:blue;">
+                            {{ $item->status ?? '-' }}
+                        </span>
+                    </td>
+                    <td class="border px-4 py-2">
+                        <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">View</a>
+                        <a href="{{ route('investigations.index', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
         </table>
-   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.querySelectorAll('.status-btn').forEach(el => {
-            el.addEventListener('click', function() {
-                const id = this.dataset.id;
-                const currentStatus = this.textContent.trim();
-                const newStatus = currentStatus === 'open' ? 'close' : 'open';
+    @endforeach
 
-                this.textContent = newStatus;
+    {{-- Traffic Accident --}}
+    <h3 class="text-xl font-bold mb-4 mt-4">Traffic Accident</h3>
+    <table class="w-full border mb-4 text-sm">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="border px-4 py-2">No</th>
+                <th class="border px-4 py-2">Site</th>
+                <th class="border px-4 py-2">Name</th>
+                <th class="border px-4 py-2">Type</th>
+                <th class="border px-4 py-2">Date</th>
+                <th class="border px-4 py-2">Status</th>
+                <th class="border px-4 py-2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($trafficAccidents as $item)
+            <tr>
+                <td class="border px-4 py-2">{{ $loop->iteration }}</td>
+                <td class="border px-4 py-2">{{ $item->site->name }}</td>
+                <td class="border px-4 py-2">{{ $item->user->name }}</td>
+                <td class="border px-4 py-2">{{ $item->type }}</td>
+                <td class="border px-4 py-2">{{ $item->date }}</td>
+                <td class="border px-4 py-2">
+                    <span class="status-btn" data-id="{{ $item->id }}" style="cursor:pointer; color:blue;">{{ $item->status ?? '-' }}</span>
+                </td>
+                <td class="border px-4 py-2">
+                   <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">View</a>
+                    <a href="{{ route('investigations.index', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 
-                fetch(`/update-status/${id}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({ status: newStatus})
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (!data.success) {
-                        alert('Gagal update status!');
-                        this.textContent = currentStatus;
-                    }
-                })
-                .catch(() => {
-                    alert('Terjadi kesalahan!');
+    {{-- Non Work Accident --}}
+    <h3 class="text-xl font-bold mb-4 mt-4">Non Work Accident</h3>
+    <table class="w-full border mb-4 text-sm">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="border px-4 py-2">No</th>
+                <th class="border px-4 py-2">Site</th>
+                <th class="border px-4 py-2">Name</th>
+                <th class="border px-4 py-2">Type</th>
+                <th class="border px-4 py-2">Date</th>
+                <th class="border px-4 py-2">Status</th>
+                <th class="border px-4 py-2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($nonWorkAccidents as $item)
+            <tr>
+                <td class="border px-4 py-2">{{ $loop->iteration }}</td>
+                <td class="border px-4 py-2">{{ $item->site->name }}</td>
+                <td class="border px-4 py-2">{{ $item->user->name }}</td>
+                <td class="border px-4 py-2">{{ $item->type }}</td>
+                <td class="border px-4 py-2">{{ $item->date }}</td>
+                <td class="border px-4 py-2">
+                    <span class="status-btn" data-id="{{ $item->id }}" style="cursor:pointer; color:blue;">{{ $item->status ?? '-' }}</span>
+                </td>
+                <td class="border px-4 py-2">
+                   <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">View</a>
+                    <a href="{{ route('investigations.index', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+{{-- JS Toggle Status --}}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.status-btn').forEach(el => {
+        el.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const currentStatus = this.textContent.trim();
+            const newStatus = currentStatus === 'open' ? 'close' : 'open';
+
+            this.textContent = newStatus;
+
+            fetch(`/update-status/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ status: newStatus })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success) {
+                    alert('Gagal update status!');
                     this.textContent = currentStatus;
-                });
+                }
+            })
+            .catch(() => {
+                alert('Terjadi kesalahan!');
+                this.textContent = currentStatus;
             });
         });
     });
-   </script>
+});
+</script>
 @endsection

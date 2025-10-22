@@ -33,7 +33,15 @@
 
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700">Name</label>
-                <input type="text" name="name" value="{{ old('name', $training->name) }}" class="mt-1 block w-full border-gray-300 rounded" required>
+                  <select name="type" class="mt-1 block w-full border-gray-300 rounded" required>
+                    <option value="Training POP" {{ old('name', $training->name) == 'Training POP' ? 'selected' : '' }}>Training POP</option>
+                    <option value="Training POM" {{ old('name',  $training->name) == 'Training POM' ? 'selected' : '' }}>Training POM</option>
+                    <option value="Training POU" {{ old('name',  $training->name) == 'Training POU' ? 'selected' : '' }}>Training POU</option>
+                    <option value="Certification AK3U" {{ old('name',  $training->name) == 'Certification AK3U' ? 'selected' : '' }}>Certification AK3U</option>
+                    <option value="Certification AK3 Listrik" {{ old('name',  $training->name) == 'Certification AK3 Listrik' ? 'selected' : '' }}>Certification AK3 Listrik</option>
+                    <option value="Certification First Aid" {{ old('name',  $training->name) == 'Certification First Aid' ? 'selected' : '' }}>Certification First Aid</option>
+                    <option value="Certification Accident Investigation" {{ old('name',  $training->name) == 'Certification Accident Investigation' ? 'selected' : '' }}>Certification Accident Investigation</option>
+                </select>
             </div>
 
             <div class="mb-4">

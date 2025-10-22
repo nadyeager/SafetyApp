@@ -29,18 +29,19 @@
             <div class="p-4 border-b flex items-center justify-between">
                 <h1 class="text-xl font-bold text-gray-800">Dashboard Admin</h1>
                 <!-- Tombol close di mobile -->
-                <button class="md:hidden text-gray-500" @click="sidebarOpen = false">✖</button>
+                <button class="md:hidden text-gray-500" @click="sidebarOpen = false">X</button>
             </div>
 
             <!-- Navigasi -->
             <nav class="flex-1 overflow-y-auto p-4 space-y-2">
                 <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Dashboard</a>
-                <a href="{{ route('admin.accident.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Accident Investigations</a>
-                <a href="{{ route('admin.inspection.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Inspections</a>
-                {{-- <a href="#" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Man Hours Data</a>
-                <a href="#" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Accident Reports</a>
-                <a href="#" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Safety Observations</a>
-                <a href="#" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Sites Management</a> --}}
+                <a href="{{ route('admin.accident.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Accident Investigation</a>
+                <a href="{{ route('admin.inspection.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Inspection</a>
+                <a href="{{ route('admin.training.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Training</a>
+                <a href="{{ route('admin.assessment.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Assessment</a>
+                <a href="{{ route('admin.safetyActivity.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Safety Activity</a>
+                <a href="{{ route('admin.manhour.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Man Hour</a>
+                <a href="{{ route('admin.manpower.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Man Power</a>
                 <a href="{{ route('admin.user.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Users</a>
             </nav>
 

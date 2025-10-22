@@ -78,6 +78,14 @@ Route::get('/admin/investigations/{investigation}/edit', [AccidentInvestigationC
 Route::put('/admin/investigations/{investigation}', [AccidentInvestigationController::class, 'update'])->name('investigations.update');
 Route::delete('/admin/investigations/{investigation}', [AccidentInvestigationController::class, 'destroy'])->name('investigations.destroy');
 Route::post('/update-status/{id}', [AccidentInvestigationController::class, 'updateStatus']);
+Route::get('/admin/assessment/index', [AdminDashboardController::class, 'indexAssessment'])->name('admin.assessment.index');
+Route::get('/admin/manhour/index', [AdminDashboardController::class, 'indexManhour'])->name('admin.manhour.index');
+Route::get('/admin/manpower/index', [AdminDashboardController::class, 'indexManpower'])->name('admin.manpower.index');
+Route::get('/admin/safetyActivity/index', [AdminDashboardController::class, 'indexSafetyActivity'])->name('admin.safetyActivity.index');
+Route::get('/admin/training/index', [AdminDashboardController::class, 'indexTraining'])->name('admin.training.index');
+
+
+
 
 
 
