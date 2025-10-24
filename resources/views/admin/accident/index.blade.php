@@ -7,25 +7,24 @@
     </h1>
 
     {{-- Filter Form --}}
-    {{-- <form method="GET" action="{{ route('admin.accident.filter') }}" class="mb-4 d-flex gap-2">
+    <form method="GET" action="{{ route('admin.accident.filter') }}" class="mb-4 d-flex gap-2">
         <select name="status" class="form-select w-auto">
             <option value="">Semua Status</option>
             <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>Open</option>
             <option value="close" {{ request('status') == 'close' ? 'selected' : '' }}>Close</option>
         </select>
 
-        <select name="type" class="form-select w-auto">
-            <option value="">Semua Type</option>
-            <option value="Fatality" {{ request('type') == 'Fatality' ? 'selected' : '' }}>Fatality</option>
-            <option value="Major injury" {{ request('type') == 'Major injury' ? 'selected' : '' }}>Major injury</option>
-            <option value="Minor injury" {{ request('type') == 'Minor injury' ? 'selected' : '' }}>Minor injury</option>
-            <option value="Traffic Accident" {{ request('type') == 'Traffic Accident' ? 'selected' : '' }}>Traffic Accident</option>
-            <option value="Non Work Accident" {{ request('type') == 'Non Work Accident' ? 'selected' : '' }}>Non Work Accident</option>
+        <select name="category" class="form-select w-auto">
+            <option value="">Semua Category</option>
+            <option value="work accident" {{ request('category') == 'work accident' ? 'selected' : '' }}>Work Accident</option>
+            <option value="traffic accident" {{ request('category') == 'traffic accident' ? 'selected' : '' }}>Traffic Accident</option>
+            <option value="non-work accident" {{ request('category') == 'non-work accident' ? 'selected' : '' }}>Non Work Accident</option>
+          
         </select>
 
         <button type="submit" class="btn btn-primary">Filter</button>
         <a href="{{ route('admin.accident.filter') }}" class="btn btn-secondary">Reset</a>
-    </form> --}}
+    </form>
 
     {{-- Statistic Cards --}}
     @php 
@@ -51,13 +50,13 @@
         </div>
     </div>
 
-    
 
     {{-- Work Accident Section --}}
     <h2 class="text-2xl font-bold mt-6 mb-4">Work Accident</h2>
 
     @foreach ($workAccidents as $type => $items)
         <h3 class="text-lg font-semibold mt-6 mb-2">{{ $type }}</h3>
+        <h2 class="text-sm font-semibold mb-2">{{ count($items ?? [])  }} Cases</h2>
 
         <table class="w-full border mb-6 text-sm">
             <thead class="bg-gray-100">
@@ -65,6 +64,7 @@
                     <th class="border px-4 py-2">No</th>
                     <th class="border px-4 py-2">Site</th>
                     <th class="border px-4 py-2">Name</th>
+                    <th class="border px-4 py-2">Category</th>
                     <th class="border px-4 py-2">Type</th>
                     <th class="border px-4 py-2">Date</th>
                     <th class="border px-4 py-2">Status</th>
@@ -77,6 +77,7 @@
                     <td class="border px-4 py-2">{{ $loop->iteration }}</td>
                     <td class="border px-4 py-2">{{ $item->site->name }}</td>
                     <td class="border px-4 py-2">{{ $item->user->name }}</td>
+                     <td class="border px-4 py-2">{{ $item->category }}</td>
                     <td class="border px-4 py-2">{{ $item->type }}</td>
                     <td class="border px-4 py-2">{{ $item->date }}</td>
                     <td class="border px-4 py-2">
@@ -86,7 +87,7 @@
                     </td>
                     <td class="border px-4 py-2">
                         <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">View</a>
-                        <a href="{{ route('investigations.index', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
+                        <a href="{{ route('investigations.create', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
                     </td>
                 </tr>
                 @endforeach
@@ -95,47 +96,56 @@
     @endforeach
 
     {{-- Traffic Accident --}}
-    <h3 class="text-xl font-bold mb-4 mt-4">Traffic Accident</h3>
+    <h3 class="text-2xl font-bold mt-6 mb-4">Traffic Accident</h3>
+   @if(!empty($trafficAccidents) && count($trafficAccidents) > 0)
+   <h3 class="text-lg font-semibold mt-6 mb-2">{{ count($trafficAccidents) }} Cases</h3>
     <table class="w-full border mb-4 text-sm">
         <thead class="bg-gray-100">
+            
             <tr>
                 <th class="border px-4 py-2">No</th>
                 <th class="border px-4 py-2">Site</th>
                 <th class="border px-4 py-2">Name</th>
-                <th class="border px-4 py-2">Type</th>
+                <th class="border px-4 py-2">Category</th>
                 <th class="border px-4 py-2">Date</th>
                 <th class="border px-4 py-2">Status</th>
                 <th class="border px-4 py-2">Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($trafficAccidents as $item)
+             @foreach ($trafficAccidents as $item)
             <tr>
                 <td class="border px-4 py-2">{{ $loop->iteration }}</td>
                 <td class="border px-4 py-2">{{ $item->site->name }}</td>
                 <td class="border px-4 py-2">{{ $item->user->name }}</td>
-                <td class="border px-4 py-2">{{ $item->type }}</td>
+                 <td class="border px-4 py-2">{{ $item->category }}</td>
+               
                 <td class="border px-4 py-2">{{ $item->date }}</td>
                 <td class="border px-4 py-2">
                     <span class="status-btn" data-id="{{ $item->id }}" style="cursor:pointer; color:blue;">{{ $item->status ?? '-' }}</span>
                 </td>
                 <td class="border px-4 py-2">
                    <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">View</a>
-                    <a href="{{ route('investigations.index', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
+                    <a href="{{ route('investigations.create', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
+    @endif
 
     {{-- Non Work Accident --}}
-    <h3 class="text-xl font-bold mb-4 mt-4">Non Work Accident</h3>
+    <h3 class="text-2xl font-bold mt-6 mb-4">Non Work Accident</h3>
+      @foreach ($nonWorkAccidents as $type => $items)
+            <h3 class="text-lg font-semibold mt-6 mb-2">{{ $type }}</h3>
+        <h2 class="text-sm font-semibold mb-2">{{ count($items) }} Cases</h2>
     <table class="w-full border mb-4 text-sm">
         <thead class="bg-gray-100">
             <tr>
                 <th class="border px-4 py-2">No</th>
                 <th class="border px-4 py-2">Site</th>
                 <th class="border px-4 py-2">Name</th>
+                 <th class="border px-4 py-2">Category</th>
                 <th class="border px-4 py-2">Type</th>
                 <th class="border px-4 py-2">Date</th>
                 <th class="border px-4 py-2">Status</th>
@@ -143,11 +153,13 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($nonWorkAccidents as $item)
+            @foreach ($items as $item )
+                
             <tr>
                 <td class="border px-4 py-2">{{ $loop->iteration }}</td>
                 <td class="border px-4 py-2">{{ $item->site->name }}</td>
                 <td class="border px-4 py-2">{{ $item->user->name }}</td>
+                  <td class="border px-4 py-2">{{ $item->category }}</td>
                 <td class="border px-4 py-2">{{ $item->type }}</td>
                 <td class="border px-4 py-2">{{ $item->date }}</td>
                 <td class="border px-4 py-2">
@@ -155,12 +167,14 @@
                 </td>
                 <td class="border px-4 py-2">
                    <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">View</a>
-                    <a href="{{ route('investigations.index', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
+                    <a href="{{ route('investigations.create', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
                 </td>
             </tr>
             @endforeach
+            
         </tbody>
     </table>
+      @endforeach
 </div>
 
 {{-- JS Toggle Status --}}

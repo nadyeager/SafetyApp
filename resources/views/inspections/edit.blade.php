@@ -34,8 +34,8 @@
             </div>
 
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700">Notes</label>
-                <textarea name="notes" rows="4" class="mt-1 block w-full border-gray-300 rounded">{{ old('notes', $inspection->notes) }}</textarea>
+                <label class="block text-sm font-medium text-gray-700">Corrective Action</label>
+                <textarea name="corrective_action" rows="4" class="mt-1 block w-full border-gray-300 rounded">{{ old('corrective_action', $inspection->corrective_action) }}</textarea>
             </div>
 
             <div class="mb-4">

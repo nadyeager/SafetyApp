@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Accident extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'site_id',
@@ -22,7 +24,7 @@ class Accident extends Model
 
     public function investigation()
 {
-    return $this->hasMany(Accident_Investigations::class, 'accident_id');
+    return $this->hasOne(Accident_Investigations::class, 'accident_id');
 }
 
     public function site()

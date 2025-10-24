@@ -103,113 +103,101 @@ private function getAccidentStats() {
     return [
         'totalAccidents' => $accidents->count(),
         'totalWorkAccidents' => $accidents->whereIn('type', ['Fatality', 'Major injury', 'Minor injury'])->count(),
-        'totalTrafficAccidents' => $accidents->where('type', 'Traffic Accident')->count(),
-        'totalNonWorkAccidents' => $accidents->where('type', 'Non Work Accident')->count(),
+        'totalTrafficAccidents' => $accidents->where('category', 'traffic accident')->count(),
+        'totalNonWorkAccidents' => $accidents->whereIn('type', ['Property damage', 'Non Work Accident', 'Occupational disease'])->count(),
         'totalInvestigation' => $investigation,
         'totalClosedAccidents' => $accidents->where('status', 'close')->count(),
         'totalOpenedAccidents' => $accidents->where('status', 'open')->count(),
     ];
 }
+
 private function getAccidentsSec() {
     $accidents = Accident::with(['site', 'user'])->get();
 
+    $orderedtypes = ['Fatality', 'Major injury', 'Minor injury'];
+
+    $orderedtypes2 = ['Property damage', 'Non Work Accident', 'Occupational disease'];
+
     return [
         'workAccidents' => $accidents
-        ->whereIn('type', ['Fatality', 'Major injury', 'Minor injury'])
-        ->groupBy(fn ($item) => $item->type),
-
+        ->whereIn ('type', $orderedtypes)
+        ->groupBy('type')
+        ->sortBy(function ($group, $key) use ($orderedtypes) {
+            return array_search($key, $orderedtypes);
+        }),
+        
         'trafficAccidents' => $accidents
-        ->where('type', 'Traffic Accident'),
+        ->where('category', 'traffic accident'),
         
 
         'nonWorkAccidents' => $accidents
-        ->where('type', 'Non Work Accident'),
+        ->whereIn('type', $orderedtypes2)
+        ->groupBy('type')
+        ->sortBy(function ($group, $key) use ($orderedtypes2) {
+            return array_search($key, $orderedtypes2);
+        }),
         
     ];
 }
 
-public function filteredAccident(Request $request)
-{
-    // Base query
-    $query = Accident::with(['site', 'user']);
+public function filteredAccident(Request $request) {
+    $status = $request->query('status');
+    $category = $request->query('category');
 
-    // Filter berdasarkan status
-    if ($request->filled('status')) {
-        $query->where('status', $request->status);
-    }
+    $accidents = Accident::with(['site', 'user'])
+        ->when($status, fn($q) => $q->where('status', $status))
+        ->when($category, fn($q) => $q->where('category', $category))
+        ->get();
 
-    // Filter berdasarkan type
-    if ($request->filled('type')) {
-        $query->where('type', $request->type);
-    }
+    // Urutan yang kamu inginkan
+    $orderedTypes = ['Fatality', 'Major injury', 'Minor injury', 'Traffic Accident', 'Non Work Accident'];
+    $orderedTypes2 = ['Property damage', 'Non Work Accident', 'Occupational disease'];
 
-    // Dapatkan hasil utama
-    $accidents = $query->latest()->paginate(10);
+    // === Group + Sort Berdasarkan Urutan ===
+    $workAccidents = $accidents
+        ->where('category', 'work accident')
+        ->groupBy('type')
+        ->sortBy(function ($group, $key) use ($orderedTypes) {
+            return array_search($key, $orderedTypes);
+        });
 
-    // Dapatkan statistik (tetap ditampilkan)
-    $stats = $this->getAccidentStats();
+    $trafficAccidents = $accidents
+        ->where('category', 'traffic accident')
+        ->sortBy(function ($item) {
+            return $item->date; // atau bisa diurutkan pakai field lain
+        });
 
-    // ==== Bagian bawah ini menyesuaikan data tabel section ====
-    // Kalau type diset → tampilkan section khusus
-    if ($request->filled('type')) {
+    $nonWorkAccidents = $accidents
+        ->where('category', 'non-work accident')
+        ->groupBy('type')
+        ->sortBy(function ($group, $key) use ($orderedTypes2) {
+            return array_search($key, $orderedTypes2);
+        });
 
-        // work accident
-        if (in_array($request->type, ['Fatality','Major injury','Minor injury'])) {
-            $sec = [
-                'workAccidents' => Accident::with(['site','user'])
-                    ->where('type', $request->type)
-                    ->get()
-                    ->groupBy('type'),
-                'trafficAccidents' => collect(),
-                'nonWorkAccidents' => collect(),
-            ];
+    // === Statistik ===
+    $totalAccidents = $accidents->count();
+    $totalWorkAccidents = $accidents->where('category', 'work accident')->count();
+    $totalTrafficAccidents = $accidents->where('category', 'traffic accident')->count();
+    $totalNonWorkAccidents = $accidents->where('category', 'non-work accident')->count();
+    $totalInvestigation = Accident_Investigations::count();
+    $totalClosedAccidents = $accidents->where('status', 'close')->count();
+    $totalOpenedAccidents = $accidents->where('status', 'open')->count();
 
-        // traffic accident
-        } elseif ($request->type === 'Traffic Accident') {
-            $sec = [
-                'workAccidents' => collect(),
-                'trafficAccidents' => Accident::with(['site','user'])
-                    ->where('type', 'Traffic Accident')
-                    ->get(),
-                'nonWorkAccidents' => collect(),
-            ];
-
-        // non work accident
-        } elseif ($request->type === 'Non Work Accident') {
-            $sec = [
-                'workAccidents' => collect(),
-                'trafficAccidents' => collect(),
-                'nonWorkAccidents' => Accident::with(['site','user'])
-                    ->where('type', 'Non Work Accident')
-                    ->get(),
-            ];
-
-        } else {
-            $sec = $this->getAccidentsSec();
-        }
-
-    } else {
-        // kalau tidak difilter type, tampilkan semua seperti biasa
-        $sec = $this->getAccidentsSec();
-    }
-
-    // Gabungkan dan kirim ke view
-    return view('admin.accident.index', array_merge(
-        compact('accidents'),
-        $stats,
-        $sec
+    return view('admin.accident.index', compact(
+        'accidents',
+        'totalAccidents',
+        'totalWorkAccidents',
+        'totalTrafficAccidents',
+        'totalNonWorkAccidents',
+        'totalInvestigation',
+        'totalClosedAccidents',
+        'totalOpenedAccidents',
+        'workAccidents',
+        'trafficAccidents',
+        'nonWorkAccidents'
     ));
 }
 
-
-    // Form edit site user
-    public function edit(User $user)
-    {
-        $this->authorizeAdmin();
-
-        $sites = Sites::all();
-        return view('admin.users.edit', compact('user', 'sites'));
-    }
 
     
 
@@ -252,18 +240,22 @@ public function filteredAccident(Request $request)
 
         $month = $request->input('month', now()->format('Y-m'));
         $monthNumber = date('m', strtotime($month));
- 
-        $managementOpen = Inspections::type('management')->status('open')->whereMonth('date', $monthNumber)->count();
-        $managementClose = Inspections::type('management')->status('close')->whereMonth('date', $monthNumber)->count();
-        $routineOpen = Inspections::type('routine')->status('open')->whereMonth('date', $monthNumber)->count();
-        $routineClose = Inspections::type('routine')->status('close')->whereMonth('date', $monthNumber)->count();
 
-        $inspection = Inspections::with(['site', 'user'])
+        $inspections = Inspections::with(['site', 'user'])
         ->whereMonth('date', $monthNumber)
-        ->latest()
         ->get();
 
-        return view('admin.inspection.index', compact('inspection', 'managementOpen', 'managementClose', 'routineOpen', 'routineClose'));
+        $management = $inspections->where('type', 'management');
+        $routine = $inspections->where('type', 'routine');
+ 
+        $managementOpen = $management->where('status', 'open')->count();
+        $managementClose = $management->where('status', 'close')->count();
+        $routineOpen = $routine->where('status', 'open')->count();
+        $routineClose = $routine->where('status', 'close')->count();
+
+
+        return view('admin.inspection.index', 
+        compact('inspections', 'management', 'routine', 'managementOpen', 'managementClose', 'routineOpen', 'routineClose'));
     }
 
     public function showInspection(Inspections $inspection) {

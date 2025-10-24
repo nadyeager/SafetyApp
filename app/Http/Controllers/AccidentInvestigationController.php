@@ -20,33 +20,44 @@ class AccidentInvestigationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Accident $accident, Accident_Investigations $investigation)
-    {
-          $accident->load('investigation');
-        return view('admin.investigation.create', compact('accident', 'investigation'));
-    }
+   public function create(Accident $accident)
+{
+    $accident->load('investigation');
+  
+    if ($accident->investigation) {
+    return view('admin.investigation.index', [
+        'investigation' => $accident->investigation,
+        'accident' => $accident,
+    ]);
+
+} else {
+    return view('admin.investigation.create', compact('accident'));
+}
+}
+
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-          $request->validate([
-            'accident_id' => 'required|exists:accidents,id',
-            'investigator' => 'required|string',
-            'root_cause' => 'required|string',
-            'corrective_action' => 'required|string',
-        ]);
+  public function store(Request $request)
+{
+    $request->validate([
+        'accident_id' => 'required|exists:accidents,id',
+        'investigator' => 'required|string',
+        'root_cause' => 'required|string',
+        'corrective_action' => 'required|string',
+    ]);
 
-        Accident_Investigations::create($request->only([
-            'accident_id',
-            'investigator',
-            'root_cause',
-            'corrective_action',
-        ]));
+    Accident_Investigations::create([
+        'accident_id' => $request->accident_id,
+        'investigator' => $request->investigator,
+        'root_cause' => $request->root_cause,
+        'corrective_action' => $request->corrective_action,
+    ]);
 
-        return redirect()->route('investigations.index')->with('success', 'Investigation created.');
-    }
+    return redirect()->route('investigations.index')
+        ->with('success', 'Investigation created successfully!');
+}
 
     /**
      * Display the specified resource.
@@ -73,6 +84,7 @@ class AccidentInvestigationController extends Controller
             'investigator' => 'required|string',
             'root_cause' => 'required|string',
             'corrective_action' => 'required|string',
+
             
         ]);
 

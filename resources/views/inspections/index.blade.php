@@ -27,10 +27,10 @@
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Sites</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
-                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Notes</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Corective Action</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Close Date</th>
+                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Notes</th>
                       <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
                     <!-- <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th> -->
                 </tr>
@@ -45,11 +45,10 @@
                          <td class="px-4 py-3 text-sm text-gray-700">{{ optional($i->site)->name ?? '-' }}</td>
                         <td class="px-4 py-3 text-sm text-gray-700">{{ optional($i->user)->name ?? '-' }}</td>
                          <td class="px-4 py-3 text-sm text-gray-700">{{ ucfirst($i->type) }}</td>
-                        <td class="px-4 py-3 text-sm text-gray-700">{{ $i->notes }}</td>
                         <td class="px-4 py-3 text-sm text-gray-700">{{ $i->corrective_action }}</td>
                         <td class="px-4 py-3 text-sm text-gray-700">{{ \Illuminate\Support\Str::limit($i->date, 10) }}</td>
                         <td class="px-4 py-3 text-sm text-gray-700">{{ \Illuminate\Support\Str::limit($i->close_date, 10) }}</td>
-                       
+                        <td class="px-4 py-3 text-sm text-gray-700">{{ $i->notes }}</td>
                         <td class="px-4 py-3 text-sm">
                             @if($i->status === 'open')
                                 <span class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full font-medium">Open</span>

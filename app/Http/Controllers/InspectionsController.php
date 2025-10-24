@@ -42,7 +42,7 @@ class InspectionsController extends Controller
         // Sesuaikan tipe enum jika beda di DB: contoh 'management','routine'
         $request->validate([
             'type' => 'required|in:management,routine',
-            'notes' => 'nullable|string|max:2000',
+            'corrective_action' => 'nullable|string|max:2000',
             'date' => 'required|date',
             'status' => 'required|in:open,close',
         ]);
@@ -51,7 +51,7 @@ class InspectionsController extends Controller
             'site_id' => Auth::user()->site_id, // ambil site dari user
             'user_id' => Auth::id(),
             'type' => $request->type,
-            'notes' => $request->notes,
+            'corrective_action' => $request->corrective_action,
             'date' => $request->date,
             'status' => $request->status,
         ]);
@@ -83,14 +83,14 @@ class InspectionsController extends Controller
 
         $request->validate([
             'type' => 'required|in:management,routine',
-            'notes' => 'nullable|string|max:2000',
+            'corrective_action' => 'nullable|string|max:2000',
             'date' => 'required|date',
             'status' => 'required|in:open,close',
         ]);
 
         $inspection->update([
             'type' => $request->type,
-            'notes' => $request->notes,
+            'corrective_action' => $request->notes,
             'date' => $request->date,
             'status' => $request->status,
         ]);
@@ -119,7 +119,7 @@ class InspectionsController extends Controller
     }
 
     $inspection->update([
-        'corrective_action' => $request->corrective_action,
+        'notes' => $request->notes,
         'status' => 'close',
         'close_date' => now(),
     ]);

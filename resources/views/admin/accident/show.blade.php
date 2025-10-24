@@ -1,24 +1,43 @@
 @extends('layouts.navbar-admin')
 
 @section('content')
-<div class="container">
-    <h2>Detail Accident</h2>
+<div class="max-w-2xl mx-auto mt-10">
+    <h2 class="text-2xl font-bold text-center mb-8">Detail Accident</h2>
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <p><strong>Sites:</strong> {{ $accident->site->name }}</p>
-            <p><strong>Nama:</strong> {{ $accident->user->name }}</p>
-             <p><strong>Tipe:</strong> {{ ucfirst($accident->type) }}</p>
-             <p><strong>Deskripsi:</strong> {{ $accident->description }}</p>
-            <p><strong>Tanggal:</strong> {{ $accident->date }}</p>
-           <p>
-            <img src="{{ asset('storage/' . $accident->image) }}" alt="{{ $accident->image }}" width="100">
-           </p>
-            <p><strong>Status Accident:</strong> {{ ucfirst($accident->status) }}</p>
+    <div class="bg-white shadow-md rounded-2xl border border-gray-200 p-6 
+                flex flex-col md:flex-row-reverse md:items-center gap-8">
+
+        <div class="flex-shrink-0 flex justify-center md:justify-end">
+            <img 
+                src="{{ asset('storage/' . $accident->image) }}" 
+                alt="{{ $accident->image }}" 
+                class="w-64 h-64 object-cover rounded-xl border border-gray-300 shadow-sm">
+        </div>
+
+    
+        <div class="flex-1 space-y-3 text-gray-800">
+            <p><span class="font-semibold text-gray-700">Sites:</span> {{ $accident->site->name }}</p>
+            <p><span class="font-semibold text-gray-700">Nama:</span> {{ $accident->user->name }}</p>
+            <p><span class="font-semibold text-gray-700">Category:</span> {{ $accident->category }}</p>
+            <p><span class="font-semibold text-gray-700">Tipe:</span> {{ ucfirst($accident->type) }}</p>
+            <p><span class="font-semibold text-gray-700">Deskripsi:</span> {{ $accident->description }}</p>
+            <p><span class="font-semibold text-gray-700">Tanggal:</span> {{ $accident->date }}</p>
+
+            <p>
+                <span class="font-semibold text-gray-700">Status Accident:</span>
+                <span class="px-3 py-1 rounded-full 
+                    {{ $accident->status === 'open' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' }}">
+                    {{ ucfirst($accident->status) }}
+                </span>
+            </p>
         </div>
     </div>
 
-    <br>
-    <a href="{{ route('admin.accident.index') }}" class="btn btn-secondary mt-3">Kembali</a>
+    <div class="mt-6 text-center">
+        <a href="{{ route('admin.accident.index') }}" 
+           class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl transition">
+            Kembali
+        </a>
+    </div>
 </div>
 @endsection

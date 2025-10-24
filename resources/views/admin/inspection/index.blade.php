@@ -4,7 +4,7 @@
 
 <h1 class="text-2xl font-bold mb-4"><span class="text-blue-600">Inspection</span> Information</h1>
 
-<form method="GET">
+<form action="{{ route('admin.inspection.index') }}" method="GET">
     <div class="d-flex align-items-center gap-2 mb-4">
         <label for="month">Pilih Bulan</label>
         <input type="month" name="month" id="month" value="{{ request('month', now()->format('Y-m')) }}" class="form-control w-auto">
@@ -31,41 +31,86 @@
                     <h3>{{  $routineClose }}</h3>
     </div>
             </div>
-    <table class="table table-striped mt-4">
-        <thead>
+<div>
+ <h1 class="text-xl font-bold mb-4 mt-4">Management Inspection</h1>
+    <table class="w-full border mb-6 text-sm">
+        <thead class="bg-gray-200">
             <tr>
                 <th>No</th>
                 <th>Sites</th>
                 <th>User</th>
                 <th>Type</th>
-                <th>Notes</th>
-                <th>Corecctive Action</th>
+                <th>Corrective Action</th>
                 <th>Date</th>
-                <th>Status</th>
                 <th>Close Date</th>
+                <th>Status</th>
+                <th>Notes</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($inspection as $i)
+        @forelse ($management as $m)
             <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ $i->site->name }}</td>
-                <td>{{ $i->user->name }}</td>
-                <td>{{ $i->type }}</td>
-                <td>{{ $i->notes }}</td>
-                <td>{{ $i->corrective_action }}</td>
-                <td>{{ $i->date }}</td>
-                <td>{{ $i->status }}</td>
-                <td>{{ $i->close_date }}</td>
+                <td>{{ $m->site->name }}</td>
+                <td>{{ $m->user->name }}</td>
+                <td>{{ $m->type }}</td>
+                <td>{{ $m->corrective_action }}</td>
+                <td>{{ $m->date }}</td>
+                <td>{{ $m->close_date }}</td>
+                  <td>{{ $m->status }}</td>
+                <td>{{ $m->notes }}</td>
+              
                 <td>
-                    <a href="{{ route('admin.inspection.show', $i->id) }}" class="btn btn-sm btn-info">View</a>
+                    <a href="{{ route('admin.inspection.show', $m->id) }}" class="btn btn-sm btn-info">View</a>
                 </td>
             </tr>
-                
-            @endforeach
+            @empty
+            <tr><td colspan="4" class="text-center">No data available</td></tr>
+            @endforelse
         </tbody>
     </table>
+    </div>
+
+    <div>
+    <h1 class="text-xl font-bold mb-4 mt-8">Routine Inspection</h1>
+    <table class="w-full border mb-6 text-sm" >
+        <thead class="bg-gray-200">
+        <tr>
+            <th>No</th>
+            <th>Sites</th>
+            <th>User</th>
+            <th>Type</th>
+             <th>Corrective Action</th>
+             <th>Date</th>
+            <th>Close Date</th>
+            <th>Status</th>
+             <th>Notes</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+            @forelse ($routine as $r )
+             <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $r->site->name }}</td>
+                <td>{{ $r->user->name }}</td>
+                <td>{{ $r->type }}</td>
+                <td>{{ $r->corrective_action }}</td>
+                <td>{{ $r->date }}</td>
+                   <td>{{ $r->close_date }}</td>
+                <td>{{ $r->status }}</td>
+                 <td>{{ $r->notes }}</td>
+                <td>
+                    <a href="{{ route('admin.inspection.show', $r->id) }}" class="btn btn-sm btn-info">View</a>
+                </td>
+            </tr>
+            @empty
+             <tr><td colspan="4" class="text-center">No data available</td></tr>
+             @endforelse
+        </tbody>
+    </table>
+    </div>
 </form>
 
 @endsection

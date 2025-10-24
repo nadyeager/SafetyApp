@@ -24,7 +24,7 @@
         @foreach ($investigation as $i)
             <tr class="border-b">
                 <td class="p-2">{{ $loop->iteration }}</td>
-                <td class="p-2">{{ $i->accident->type ?? '-' }}</td>
+                <td class="p-2">{{ $i->accident->category }}</td>
                 <td class="p-2">{{ $i->investigator ?? '-' }}</td>
                 <td class="p-2">{{ $i->root_cause ?? '-' }}</td>
                 <td class="p-2">{{ $i->corrective_action ?? '-' }}</td>
