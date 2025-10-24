@@ -1,15 +1,7 @@
 import './bootstrap';
-import Chart from 'chart.js/auto';
+import Chart from "chart.js/auto";
 
-// Jalankan setelah DOM siap
-document.addEventListener('DOMContentLoaded', () => {
-
-    // ====================================================
-
-    // 🧍‍♂️ TOTAL MANPOWER (Horizontal Bar)
-
-    // ====================================================
-    const chartElement = document.getElementById('manpowerChart');
+const chartElement = document.getElementById('manpowerChart');
     if (chartElement) {
         const labels = JSON.parse(chartElement.dataset.labels || '[]');
         const data = JSON.parse(chartElement.dataset.data || '[]');
@@ -27,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }]
             },
             options: {
-                indexAxis: 'y', // biar horizontal
+                indexAxis: 'x', // biar horizontal
                 responsive: true,
                 scales: {
                     x: {
@@ -169,23 +161,3 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    //Data Bulan Terakhir
-    // const chartElement5 = document.getElementById('bulanChart');
-    // if (chartElement5) {
-    //     const labels = JSON.parse(chartElement5.dataset.labels || '[]');
-    //     const data = JSON.parse(chartElement5.dataset.data || '[]');
-
-
-
-});
-
-// ====================================================
-// Alpine.js (wajib tetap di bawah)
-// ====================================================
-import Alpine from 'alpinejs';
-window.Alpine = Alpine;
-
-Alpine.start();
- 
-

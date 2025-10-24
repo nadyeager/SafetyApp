@@ -106,7 +106,7 @@ class AccidentController extends Controller
         $imagePath = $accident->image;
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image') ?  $request->file('image')->store('accident_image', 'public') : $accident->image;
+            $imagePath = $request->file('image') ?  $request->file('image')->store('accidents_image', 'public') : $accident->image;
         }
 
         $accident->update([
