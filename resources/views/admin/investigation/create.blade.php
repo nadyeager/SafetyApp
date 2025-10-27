@@ -1,6 +1,8 @@
 @extends('layouts.navbar-admin')
 
 @section('content')
+
+
 <h1 class="text-2xl font-bold mb-4">Create Investigation</h1>
 
     <form action="{{ route('investigations.store') }}" method="POST">

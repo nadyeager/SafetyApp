@@ -87,7 +87,7 @@
                     </td>
                     <td class="border px-4 py-2">
                         <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">View</a>
-                        <a href="{{ route('investigations.create', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
+                        <a href="{{ route('investigations.index', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
                     </td>
                 </tr>
                 @endforeach
@@ -126,7 +126,7 @@
                 </td>
                 <td class="border px-4 py-2">
                    <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">View</a>
-                    <a href="{{ route('investigations.create', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
+                    <a href="{{ route('investigations.index', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
                 </td>
             </tr>
             @endforeach
@@ -166,8 +166,8 @@
                     <span class="status-btn" data-id="{{ $item->id }}" style="cursor:pointer; color:blue;">{{ $item->status ?? '-' }}</span>
                 </td>
                 <td class="border px-4 py-2">
-                   <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">View</a>
-                    <a href="{{ route('investigations.create', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
+                   <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">Detaik</a>
+                    <a href="{{ route('investigations.index', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
                 </td>
             </tr>
             @endforeach

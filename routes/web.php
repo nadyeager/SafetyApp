@@ -13,7 +13,7 @@ use App\Http\Controllers\SafetyActivitiesController;
 use App\Http\Controllers\SitesController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\UserDashboardController;
-use App\Http\Controllers\AccidentInvestigationController;
+use App\Http\Controllers\InvestigationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 
@@ -72,13 +72,13 @@ Route::get('/admin/inspection/index', [AdminDashboardController::class, 'indexIn
 Route::get('/admin/inspection/show/{inspection}', [AdminDashboardController::class, 'showInspection'])->name('admin.inspection.show');
 Route::put('/admin/inspection/update/{inspection}', [AdminDashboardController::class, 'updateInspection'])->name('admin.inspection.update');
 
-Route::get('/admin/investigations', [AccidentInvestigationController::class, 'index'])->name('investigations.index');
-Route::get('/admin/investigations/create/{accident}', [AccidentInvestigationController::class, 'create'])->name('investigations.create');
-Route::post('/admin/investigations', [AccidentInvestigationController::class, 'store'])->name('investigations.store');
-Route::get('/admin/investigations/{investigation}/edit', [AccidentInvestigationController::class, 'edit'])->name('investigations.edit');
-Route::put('/admin/investigations/{investigation}', [AccidentInvestigationController::class, 'update'])->name('investigations.update');
-Route::delete('/admin/investigations/{investigation}', [AccidentInvestigationController::class, 'destroy'])->name('investigations.destroy');
-Route::post('/update-status/{id}', [AccidentInvestigationController::class, 'updateStatus']);
+Route::get('/admin/investigations', [InvestigationController::class, 'index'])->name('investigations.index');
+Route::get('/admin/investigations/create/{accident}', [InvestigationController::class, 'create'])->name('investigations.create');
+Route::post('/admin/investigations', [InvestigationController::class, 'store'])->name('investigations.store');
+Route::get('/admin/investigations/{investigation}/edit', [InvestigationController::class, 'edit'])->name('investigations.edit');
+Route::put('/admin/investigations/{investigation}', [InvestigationController::class, 'update'])->name('investigations.update');
+Route::delete('/admin/investigations/{investigation}', [InvestigationController::class, 'destroy'])->name('investigations.destroy');
+
 
 Route::get('/admin/assessment/index', [AdminDashboardController::class, 'indexAssessment'])->name('admin.assessment.index');
 Route::get('/admin/manhour/index', [AdminDashboardController::class, 'indexManhour'])->name('admin.manhour.index');

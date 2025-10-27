@@ -1,4 +1,4 @@
-@extends('layouts.navbar-admin')
+{{-- @extends('layouts.navbar-admin')
 
 @section('content')
 <h1 class="text-2xl text=bold">Update Investigation</h1>
@@ -26,4 +26,4 @@
 </form>
 
 
-@endsection
+@endsection --}}
