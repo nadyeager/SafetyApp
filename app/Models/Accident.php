@@ -18,7 +18,7 @@ class Accident extends Model
         'type',
         'description',
         'date',
-        'image',
+        'file',
         'status',
     ];
 

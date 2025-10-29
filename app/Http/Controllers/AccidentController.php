@@ -46,11 +46,11 @@ class AccidentController extends Controller
             'type' => $request->category === 'traffic accident' ? 'nullable' : 'required',
             'description' => 'required|string',
             'date' => 'required|date',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:10000',
             'status' => 'required|in:open,close',
         ]);
 
-        $imagePath = $request->file('image') ? $request->file('image')->store('accidents_image', 'public') : null;
+        $filePath = $request->file('file') ? $request->file('file')->store('accidents_file', 'public') : null;
 
         Accident::create([
             'site_id' => Auth::user()->site_id, // otomatis ambil site user
@@ -59,7 +59,7 @@ class AccidentController extends Controller
             'type' => $request->type,
             'description' => $request->description,
             'date' => $request->date,
-            'image' => $imagePath,
+            'file' => $request->file('file') ? $request->file('file')->store('accidents_file', 'public') : null,
             'status' => $request->status,
         ]);
 
@@ -81,6 +81,12 @@ class AccidentController extends Controller
         if (Auth::user()->role !== 'admin' && $accident->site_id !== Auth::user()->site_id) {
             abort(403);
         }
+if (Auth::user()->role === 'user' && $accident->status !== 'open') {
+    return redirect()->route('accidents.index')
+        ->with('error', 'Accident sudah ditutup dan tidak bisa diedit.');
+}
+
+
 
         return view('accidents.edit', compact('accident'));
     }
@@ -93,20 +99,26 @@ class AccidentController extends Controller
         if (Auth::user()->role !== 'admin' && $accident->site_id !== Auth::user()->site_id) {
             abort(403);
         }
+if (Auth::user()->role === 'user' && $accident->status !== 'open') {
+    return redirect()->route('accidents.index')
+        ->with('error', 'Accident sudah ditutup dan tidak bisa diedit.');
+}
+
+
 
         $request->validate([
             'category' => 'required|in:work accident,traffic accident,non-work accident',
             'type' => $request->category === 'traffic accident' ? 'nullable' : 'required',
             'description' => 'required|string',
             'date' => 'required|date',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:10000',
             'status' => 'required|in:open,close',
         ]);
 
-        $imagePath = $accident->image;
+        $filePath = $accident->file;
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image') ?  $request->file('image')->store('accidents_image', 'public') : $accident->image;
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file') ?  $request->file('file')->store('accidents_file', 'public') : $accident->file;
         }
 
         $accident->update([
@@ -114,7 +126,7 @@ class AccidentController extends Controller
             'type' => $request->type,
             'description' => $request->description,
             'date' => $request->date,
-            'image' => $request->file('image') ? $imagePath : $imagePath,
+            'file' => $request->file('file') ? $request->file('file')->store('accidents_file', 'public') : $accident->file,
             'status' => $request->status,
         ]);
 

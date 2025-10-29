@@ -15,6 +15,12 @@
             </div>
         @endif
 
+         @if(session('error'))
+            <div class="mb-4 p-3 bg-red-100 text-red-800 rounded-lg shadow-sm">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -31,7 +37,7 @@
                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Date</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                Image</th>
+                                File</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Status</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -46,25 +52,42 @@
                                 <td class="px-4 py-3 text-sm text-gray-700">{{ $accident->type }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-700">{{ $accident->description }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-700">{{ $accident->date }}</td>
-                                <td class="px-4 py-3 text-sm text-gray-700">
-                                    <img src="{{ asset('storage/' . $accident->image) }}" alt="{{ $accident->image }}"
-                                        width="100">
-                                </td>
+<td class="px-4 py-3 text-sm text-gray-700">
+    @if($accident->file)
+        @if(Str::endsWith($accident->file, ['.jpg', '.jpeg', '.png', '.gif']))
+            <img src="{{ asset('storage/' . $accident->file) }}" alt="File" class="h-12 rounded">
+        @elseif(Str::endsWith($accident->file, '.pdf'))
+            <a href="{{ asset('storage/' . $accident->file) }}" target="_blank" class="text-blue-600 underline">View PDF</a>
+        @else
+            <a href="{{ asset('storage/' . $accident->file) }}" target="_blank" class="text-gray-600 underline">Download File</a>
+        @endif
+    @else
+        <span class="text-gray-400 italic">No file</span>
+    @endif
+</td>
+
                                 <td class="px-4 py-3 text-sm text-gray-700">{{ $accident->status }}</td>
-                                <td class="px-4 py-3 text-sm">
-                                    <a href="{{ route('accidents.edit', $accident) }}"
-                                        class="text-blue-600 hover:text-blue-800 font-medium">
-                                        Edit
-                                    </a>
-                                    <form action="{{ route('accidents.destroy', $accident) }}" method="POST"
-                                        style="display:inline-block;">
-                                        @csrf @method('DELETE')
-                                        <!-- <button class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Yakin mau hapus?')">Delete</button>
-                                    </form>
-                                    <a href="{{ route('accidents.show', $accident->id) }}"
-                                        class="text-blue-600 hover:text-blue-800 font-medium">Detail</a> -->
-                                </td>
+                        <td class="px-4 py-3 text-sm">
+                            <div class="flex space-x-3">
+                                <a href="{{ route('accidents.edit', $accident) }}" 
+                                   class="text-blue-600 hover:text-blue-800 font-medium">
+                                   Edit
+                                </a>
+                                <!-- <a href="{{ route('accidents.show', $accident) }}"
+                                   class="text-green-600 hover:text-green-800 font-medium">
+                                   Detail
+                                </a>
+                                <form action="{{ route('accidents.destroy', $accident) }}" 
+                                      method="POST" 
+                                      onsubmit="return confirm('Hapus accident ini?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="text-red-600 hover:text-red-800 font-medium">
+                                        Delete
+                                    </button>
+                                </form> -->
+                            </div>
+                        </td>
                             </tr>
 
                         @empty
