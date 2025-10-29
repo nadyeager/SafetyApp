@@ -38,6 +38,7 @@
                 <a href="{{ route('admin.accident.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Accident Investigation</a>
                 <a href="{{ route('admin.inspection.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Inspection</a>
                 <a href="{{ route('admin.training.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Training</a>
+                <a href="{{ route('admin.certification.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Certification</a>
                 <a href="{{ route('admin.assessment.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Assessment</a>
                 <a href="{{ route('admin.safetyActivity.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Safety Activity</a>
                 <a href="{{ route('admin.manhour.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Man Hour</a>

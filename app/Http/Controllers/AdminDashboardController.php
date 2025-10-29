@@ -10,6 +10,7 @@ use App\Models\Accident;
 use App\Models\Accident_Investigations;
 use App\Models\Inspections;
 use App\Models\Trainings;
+use App\Models\Certifications;
 use App\Models\Assessments;
 use App\Models\SafetyActivities;
 use Illuminate\Http\Request;
@@ -19,55 +20,72 @@ use Illuminate\Support\Facades\DB;
 class AdminDashboardController extends Controller
 {
     // Halaman dashboard admin
-    public function index()
-    {
-        //sites per category
-        $sitesByCategory = Sites::selectRaw('category, count(*) as total')
+public function index(Request $request)
+{
+    $month = $request->input('month', now()->format('Y-m'));
+    $monthNumber = date('m', strtotime($month));
+    $yearNumber = date('Y', strtotime($month));
+
+    // Site per kategori
+    $siteByCategory = sites::selectRaw('category, COUNT(*) as total')
+        ->whereMonth('created_at', $monthNumber)
+        ->whereYear('created_at', $yearNumber)
         ->groupBy('category')
         ->get();
 
-        $labelsSite = $sitesByCategory->pluck('category')->toArray();
-        $dataSite = $sitesByCategory->pluck('total')->toArray();
+    $labelsSiteCategory = $siteByCategory->pluck('category')->toArray();
+    $dataSiteCategory = $siteByCategory->pluck('total')->toArray();
 
-        //manpower per site
-        $manpowerPerSite = Manpower::selectRaw('site_id, sum(total) as total')
-            ->groupBy('site_id')
-            ->with('site')
-            ->get();
-
-            $labelsManpower = $manpowerPerSite->pluck('site.name')->toArray();
-            $dataManpower = $manpowerPerSite->pluck('total')->toArray();
-
-            //gender Manpower
-            $genderManpower = Manpower::selectRaw('gender, sum(total) as total')
-            ->groupBy('gender')
-            ->get();
-
-            $labelsGender = $genderManpower->pluck('gender')->toArray();
-            $dataGender = $genderManpower->pluck('total')->toArray();
-
-            //manhours per site
-   $manhoursPerSite = Manhours::selectRaw('site_id, sum(total_hours) as total')
-        ->groupBy('site_id')
+    // Total manpower
+    $manpowerBySites = manpower::selectRaw('site_id, type, SUM(total) as total')
+        ->whereMonth('created_at', $monthNumber)
+        ->whereYear('created_at', $yearNumber)
+        ->groupBy('site_id', 'type')
         ->with('site')
         ->get();
 
-    $labelsManhours = $manhoursPerSite->pluck('site.name')->toArray();
-    $dataManhours = $manhoursPerSite->pluck('total')->toArray();
+    $labelsManpower = $manpowerBySites->pluck('site.name')->unique()->toArray();
+    $dataManpowerOrganik = $manpowerBySites->where('type', 'organik')->pluck('total')->toArray();
+    $dataManpowerPartner = $manpowerBySites->where('type', 'partner')->pluck('total')->toArray();
 
-    //data bulan terakhir
-    $latestUpdate = Manhours::latest('updated_at')->first();
+    // Gender manpower
+    $genderBySites = manpower::selectRaw('gender, type, SUM(total) as total')
+        ->whereMonth('created_at', $monthNumber)
+        ->whereYear('created_at', $yearNumber)
+        ->groupBy('gender', 'type')
+        ->get();
 
-    $lastUpdatedMonth =$latestUpdate
-    ? \Carbon\Carbon::parse($latestUpdate->updated_at)->format('F Y')
-    : '-';
+    $labelsGender = $genderBySites->pluck('gender')->unique()->toArray();
+    $dataGenderOrganik = $genderBySites->where('type', 'organik')->pluck('total')->toArray();
+    $dataGenderPartner = $genderBySites->where('type', 'partner')->pluck('total')->toArray();
 
-        return view('admin.dashboard', compact('labelsSite', 'dataSite',
-        'labelsManpower', 'dataManpower',
-        'labelsGender', 'dataGender',
-        'labelsManhours', 'dataManhours',
-        'lastUpdatedMonth',)); // resources/views/admin/dashboard.blade.php
-    }
+    // Manhours per site
+   $manhoursBySites = manhours::selectRaw('site_id, type, SUM(total_hours) as total_hours')
+    ->whereMonth('created_at', $monthNumber)
+    ->whereYear('created_at', $yearNumber)
+    ->groupBy('site_id', 'type')
+    ->with('site')
+    ->get();
+
+
+$labelsManhours = array_values($manhoursBySites->pluck('site.name')->unique()->toArray());
+$dataManhoursOrganik = $manhoursBySites
+    ->where('type', 'organik')
+    ->pluck('total_hours', 'site.name'); 
+$dataManhoursPartner = $manhoursBySites
+    ->where('type', 'partner')
+    ->pluck('total_hours', 'site.name');
+
+
+
+    return view('admin.dashboard', compact(
+        'labelsSiteCategory', 'dataSiteCategory',
+        'labelsManpower', 'dataManpowerOrganik', 'dataManpowerPartner',
+        'labelsGender', 'dataGenderOrganik', 'dataGenderPartner',
+        'labelsManhours', 'dataManhoursOrganik', 'dataManhoursPartner', 'month','monthNumber','yearNumber'
+    ));
+}
+
 
     // Daftar user
    public function indexUser()
@@ -145,7 +163,7 @@ public function filteredAccident(Request $request) {
     $category = $request->query('category');
 
     $accidents = Accident::with(['site', 'user'])
-        ->when($status, fn($q) => $q->where('status', $status))
+        ->when($status, fn($q) => $q->where('status', $status ))
         ->when($category, fn($q) => $q->where('category', $category))
         ->get();
 
@@ -326,42 +344,161 @@ public function filteredAccident(Request $request) {
         return view('admin.safetyActivity.index', compact('data', 'labels'));
     }
 
-    public function indexTraining(Request $request, Trainings $training) {
+//     public function indexTraining(Request $request, Trainings $training) {
 
-        $type = $request->get('type');
+//         $training = Trainings::with(['site', 'user'])->get();
 
-         $summary = [
-        'total_mandatory' => Trainings::where('type', 'mandatory')->count(),
-        'total_non_mandatory' => Trainings::where('type', 'non-mandatory')->count(),
-        'expired' => Trainings::where('expired_date', '<', now())->count(),
-       ];
+       
+//         $total_mandatory = $training->where('type', 'mandatory')->count();
+//         $total_non_mandatory = $training->where('type', 'non-mandatory')->count();
+      
+//         $mandatory = $training->where('type', 'mandatory');
 
-       $mandatory = collect();
-       $non_mandatory = collect();
+//         $non_mandatory = $training->where('type', 'non-mandatory');
 
-       if ($type === 'mandatory') {
-        $mandatory = Trainings::with(['user', 'site'])
-        ->where('type', 'mandatory')
-        ->get()
-        ->groupBy('name');
-       } elseif ($type === 'non-mandatory') {
-        $non_mandatory = Trainings::with(['user', 'site'])
-        ->where('type', 'non-mandatory')
-        ->get()
-        ->groupBy('name');
-       } else {
-        $mandatory = Trainings::with(['user', 'site'])
-        ->where('type', 'mandatory')
-        ->get()
-        ->groupBy('name');
+//         return view('admin.training.index', compact('mandatory', 'non_mandatory', 'total_mandatory', 'total_non_mandatory', 'training'));
+//     }
 
-        $non_mandatory = Trainings::with(['user', 'site'])
-        ->where('type', 'non-mandatory')
-        ->get()
-        ->groupBy('name');
-       }
+//     public function filteredTraining(Request $request) {
+//         $type = $request->query('type');
 
-        return view('admin.training.index', compact('mandatory', 'non_mandatory', 'summary', 'type'));
+//         $training = Trainings::with(['site', 'user'])
+//             ->when($type, fn($q) => $q->where('type', $type))
+//             ->get();
+
+//         $total_mandatory = $training->where('type', 'mandatory')->count();
+//         $total_non_mandatory = $training->where('type', 'non-mandatory')->count();
+
+//         $mandatory = $training->where('type', 'mandatory');
+
+//         $non_mandatory = $training->where('type', 'non-mandatory');
+
+//         return view('admin.training.index', compact(
+//             'training',
+//             'mandatory',
+//             'non_mandatory',
+//             'total_mandatory',
+//             'total_non_mandatory'
+//         ));
+//     }
+
+//     public function indexCertification(Request $request, Certifications $certification) {
+
+//         $certification = Certifications::with(['site', 'user'])->get();
+
+      
+//             $total_mandatory = $certification->where('type', 'mandatory')->count();
+//             $total_non_mandatory = $certification->where('type', 'non-mandatory')->count();
+
+//            $mandatory = $certification->where('type', 'mandatory');
+
+//               $non_mandatory = $certification->where('type', 'non-mandatory');
+
+//         return view('admin.certification.index', compact( 'mandatory', 'non_mandatory', 'total_mandatory', 'total_non_mandatory', 'certification'));
+//     }
+
+//     public function filteredCertification(Request $request) {
+//         $type = $request->query('type');
+
+//         $certification = Certifications::with(['site', 'user'])
+//             ->when($type, fn($q) => $q->where('type', $type))
+//             ->get();
+
+//         $total_mandatory = $certification->where('type', 'mandatory')->count();
+//         $total_non_mandatory = $certification->where('type', 'non-mandatory')->count();
+
+//         $mandatory = $certification->where('type', 'mandatory');
+
+//         $non_mandatory = $certification->where('type', 'non-mandatory');
+
+//         return view('admin.certification.index', compact(
+//             'certification',
+//             'mandatory',
+//             'non_mandatory',
+//             'total_mandatory',
+//             'total_non_mandatory'
+//         ));
+//     }
+
+// }
+
+private function getSummaryData($model, $typeFilter = null) {
+
+    $query = $model::with(['site', 'user']);
+    if ($typeFilter) {
+        $query->where('type', $typeFilter);
     }
 
+    $data = $query->get();
+
+    $expiringSoon = $model::where('expired_date', [now(), now()->addDays(30)])->get();
+    $expired = $model::where('expired_date', '<', now())->get();
+
+    return [
+        'data' => $data,
+        'mandatory' => $data->where('type', 'mandatory'),
+        'non_mandatory' => $data->where('type', 'non-mandatory'),
+        'total_mandatory' => $data->where('type', 'mandatory')->count(),
+        'total_non_mandatory' => $data->where('type', 'non-mandatory')->count(),
+        'expiring_soon' => $expiringSoon->count(),
+        'expired' => $expired->count(),
+    ];
+
+}
+
+public function indexTraining(Request $request) {
+    $summary = $this->getSummaryData(Trainings::class);
+
+    return view('admin.training.index', [
+        'training' => $summary['data'],
+        'mandatory' => $summary['mandatory'],
+        'non_mandatory' => $summary['non_mandatory'],
+        'total_mandatory' => $summary['total_mandatory'],
+        'total_non_mandatory' => $summary['total_non_mandatory'],
+    ]);
+}
+
+public function filteredTraining(Request $request) {
+    $summary = $this->getSummaryData(Trainings::class, $request->query('type'));
+
+    return view('admin.training.index', [
+        'training' => $summary['data'],
+        'mandatory' => $summary['mandatory'],
+        'non_mandatory' => $summary['non_mandatory'],
+        'total_mandatory' => $summary['total_mandatory'],
+        'total_non_mandatory' => $summary['total_non_mandatory'],
+    ]);
+   
+}
+
+public function indexCertification(Request $request) {
+    $summary = $this->getSummaryData(Certifications::class);
+
+
+    return view('admin.certification.index', [
+        'certification' => $summary['data'],
+        'mandatory' => $summary['mandatory'],
+        'non_mandatory' => $summary['non_mandatory'],
+        'total_mandatory' => $summary['total_mandatory'],
+        'total_non_mandatory' => $summary['total_non_mandatory'],
+        'expiring_soon' => $summary['expiring_soon'],
+        'expired' => $summary['expired'],
+    ]);
+}
+
+public function filteredCertification(Request $request) {
+    $summary = $this->getSummaryData(Certifications::class, $request->query('type'));
+
+    return view('admin.certification.index', [
+        'certification' => $summary['data'],
+        'mandatory' => $summary['mandatory'],
+        'non_mandatory' => $summary['non_mandatory'],
+        'total_mandatory' => $summary['total_mandatory'],
+        'total_non_mandatory' => $summary['total_non_mandatory'],
+        'expiring_soon' => $summary['expiring_soon'],
+        'expired' => $summary['expired'],
+
+    ]);
+   
+}
 }

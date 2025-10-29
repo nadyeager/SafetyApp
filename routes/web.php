@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AccidentController;
 use App\Http\Controllers\AssessmentsController;
 use App\Http\Controllers\TrainingsController;
+use App\Http\Controllers\CertificationsController;
 use App\Http\Controllers\InspectionsController;
 use App\Http\Controllers\ManhoursController;
 use App\Http\Controllers\ManpowerController;
@@ -85,6 +86,9 @@ Route::get('/admin/manhour/index', [AdminDashboardController::class, 'indexManho
 Route::get('/admin/manpower/index', [AdminDashboardController::class, 'indexManpower'])->name('admin.manpower.index');
 Route::get('/admin/safetyActivity/index', [AdminDashboardController::class, 'indexSafetyActivity'])->name('admin.safetyActivity.index');
 Route::get('/admin/training/index', [AdminDashboardController::class, 'indexTraining'])->name('admin.training.index');
+Route::get('/admin/training/filtered', [AdminDashboardController::class, 'filteredTraining'])->name('admin.training.filter');
+Route::get('/admin/certification/index', [AdminDashboardController::class, 'indexCertification'])->name('admin.certification.index');
+Route::get('/admin/certification/filtered', [AdminDashboardController::class, 'filteredCertification'])->name('admin.certification.filter');
 
 
 
@@ -103,6 +107,7 @@ Route::middleware(['auth', 'user'])->group(function () {
   Route::resource('accidents', AccidentController::class);
     Route::resource('inspections', InspectionsController::class);
     Route::resource('trainings', TrainingsController::class);
+    Route::resource('certifications',CertificationsController::class);
     Route::resource('assessments', AssessmentsController::class);
     Route::resource('safety-activities', SafetyActivitiesController::class);
     Route::resource('manpowers', ManpowerController::class);

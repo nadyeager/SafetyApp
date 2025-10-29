@@ -2,29 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sites;
-use App\Models\Trainings;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Certifications;
 
-class TrainingsController extends Controller
+class CertificationsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $training = Trainings::with(['user', 'site'])->get();       
-        return view('trainings.index', compact('training'));
+        $certification = Certifications::with(['site', 'user'])->get();
+        return view('certifications.index', compact('certification'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Trainings $training)
+    public function create(Certifications $certification)
     {
-       
-        return view('trainings.create');
+        return view('certifications.create');
     }
 
     /**
@@ -33,14 +30,14 @@ class TrainingsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|in:Training POP,Training POM,Training POU,Others',
+            'name' => 'required|in:Certification AK3U,Certification AK3 Listrik,Certification First Aid,Certification Accident Investigation,Others',
             'other_name' => 'required_if:name,Others|string|max:255',
             'type' => 'required|in:mandatory,non-mandatory',
             'provider' => 'nullable|string|max:255',
             'expired_date' => 'nullable|date',
         ]);
 
-        Trainings::create([
+        Certifications::create([
             'site_id' => auth()->user()->site_id,
             'user_id' => auth()->id(),
             'name' => $request->name === 'Others' ? $request->other_name : $request->name,
@@ -48,37 +45,39 @@ class TrainingsController extends Controller
             'provider' => $request->provider,
             'expired_date' => $request->expired_date,
         ]);
-      
+        return redirect()->route('certifications.index')
+            ->with('success', 'Certification created successfully.');
+    }
 
-        return redirect()->route('trainings.index')->with('success', 'Training created successfully.');
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Trainings $training)
+    public function edit(string $id)
     {
-      
-
-        return view('trainings.edit', compact('training', 'sites'));
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Trainings $training)
+    public function update(Request $request, string $id)
     {
-       
-        return redirect()->route('trainings.index')->with('success', 'Training updated successfully.');
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Trainings $training)
+    public function destroy(string $id)
     {
-        $training->delete(); // jika kamu ingin soft delete, pastikan migration menggunakan softDeletes
-
-        return redirect()->route('trainings.index')->with('success', 'Training deleted successfully.');
+        //
     }
 }

@@ -37,10 +37,6 @@
                     <option value="Training POP" {{ old('name', $training->name) == 'Training POP' ? 'selected' : '' }}>Training POP</option>
                     <option value="Training POM" {{ old('name',  $training->name) == 'Training POM' ? 'selected' : '' }}>Training POM</option>
                     <option value="Training POU" {{ old('name',  $training->name) == 'Training POU' ? 'selected' : '' }}>Training POU</option>
-                    <option value="Certification AK3U" {{ old('name',  $training->name) == 'Certification AK3U' ? 'selected' : '' }}>Certification AK3U</option>
-                    <option value="Certification AK3 Listrik" {{ old('name',  $training->name) == 'Certification AK3 Listrik' ? 'selected' : '' }}>Certification AK3 Listrik</option>
-                    <option value="Certification First Aid" {{ old('name',  $training->name) == 'Certification First Aid' ? 'selected' : '' }}>Certification First Aid</option>
-                    <option value="Certification Accident Investigation" {{ old('name',  $training->name) == 'Certification Accident Investigation' ? 'selected' : '' }}>Certification Accident Investigation</option>
                 </select>
             </div>
 
@@ -55,11 +51,6 @@
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700">Provider</label>
                 <input type="text" name="provider" value="{{ old('provider', $training->provider) }}" class="mt-1 block w-full border-gray-300 rounded">
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700">Expired Date</label>
-                <input type="date" name="expired_date" value="{{ old('expired_date', $training->expired_date ? \Carbon\Carbon::parse($training->expired_date)->format('Y-m-d') : '') }}" class="mt-1 block w-full border-gray-300 rounded">
             </div>
 
             <div class="flex items-center space-x-2">

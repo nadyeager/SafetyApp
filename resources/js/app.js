@@ -1,191 +1,121 @@
 import './bootstrap';
 import Chart from 'chart.js/auto';
-
-// Jalankan setelah DOM siap
-document.addEventListener('DOMContentLoaded', () => {
-
-    // ====================================================
-
-    // 🧍‍♂️ TOTAL MANPOWER (Horizontal Bar)
-
-    // ====================================================
-    const chartElement = document.getElementById('manpowerChart');
-    if (chartElement) {
-        const labels = JSON.parse(chartElement.dataset.labels || '[]');
-        const data = JSON.parse(chartElement.dataset.data || '[]');
-
-        new Chart(chartElement, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Total Manpower',
-                    data: data,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                indexAxis: 'y', // biar horizontal
-                responsive: true,
-                scales: {
-                    x: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
-
-    // ====================================================
-    // 🚻 GENDER MANPOWER (Doughnut)
-    // ====================================================
-    const chartElement2 = document.getElementById('genderChart');
-    if (chartElement2) {
-        const labels = JSON.parse(chartElement2.dataset.labels || '[]');
-        const data = JSON.parse(chartElement2.dataset.data || '[]');
-
-
-        new Chart(chartElement2, { // ⚠️ sebelumnya typo: new chartElement → harus Chart
-
-            type: 'doughnut',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Gender Manpower',
-                    data: data,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.6)',   // Merah
-                        'rgba(54, 162, 235, 0.6)',   // Biru
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }
-        });
-    }
-
-    // ====================================================
-
-    // ⛰️ TOTAL MANHOURS (Area Chart - “Gunung”)
-
-
-    // ====================================================
-    const chartElement3 = document.getElementById('manhoursChart');
-    if (chartElement3) {
-        const labels = JSON.parse(chartElement3.dataset.labels || '[]');
-        const data = JSON.parse(chartElement3.dataset.data || '[]');
-        const ctx = chartElement3.getContext('2d');
-
-        // buat gradasi halus
-        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, 'rgba(54, 162, 235, 0.5)');
-        gradient.addColorStop(1, 'rgba(54, 162, 235, 0)');
-
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Total Jam per Site',
-                    data: data,
-                    fill: true,
-                    backgroundColor: gradient,
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 2,
-                    tension: 0.5,
-                    pointRadius: 5,
-                    pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-                    pointHoverRadius: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { mode: 'index', intersect: false }
-                },
-                scales: {
-                    x: { title: { display: true, text: 'Site' } },
-                    y: { beginAtZero: true, title: { display: true, text: 'Total Jam' } }
-                }
-            }
-        });
-    }
-
-    // ====================================================
-    // 🏢 SITE PER CATEGORY (Pie)
-    // ====================================================
-    const chartElement4 = document.getElementById('categoryChart');
-    if (chartElement4) {
-        const labels = JSON.parse(chartElement4.dataset.labels || '[]');
-        const data = JSON.parse(chartElement4.dataset.data || '[]');
-
-
-        new Chart(chartElement4, { // ⚠️ sebelumnya typo: new chart → harus Chart
-
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Site per Category',
-                    data: data,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.6)',
-                        'rgba(54, 162, 235, 0.6)',
-                        'rgba(255, 206, 86, 0.6)',
-                        'rgba(75, 192, 192, 0.6)',
-                        'rgba(153, 102, 255, 0.6)',
-                        'rgba(255, 159, 64, 0.6)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'bottom' }
-                }
-            }
-        });
-    }
-
-    //Data Bulan Terakhir
-    // const chartElement5 = document.getElementById('bulanChart');
-    // if (chartElement5) {
-    //     const labels = JSON.parse(chartElement5.dataset.labels || '[]');
-    //     const data = JSON.parse(chartElement5.dataset.data || '[]');
-
-
-
-});
-
-// ====================================================
-// Alpine.js (wajib tetap di bawah)
-// ====================================================
 import Alpine from 'alpinejs';
 window.Alpine = Alpine;
-
 Alpine.start();
- 
 
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ====================================================
+  // 🏢 1. DISTRIBUSI SITE / CABANG
+  // ====================================================
+  const siteChart = document.getElementById('siteDistributionChart');
+  if (siteChart) {
+    new Chart(siteChart, {
+      type: 'pie',
+      data: {
+        labels: JSON.parse(siteChart.dataset.labels || '[]'),
+        datasets: [{
+          data: JSON.parse(siteChart.dataset.data || '[]'),
+          backgroundColor: [
+            '#3B82F6', '#F59E0B', '#10B981', '#EF4444'
+          ],
+        }]
+      },
+      options: {
+        plugins: { legend: { position: 'bottom' } },
+        responsive: true
+      }
+    });
+  }
+
+  // ====================================================
+  // 👷‍♂️ 2. TOTAL MANPOWER (Organik vs Partner)
+  // ====================================================
+  const manpowerChart = document.getElementById('manpowerChart');
+  if (manpowerChart) {
+    const labels = JSON.parse(manpowerChart.dataset.labels || '[]');
+    const organik = JSON.parse(manpowerChart.dataset.organik || '[]');
+    const partner = JSON.parse(manpowerChart.dataset.partner || '[]');
+
+    new Chart(manpowerChart, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          { label: 'Organik', data: organik, backgroundColor: '#3B82F6' },
+          { label: 'Partner', data: partner, backgroundColor: '#F59E0B' }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  }
+
+  // ====================================================
+  // 🚻 3. GENDER MANPOWER (Organik vs Partner)
+  // ====================================================
+const genderChart = document.getElementById('genderChart');
+if (genderChart) {
+  const labels = JSON.parse(genderChart.dataset.labels || '[]');
+  const organik = JSON.parse(genderChart.dataset.organik || '[]');
+  const partner = JSON.parse(genderChart.dataset.partner || '[]');
+
+  new Chart(genderChart, {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Gender Distribution',
+          data: [
+            organik.reduce((a, b) => a + b, 0),
+            partner.reduce((a, b) => a + b, 0)
+          ],
+          backgroundColor: ['#60A5FA', '#EB59AD'],
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        title: {
+          display: true,
+          text: 'Perbandingan Gender (Organik vs Partner)'
+        }
+      }
+    }
+  });
+}
+
+  // ====================================================
+  // ⏱️ 4. TOTAL MANHOURS (Organik vs Partner)
+  // ====================================================
+  const manhoursChart = document.getElementById('manhoursChart');
+  if (manhoursChart) {
+    const labels = JSON.parse(manhoursChart.dataset.labels || '[]');
+    const organik = JSON.parse(manhoursChart.dataset.organik || '[]');
+    const partner = JSON.parse(manhoursChart.dataset.partner || '[]');
+
+    new Chart(manhoursChart, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          { label: 'Organik', data: organik, borderColor: '#3B82F6', fill: false },
+          { label: 'Partner', data: partner, borderColor: '#F59E0B', fill: false }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  }
+
+});
