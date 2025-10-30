@@ -8,10 +8,19 @@
                 flex flex-col md:flex-row-reverse md:items-center gap-8">
 
         <div class="flex-shrink-0 flex justify-center md:justify-end">
-            <img 
-                src="{{ asset('storage/' . $accident->image) }}" 
-                alt="{{ $accident->image }}" 
-                class="w-64 h-64 object-cover rounded-xl border border-gray-300 shadow-sm">
+           @php
+    $isImage = Str::endsWith($accident->file, ['.jpg', '.jpeg', '.png', '.gif']);
+@endphp
+
+@if ($isImage)
+    <img src="{{ asset('storage/' . $accident->file) }}" 
+         alt="{{ $accident->file }}" 
+         class="w-64 h-64 object-cover rounded-xl border border-gray-300 shadow-sm">
+@else
+    <a href="{{ asset('storage/' . $accident->file) }}" target="_blank" 
+       class="text-blue-600 underline">Lihat File</a>
+@endif
+
         </div>
 
     

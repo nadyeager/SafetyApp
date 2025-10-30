@@ -14,7 +14,7 @@
              <p><strong>Deskripsi:</strong> {{ $accident->description }}</p>
             <p><strong>Tanggal:</strong> {{ $accident->date }}</p>
            <p>
-            <img src="{{ asset('storage/' . $accident->image) }}" alt="{{ $accident->image }}" width="100">
+            <img src="{{ asset('storage/' . $accident->file) }}" alt="{{ $accident->file }}" width="100">
            </p>
             <p><strong>Status Accident:</strong> {{ ucfirst($accident->status) }}</p>
         </div>

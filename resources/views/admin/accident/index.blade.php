@@ -63,11 +63,10 @@
                 <tr>
                     <th class="border px-4 py-2">No</th>
                     <th class="border px-4 py-2">Site</th>
-                    <th class="border px-4 py-2">Name</th>
                     <th class="border px-4 py-2">Category</th>
                     <th class="border px-4 py-2">Type</th>
-                    <th class="border px-4 py-2">Date</th>
                     <th class="border px-4 py-2">Status</th>
+                    <th class="border px-4 py-2">Date</th>
                     <th class="border px-4 py-2">Action</th>
                 </tr>
             </thead>
@@ -76,18 +75,18 @@
                 <tr>
                     <td class="border px-4 py-2">{{ $loop->iteration }}</td>
                     <td class="border px-4 py-2">{{ $item->site->name }}</td>
-                    <td class="border px-4 py-2">{{ $item->user->name }}</td>
                      <td class="border px-4 py-2">{{ $item->category }}</td>
                     <td class="border px-4 py-2">{{ $item->type }}</td>
-                    <td class="border px-4 py-2">{{ $item->date }}</td>
-                    <td class="border px-4 py-2">
+                      <td class="border px-4 py-2">
                         <span class="status-btn" data-id="{{ $item->id }}" style="cursor:pointer; color:blue;">
                             {{ $item->status ?? '-' }}
                         </span>
                     </td>
+                    <td class="border px-4 py-2">{{ $item->date }}</td>
                     <td class="border px-4 py-2">
-                        <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">View</a>
+                        <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">Detail</a>
                         <a href="{{ route('investigations.index', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
+                        <a href="{{ route('admin.accident.edit', $item->id) }}" class="btn btn-sm btn-info">Edit</a>
                     </td>
                 </tr>
                 @endforeach
@@ -105,10 +104,9 @@
             <tr>
                 <th class="border px-4 py-2">No</th>
                 <th class="border px-4 py-2">Site</th>
-                <th class="border px-4 py-2">Name</th>
                 <th class="border px-4 py-2">Category</th>
+                 <th class="border px-4 py-2">Status</th>
                 <th class="border px-4 py-2">Date</th>
-                <th class="border px-4 py-2">Status</th>
                 <th class="border px-4 py-2">Action</th>
             </tr>
         </thead>
@@ -117,16 +115,15 @@
             <tr>
                 <td class="border px-4 py-2">{{ $loop->iteration }}</td>
                 <td class="border px-4 py-2">{{ $item->site->name }}</td>
-                <td class="border px-4 py-2">{{ $item->user->name }}</td>
                  <td class="border px-4 py-2">{{ $item->category }}</td>
-               
-                <td class="border px-4 py-2">{{ $item->date }}</td>
-                <td class="border px-4 py-2">
+               <td class="border px-4 py-2">
                     <span class="status-btn" data-id="{{ $item->id }}" style="cursor:pointer; color:blue;">{{ $item->status ?? '-' }}</span>
                 </td>
+                <td class="border px-4 py-2">{{ $item->date }}</td>
                 <td class="border px-4 py-2">
-                   <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">View</a>
+                   <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">Detail</a>
                     <a href="{{ route('investigations.index', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
+                    <a href="{{ route('admin.accident.edit', $item->id) }}" class="btn btn-sm btn-info">Edit</a>
                 </td>
             </tr>
             @endforeach
@@ -144,11 +141,10 @@
             <tr>
                 <th class="border px-4 py-2">No</th>
                 <th class="border px-4 py-2">Site</th>
-                <th class="border px-4 py-2">Name</th>
                  <th class="border px-4 py-2">Category</th>
                 <th class="border px-4 py-2">Type</th>
-                <th class="border px-4 py-2">Date</th>
                 <th class="border px-4 py-2">Status</th>
+                <th class="border px-4 py-2">Date</th>
                 <th class="border px-4 py-2">Action</th>
             </tr>
         </thead>
@@ -158,16 +154,16 @@
             <tr>
                 <td class="border px-4 py-2">{{ $loop->iteration }}</td>
                 <td class="border px-4 py-2">{{ $item->site->name }}</td>
-                <td class="border px-4 py-2">{{ $item->user->name }}</td>
                   <td class="border px-4 py-2">{{ $item->category }}</td>
                 <td class="border px-4 py-2">{{ $item->type }}</td>
-                <td class="border px-4 py-2">{{ $item->date }}</td>
-                <td class="border px-4 py-2">
+                 <td class="border px-4 py-2">
                     <span class="status-btn" data-id="{{ $item->id }}" style="cursor:pointer; color:blue;">{{ $item->status ?? '-' }}</span>
                 </td>
+                <td class="border px-4 py-2">{{ $item->date }}</td>
                 <td class="border px-4 py-2">
                    <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">Detaik</a>
                     <a href="{{ route('investigations.index', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
+                    <a href="{{ route('admin.accident.edit', $item->id) }}" class="btn btn-sm btn-info">Edit</a>
                 </td>
             </tr>
             @endforeach
@@ -183,9 +179,12 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll('.status-btn').forEach(el => {
         el.addEventListener('click', function() {
             const id = this.dataset.id;
-            const currentStatus = this.textContent.trim();
-            const newStatus = currentStatus === 'open' ? 'close' : 'open';
+            const currentStatus = this.textContent.trim().toLowerCase();
 
+            // hanya izinkan klik kalau status open
+            if (currentStatus !== 'open') return;
+
+            const newStatus = 'close';
             this.textContent = newStatus;
 
             fetch(`/update-status/${id}`, {
@@ -198,7 +197,11 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(res => res.json())
             .then(data => {
-                if (!data.success) {
+                if (data.success) {
+                    this.style.color = 'gray';
+                    this.style.cursor = 'not-allowed';
+                    this.style.pointerEvents = 'none';
+                } else {
                     alert('Gagal update status!');
                     this.textContent = currentStatus;
                 }
@@ -211,4 +214,5 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
+
 @endsection

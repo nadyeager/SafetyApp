@@ -13,8 +13,11 @@ class InvestigationController extends Controller
      */
     public function index(Accident $accident)
     {
-        $investigation = Accident_Investigations::with(['accident_id']);
+      $investigation = Accident_Investigations::where('accident_id', $accident->id)->first();
 
+      if(!$investigation) {
+        return redirect()->route('investigations.create', ['accident' => $accident->id]);   
+      }
         return view('admin.investigation.index', compact('investigation', 'accident'));
         
     }
@@ -24,16 +27,13 @@ class InvestigationController extends Controller
      */
     public function create(Accident_Investigations $investigation, Accident $accident)
     {
-        if($investigation->isEmpty())  {
             return view('admin.investigation.create', compact('accident', 'investigation'));
-        } else {
-        return view('admin.investigation.index', compact('investigation', 'accident'));
-    }
+    
     }
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Accident $accident)
     {
         $request->validate([
             'investigator' => 'required|string',
@@ -48,7 +48,7 @@ class InvestigationController extends Controller
             'corrective_action' => $request->corrective_action,
         ]);
 
-        return redirect()->route('investigation.index')->with('success', 'Investigation created successfully.');
+        return redirect()->route('investigations.index')->with('success', 'Investigation created successfully.');
     }
 
     /**

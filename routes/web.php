@@ -69,13 +69,16 @@ Route::get('/admin/users/{user}/edit', [AdminDashboardController::class, 'edit']
 Route::put('/admin/users/{user}', [AdminDashboardController::class, 'update'])->name('admin.user.update');
 Route::get('/admin/accidents/show/{accident}', [AdminDashboardController::class, 'show'])->name('admin.accident.show');
 Route::get('/admin/accident/filtered', [AdminDashboardController::class, 'filteredAccident'])->name('admin.accident.filter');
+Route::post('/update-status/{id}', [AdminDashboardController::class, 'updateStatus'])->name('update.status');
+Route::get('/admin/accident/edit/{accident}', [AdminDashboardController::class, 'editAccident'])->name('admin.accident.edit');
+
 Route::get('/admin/inspection/index', [AdminDashboardController::class, 'indexInspection'])->name('admin.inspection.index');
 Route::get('/admin/inspection/show/{inspection}', [AdminDashboardController::class, 'showInspection'])->name('admin.inspection.show');
 Route::put('/admin/inspection/update/{inspection}', [AdminDashboardController::class, 'updateInspection'])->name('admin.inspection.update');
 
-Route::get('/admin/investigations', [InvestigationController::class, 'index'])->name('investigations.index');
+Route::get('/admin/investigations/{accident}', [InvestigationController::class, 'index'])->name('investigations.index');
 Route::get('/admin/investigations/create/{accident}', [InvestigationController::class, 'create'])->name('investigations.create');
-Route::post('/admin/investigations', [InvestigationController::class, 'store'])->name('investigations.store');
+Route::post('/admin/investigations/{accident}', [InvestigationController::class, 'store'])->name('investigations.store');
 Route::get('/admin/investigations/{investigation}/edit', [InvestigationController::class, 'edit'])->name('investigations.edit');
 Route::put('/admin/investigations/{investigation}', [InvestigationController::class, 'update'])->name('investigations.update');
 Route::delete('/admin/investigations/{investigation}', [InvestigationController::class, 'destroy'])->name('investigations.destroy');

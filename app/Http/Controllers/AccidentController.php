@@ -39,32 +39,35 @@ class AccidentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Accident $accident)
-    {
-        $request->validate([
-            'category' => 'required|in:work accident,traffic accident,non-work accident',
-            'type' => $request->category === 'traffic accident' ? 'nullable' : 'required',
-            'description' => 'required|string',
-            'date' => 'required|date',
-            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:10000',
-            'status' => 'required|in:open,close',
-        ]);
+   public function store(Request $request, Accident $accident)
+{
+    $request->validate([
+        'category' => 'required|in:work accident,traffic accident,non-work accident',
+        'type' => $request->category === 'traffic accident' ? 'nullable' : 'required',
+        'description' => 'required|string',
+        'date' => 'required|date',
+        'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:10000',
+        'status' => 'required|in:open,close',
+    ]);
 
-        $filePath = $request->file('file') ? $request->file('file')->store('accidents_file', 'public') : null;
+    // Simpan file hanya sekali
+    $filePath = $request->file('file')
+        ? $request->file('file')->store('accidents_file', 'public')
+        : null;
 
-        Accident::create([
-            'site_id' => Auth::user()->site_id, // otomatis ambil site user
-            'user_id' => Auth::id(),
-            'category' => $request->category,
-            'type' => $request->type,
-            'description' => $request->description,
-            'date' => $request->date,
-            'file' => $request->file('file') ? $request->file('file')->store('accidents_file', 'public') : null,
-            'status' => $request->status,
-        ]);
+    Accident::create([
+        'site_id' => Auth::user()->site_id,
+        'user_id' => Auth::id(),
+        'category' => $request->category,
+        'type' => $request->type,
+        'description' => $request->description,
+        'date' => $request->date,
+        'file' => $filePath, 
+        'status' => $request->status,
+    ]);
 
-        return redirect()->route('accidents.index')->with('success', 'Accident created successfully.');
-    }
+    return redirect()->route('accidents.index')->with('success', 'Accident created successfully.');
+}
 
     public function show(Accident $accident)
     {

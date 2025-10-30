@@ -216,6 +216,35 @@ public function filteredAccident(Request $request) {
     ));
 }
 
+public function editAccident(Request $request, Accident $accident) {
+
+          $request->validate([
+            'category' => 'required|in:work accident,traffic accident,non-work accident',
+            'type' => $request->category === 'traffic accident' ? 'nullable' : 'required',
+            'description' => 'required|string',
+            'date' => 'required|date',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:10000',
+            'status' => 'required|in:open,close',
+        ]);
+
+        $filePath = $accident->file;
+
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file') ?  $request->file('file')->store('accidents_file', 'public') : $accident->file;
+        }
+
+        $accident->update([
+            'category' => $request->category,
+            'type' => $request->type,
+            'description' => $request->description,
+            'date' => $request->date,
+            'file' => $request->file('file') ? $request->file('file')->store('accidents_file', 'public') : $accident->file,
+            'status' => $request->status,
+        ]);
+
+    return redirect()->route('admin.accident.index')->with('success', 'Accident updated successfully.');
+}
+
 
     
 
@@ -251,6 +280,18 @@ public function filteredAccident(Request $request) {
         $accident_investigations = Accident_Investigations::where('accident_id', $accident->id)->get();
         return view('admin.accident.show', compact('accident', 'accident_investigations'));
     }
+    
+    public function updateStatus(Request $request, $id)
+{
+    $accident = Accident::findOrFail($id);
+
+    // Ubah statusnya
+    $accident->status = $request->status;
+    $accident->save();
+
+    return response()->json(['success' => true]);
+}
+
 
     //index inspection admin
 
@@ -321,11 +362,17 @@ public function filteredAccident(Request $request) {
     }
 
     public function indexManhour() {
-        return view('admin.manhour.index');
+
+        $manhour = Manhours::with('site')->get(); 
+
+        return view('admin.manhour.index', compact('manhour'));
     }
 
     public function indexManpower() {
-        return view('admin.manpower.index');
+
+        $manpower = Manpower::with('site')->get();
+
+        return view('admin.manpower.index', compact('manpower'));
     }
 
     public function indexSafetyActivity() {
@@ -501,4 +548,5 @@ public function filteredCertification(Request $request) {
     ]);
    
 }
+
 }
