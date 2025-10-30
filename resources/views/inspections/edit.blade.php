@@ -39,6 +39,11 @@
             </div>
 
             <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700">File</label>
+                <input type="file" name="file" class="mt-1 block w-full border-gray-300 rounded" />
+            </div>
+
+            <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700">Status</label>
                 <select name="status" class="mt-1 block w-full border-gray-300 rounded">
                     <option value="open" {{ old('status', $inspection->status) == 'open' ? 'selected' : '' }}>Open</option>

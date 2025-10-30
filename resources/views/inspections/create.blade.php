@@ -16,7 +16,8 @@
     @endif
 
     <div class="bg-white p-6 rounded shadow">
-        <form action="{{ route('inspections.store') }}" method="POST">
+        <form action="{{ route('inspections.store') }}" method="POST" enctype="multipart/form-data">
+
             @csrf
 
             <div class="mb-4">
@@ -30,12 +31,18 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700">Corrective Action</label>
-                <textarea name="corrective_action" rows="4" class="mt-1 block w-full border-gray-300 rounded">{{ old('corrective_action') }}</textarea>
+                <textarea name="corrective_action" rows="4"
+                    class="mt-1 block w-full border-gray-300 rounded">{{ old('corrective_action') }}</textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700">File</label>
+                <input type="file" name="file" class="mt-1 block w-full border-gray-300 rounded" />
             </div>
 
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700">Date</label>
-                <input type="date" name="date" value="{{ old('date', date('Y-m-d')) }}" class="mt-1 block w-full border-gray-300 rounded" />
+                <input type="date" name="date" value="{{ old('date', date('Y-m-d')) }}"
+                    class="mt-1 block w-full border-gray-300 rounded" />
             </div>
 
             <div class="mb-4">

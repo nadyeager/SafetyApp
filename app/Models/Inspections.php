@@ -15,6 +15,7 @@ class Inspections extends Model
         'type',
         'notes',
         'corrective_action',
+        'file',
         'status',
         'date',
         'close_date',

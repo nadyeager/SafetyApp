@@ -43,15 +43,21 @@ class InspectionsController extends Controller
         $request->validate([
             'type' => 'required|in:management,routine',
             'corrective_action' => 'nullable|string|max:2000',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:5120', // validasi file
             'date' => 'required|date',
             'status' => 'required|in:open,close',
         ]);
+        // Simpan file jika ada
+        $filePath = $request->hasFile('file')
+            ? $request->file('file')->store('inspection_files', 'public')
+            : null;
 
         Inspections::create([
             'site_id' => Auth::user()->site_id, // ambil site dari user
             'user_id' => Auth::id(),
             'type' => $request->type,
             'corrective_action' => $request->corrective_action,
+            'file' => $filePath,
             'date' => $request->date,
             'status' => $request->status,
         ]);
@@ -84,13 +90,19 @@ class InspectionsController extends Controller
         $request->validate([
             'type' => 'required|in:management,routine',
             'corrective_action' => 'nullable|string|max:2000',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:5120', // validasi file
             'date' => 'required|date',
             'status' => 'required|in:open,close',
         ]);
-
+        // Simpan file jika ada
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('inspection_files', 'public');
+            $inspection->file = $filePath;
+        }
         $inspection->update([
             'type' => $request->type,
-            'corrective_action' => $request->notes,
+            'corrective_action' => $request->corrective_action,
+            'file' => $inspection->file, // pastikan file tidak dihapus jika tidak diupload ulang
             'date' => $request->date,
             'status' => $request->status,
         ]);
@@ -119,7 +131,7 @@ class InspectionsController extends Controller
     }
 
     $inspection->update([
-        'notes' => $request->notes,
+        'corrective_action' => $request->corrective_action,
         'status' => 'close',
         'close_date' => now(),
     ]);
