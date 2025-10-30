@@ -16,9 +16,9 @@ class SafetyActivitiesController extends Controller
     public function index()
     {
         if (Auth::user()->role === 'admin') {
-            $safetyActivities = SafetyActivities::with(['site','user'])->latest()->paginate(10);
+            $safetyActivities = SafetyActivities::with(['site', 'user'])->latest()->paginate(10);
         } else {
-            $safetyActivities = SafetyActivities::with(['site','user'])
+            $safetyActivities = SafetyActivities::with(['site', 'user'])
                 ->where('user_id', Auth::id())
                 ->latest()
                 ->paginate(10);
@@ -33,17 +33,17 @@ class SafetyActivitiesController extends Controller
     public function create()
     {
         // tipe sesuai enum di migration
-        $types = ['safety_talk','p5m','meeting','campaign'];
+        $types = ['safety_talk', 'p5m', 'meeting', 'campaign'];
 
         $sites = [];
         $users = [];
 
         if (Auth::user()->role === 'admin') {
-            $sites = Sites::orderBy('name')->pluck('name','id')->toArray();
-            $users = User::orderBy('name')->pluck('name','id')->toArray();
+            $sites = Sites::orderBy('name')->pluck('name', 'id')->toArray();
+            $users = User::orderBy('name')->pluck('name', 'id')->toArray();
         }
 
-        return view('safety-activities.create', compact('types','sites','users'));
+        return view('safety-activities.create', compact('types', 'sites', 'users'));
     }
 
     /**
@@ -53,8 +53,10 @@ class SafetyActivitiesController extends Controller
     {
         $rules = [
             'type' => 'required|in:safety_talk,p5m,meeting,campaign',
+            'frequency' => 'required|in:daily,weekly,monthly',
             'date' => 'required|date',
             'notes' => 'nullable|string',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:5120', // validasi file
         ];
 
         if (Auth::user()->role === 'admin') {
@@ -67,12 +69,20 @@ class SafetyActivitiesController extends Controller
         $siteId = Auth::user()->role === 'admin' ? $validated['site_id'] : Auth::user()->site_id;
         $userId = Auth::user()->role === 'admin' ? $validated['user_id'] : Auth::id();
 
+        $filePath = null;
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('safety_activity_files', 'public');
+        }
+
+
         SafetyActivities::create([
             'site_id' => $siteId,
             'user_id' => $userId,
             'type' => $validated['type'],
+            'frequency' => $validated['frequency'],
             'date' => $validated['date'],
             'notes' => $validated['notes'] ?? null,
+            'file' => $filePath,
         ]);
 
         return redirect()->route('safety-activities.index')->with('success', 'Safety activity created successfully.');
@@ -87,16 +97,17 @@ class SafetyActivitiesController extends Controller
             abort(403);
         }
 
-        $types = ['safety_talk','p5m','meeting','campaign'];
+        $types = ['safety_talk', 'p5m', 'meeting', 'campaign'];
+        $frequencies = ['daily', 'weekly', 'monthly'];
         $sites = [];
         $users = [];
 
         if (Auth::user()->role === 'admin') {
-            $sites = Sites::orderBy('name')->pluck('name','id')->toArray();
-            $users = User::orderBy('name')->pluck('name','id')->toArray();
+            $sites = Sites::orderBy('name')->pluck('name', 'id')->toArray();
+            $users = User::orderBy('name')->pluck('name', 'id')->toArray();
         }
 
-        return view('safety-activities.edit', compact('safetyActivity','types','sites','users'));
+        return view('safety-activities.edit', compact('safetyActivity', 'types', 'sites', 'users'));
     }
 
     /**
@@ -110,8 +121,10 @@ class SafetyActivitiesController extends Controller
 
         $rules = [
             'type' => 'required|in:safety_talk,p5m,meeting,campaign',
+            'frequency' => 'required|in:daily,weekly,monthly',
             'date' => 'required|date',
             'notes' => 'nullable|string',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:5120', // validasi file
         ];
 
         if (Auth::user()->role === 'admin') {
@@ -123,13 +136,19 @@ class SafetyActivitiesController extends Controller
 
         $siteId = Auth::user()->role === 'admin' ? $validated['site_id'] : $safetyActivity->site_id;
         $userId = Auth::user()->role === 'admin' ? $validated['user_id'] : $safetyActivity->user_id;
+        $filePath = $safetyActivity->file;
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('safety_activity_files', 'public');
+        }
 
         $safetyActivity->update([
             'site_id' => $siteId,
             'user_id' => $userId,
             'type' => $validated['type'],
+            'frequency' => $validated['frequency'],
             'date' => $validated['date'],
             'notes' => $validated['notes'] ?? null,
+            'file' => $filePath,
         ]);
 
         return redirect()->route('safety-activities.index')->with('success', 'Safety activity updated successfully.');

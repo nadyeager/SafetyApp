@@ -46,6 +46,10 @@
         </div>
 
         <div class="mb-4">
+            <label class="block text-sm font-medium">Frequency</label>
+            <input type="text" name="frequency" value="{{ old('frequency', $safetyActivity->frequency) }}" class="mt-1 block w-full border-gray-300 rounded" required>   
+
+        <div class="mb-4">
             <label class="block text-sm font-medium">Date</label>
             <input type="date" name="date" value="{{ old('date', \Carbon\Carbon::parse($safetyActivity->date)->format('Y-m-d')) }}" class="mt-1 block w-full border-gray-300 rounded" required>
         </div>
@@ -54,6 +58,11 @@
             <label class="block text-sm font-medium">Notes</label>
             <textarea name="notes" rows="4" class="mt-1 block w-full border-gray-300 rounded">{{ old('notes', $safetyActivity->notes) }}</textarea>
         </div>
+
+        <div class="mb-4">
+            <label class="block text-sm font-medium">File</label>
+            <input type="file" name="file" class="mt-1 block w-full border-gray-300 rounded">
+        </div>  
 
         <div class="flex items-center space-x-2">
             <button class="px-4 py-2 bg-blue-600 text-white rounded">Update</button>

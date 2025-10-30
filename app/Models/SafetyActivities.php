@@ -16,8 +16,10 @@ class SafetyActivities extends Model
         'site_id',
         'user_id',
         'type',
+        'frequency',
         'date',
         'notes',
+        'file',
     ];
 
     public function site()
