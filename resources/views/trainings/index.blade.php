@@ -1,36 +1,63 @@
 @extends('layouts.navbar-user')
 
+@section('title', 'Trainings')
+
 @section('content')
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-semibold">Trainings</h1>
+        <a href="{{ route('trainings.create') }}"
+            class="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition">
+            + Buat Training
+        </a>
+    </div>
 
-<h1 class="mb-4">Halaman training</h1>
-<a href="{{ route('trainings.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
-    + Buat Training
-</a>
+    @if (session('success'))
+        <div class="mb-4 p-3 bg-green-100 text-green-800 rounded-lg shadow-sm">
+            {{ session('success') }}
+        </div>
+    @endif
 
-<div>
-   <table class="min-w-full bg-gray-400 border border-gray-200 mt-4">
-       <thead class="bg-gray-500">
-            <tr>
-                <th class="px-3 py-4 text-left text-semibold">No</th>
-                <th class="px-3 py-4 text-left text-semibold">Name</th>
-                <th class="px-3 py-4 text-left text-semibold">Site</th>
-                <th class="px-3 py-4 text-left text-semibold">Training Name</th>
-                <th class="px-3 py-4 text-left text-semibold">Type</th>
-                <th  class="px-3 py-4 text-left text-semibold">Provider</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($training as $t)
-            <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $t->user->name }}</td>
-                <td>{{ $t->site->name }}</td>
-                <td>{{ $t->name }}</td>
-                <td>{{ $t->type }}</td>
-                <td>{{ $t->provider }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+    {{-- WRAPPER UNTUK RESPONSIVE TABLE --}}
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">No</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">User</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Site</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Training Name</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Type</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Provider</th>
+                    </tr>
+                </thead>
+
+                <tbody class="bg-white divide-y divide-gray-100">
+                    @forelse ($training as $i => $t)
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 text-sm text-gray-700">{{ $loop->iteration }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-700">{{ optional($t->user)->name ?? '-' }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-700">{{ optional($t->site)->name ?? '-' }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-700">{{ $t->name }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-700">{{ $t->type }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-700">{{ $t->provider }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="px-4 py-6 text-center text-gray-500">
+                                Belum ada training.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {{-- Jika kamu pakai pagination --}}
+    @if (method_exists($training, 'links'))
+        <div class="mt-4">
+            {{ $training->links() }}
+        </div>
+    @endif
 @endsection

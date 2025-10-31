@@ -54,19 +54,15 @@
                                 <td class="px-4 py-3 text-sm text-gray-700">{{ $accident->type }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-700">{{ $accident->description }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-700">{{ $accident->date->format('d-m-Y') }}</td>
-<td class="px-4 py-3 text-sm text-gray-700">
-    @if($accident->file)
-        @if(Str::endsWith($accident->file, ['.jpg', '.jpeg', '.png', '.gif']))
-            <img src="{{ asset('storage/' . $accident->file) }}" alt="File" class="h-12 rounded">
-        @elseif(Str::endsWith($accident->file, '.pdf'))
-            <a href="{{ asset('storage/' . $accident->file) }}" target="_blank" class="text-blue-600 underline">View PDF</a>
-        @else
-            <a href="{{ asset('storage/' . $accident->file) }}" target="_blank" class="text-gray-600 underline">Download File</a>
-        @endif
-    @else
-        <span class="text-gray-400 italic">No file</span>
-    @endif
-</td>
+                                <td class="px-4 py-3 text-sm text-gray-700">
+                                    @if($accident->file)
+                                        <a href="{{ asset('storage/' . $accident->file) }}" target="_blank"
+                                            class="text-blue-600 hover:underline">
+                                            Lihat File
+                                        </a>
+                                    @else
+                                        -
+                                    @endif
 
                                 <td class="px-4 py-3 text-sm text-gray-700">{{ $accident->status }}</td>
                         <td class="px-4 py-3 text-sm">

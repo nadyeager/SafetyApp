@@ -6,9 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Dashboard</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body class="bg-gray-100 font-sans antialiased h-screen overflow-hidden">
+<body class="h-full font-[Poppins] bg-gray-100 font-sans antialiased h-screen overflow-hidden">
   <!-- Overlay (untuk mobile) -->
   <div 
     class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
@@ -22,7 +24,7 @@
 
     <!-- Sidebar -->
     <aside 
-      class="w-64 bg-white shadow-lg flex flex-col fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out md:translate-x-0"
+      class="w-64 bg-blue-200 shadow-lg flex flex-col fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out md:translate-x-0"
       :class="{ '-translate-x-full': !sidebarOpen }">
       
       <!-- Header Sidebar -->
@@ -35,10 +37,10 @@
       <nav class="flex-1 overflow-y-auto p-4 space-y-2 text-gray-700">
         <a href="{{ route('user.dashboard') }}" class="block px-3 py-2 text-blue-700 hover:bg-blue-50 rounded">Dashboard</a>
         <a href="{{ route('accidents.index') }}" class="block px-3 py-2 text-blue-700 hover:bg-blue-50 rounded">Accidents</a>
+        <a href="{{ route('assessments.index') }}" class="block px-3 py-2 text-blue-700 hover:bg-blue-50 rounded">Assessments</a>
+        <a href="{{ route('certifications.index') }}" class="block px-3 py-2 text-blue-700 hover:bg-blue-50 rounded">Certification</a>
         <a href="{{ route('inspections.index') }}" class="block px-3 py-2 text-blue-700 hover:bg-blue-50 rounded">Inspections</a>
         <a href="{{ route('trainings.index') }}" class="block px-3 py-2 text-blue-700 hover:bg-blue-50 rounded">Trainings</a>
-        <a href="{{ route('certifications.index') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-200">Certification</a>
-        <a href="{{ route('assessments.index') }}" class="block px-3 py-2 text-blue-700 hover:bg-blue-50 rounded">Assessments</a>
         <a href="{{ route('safety-activities.index') }}" class="block px-3 py-2 text-blue-700 hover:bg-blue-50 rounded">Safety Activities</a>
         <a href="{{ route('manhours.index') }}" class="block px-3 py-2 text-blue-700 hover:bg-blue-50 rounded">Man Hours</a>
         <a href="{{ route('manpowers.index') }}" class="block px-3 py-2 text-blue-700 hover:bg-blue-50 rounded">Man Power</a>
