@@ -50,6 +50,7 @@
                 <th>Type</th>
                 <th>Provider</th>
                 <th>Expired Date</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -62,6 +63,8 @@
             <td>{{ $c->type }}</td>
             <td>{{ $c->provider }}</td>
             <td>{{ $c->expired_date }}</td>
+            <td>
+                <a href="{{ route('admin.certification.edit', $c->id) }}" class="text-blue-500 hover:underline">Edit</a>
         </tr>
         @endforeach
         </tbody>

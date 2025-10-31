@@ -14,6 +14,7 @@
             <th class="py-2 px-4 border-b">Total</th>
             <th class="py-2 px-4 border-b">Month</th>
             <th class="py-2 px-4 border-b">Year</th>
+            <th class="py-2 px-4 border-b">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -26,6 +27,9 @@
             <td class="py-2 px-4 border-b">{{ $person->total }}</td>
             <td class="py-2 px-4 border-b">{{ $person->month }}</td>
             <td class="py-2 px-4 border-b">{{ $person->year }}</td>
+            <td class="py-2 px-4 border-b">
+                <a href="{{ route('admin.manpower.edit', $person->id) }}" class="text-blue-500 hover:underline">Edit</a>
+            </td>
         </tr>
         @endforeach
     </tbody>

@@ -1,24 +1,26 @@
-@extends('layouts.navbar-user')
+@extends('layouts.navbar-admin')
 
 @section('title', 'Tambah Accidents')
 
 @section('content')
-    <h1 class="text-2xl font-bold mb-4">Tambah Accidents Baru</h1>
+    <h1 class="text-2xl font-bold mb-4">Edit Laporan Accidents User</h1>
 
-    <form action="{{ route('admin.accidents.edit') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
-        @csrf
-@method('PUT')
+<p>Form action: {{ route('admin.accident.update', $accident->id) }}</p>
+
+  <form action="{{ route('admin.accident.update', $accident->id) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+    @csrf
+    @method('PUT')
         <input type="hidden" name="id" value="{{ $accident->id }}">
         {{-- Category --}}
         <div>
             <x-input-label for="category" :value="__('Category')" class="text-black" />
             <select name="category" id="category" class="mt-1 block w-full border-gray-300 rounded">
                 <option value="">-- pilih --</option>
-                <option value="work accident" {{ old('category', $accident) == 'work accident' ? 'selected' : '' }}>Work Accident
+                <option value="work accident" {{ old('category', $accident->category) == 'work accident' ? 'selected' : '' }}>Work Accident
                 </option>
-                <option value="traffic accident" {{ old('category', $accident) == 'traffic accident' ? 'selected' : '' }}>Traffic
+                <option value="traffic accident" {{ old('category', $accident->category) == 'traffic accident' ? 'selected' : '' }}>Traffic
                     Accident</option>
-                <option value="non-work accident" {{ old('category', $accident) == 'non-work accident' ? 'selected' : '' }}>Non Work
+                <option value="non-work accident" {{ old('category', $accident->category ) == 'non-work accident' ? 'selected' : '' }}>Non Work
                     Accident</option>
             </select>
             <x-input-error :messages="$errors->get('category')" class="mt-2" />
@@ -29,14 +31,14 @@
             <x-input-label for="type" :value="__('Type')" class="text-black" />
             <select name="type" id="type" class="mt-1 block w-full border-gray-300 rounded">
                 <option value="">-- pilih --</option>
-                <option value="Fatality" {{ old('type', $accident) == 'Fatality' ? 'selected' : '' }}>Fatality</option>
-                <option value="Major injury" {{ old('type', $accident) == 'Major injury' ? 'selected' : '' }}>Major injury</option>
-                <option value="Minor injury" {{ old('type', $accident) == 'Minor injury' ? 'selected' : '' }}>Minor injury</option>
-                <option value="Property damage" {{ old('type', $accident) == 'Property damage' ? 'selected' : '' }}>Property damage
+                <option value="Fatality" {{ old('type', $accident->type) == 'Fatality' ? 'selected' : '' }}>Fatality</option>
+                <option value="Major injury" {{ old('type', $accident->type) == 'Major injury' ? 'selected' : '' }}>Major injury</option>
+                <option value="Minor injury" {{ old('type', $accident->type) == 'Minor injury' ? 'selected' : '' }}>Minor injury</option>
+                <option value="Property damage" {{ old('type', $accident->type) == 'Property damage' ? 'selected' : '' }}>Property damage
                 </option>
-                <option value="Non Work Accident" {{ old('type', $accident) == 'Non Work Accident' ? 'selected' : '' }}>Non Work Accident
+                <option value="Non Work Accident" {{ old('type', $accident->type) == 'Non Work Accident' ? 'selected' : '' }}>Non Work Accident
                 </option>
-                <option value="Occupational disease" {{ old('type', $accident) == 'Occupational disease' ? 'selected' : '' }}>
+                <option value="Occupational disease" {{ old('type', $accident->type) == 'Occupational disease' ? 'selected' : '' }}>
                     Occupational disease</option>
             </select>
             <x-input-error :messages="$errors->get('type')" class="mt-2" />
@@ -46,36 +48,22 @@
         <div>
             <x-input-label for="description" :value="__('Description')" class="text-black" />
             <x-text-input id="description" class="block mt-1 w-full" type="text" name="description"
-                :value="old('description', $accident)" required autofocus autocomplete="description" />
+                :value="old('description', $accident->description)" required autofocus autocomplete="description" />
             <x-input-error :messages="$errors->get('description')" class="mt-2" />
         </div>
-
-        {{-- Date --}}
-        <div>
-            <x-input-label for="date" :value="__('Date')" class="text-black" />
-            <x-text-input id="date" class="block mt-1 w-full" type="date" name="date" :value="old('date', $accident)" required
-                autofocus autocomplete="date" />
-            <x-input-error :messages="$errors->get('date')" class="mt-2" />
-        </div>
-
+       
         {{-- gambar --}}
         <div>
             <x-input-label for="file" :value="__('File')" class="text-black" />
-            <x-text-input id="file" class="block mt-1 w-full" type="file" name="file" :value="old('file', $accident)" required
-                autofocus autocomplete="file" />
+           @if($accident->file)
+               <img src="{{ asset('storage/' . $accident->file) }}" alt="{{ $accident->category }}" class="h-20 mb-2">
+               @endif
+             <x-text-input id="file" class="block mt-1 w-full" type="file" name="file" autofocus autocomplete="file" />
+
+
             <x-input-error :messages="$errors->get('file')" class="mt-2" />
+                  
         </div>
-
-        {{-- Status --}}
-        <div>
-            <x-input-label for="status" :value="__('Status', $accident)" class="text-black" />
-            <input type="hidden" name="status" value="open">
-            <p class="mt-1 text-gray-700">Open</p>
-        </div>
-
-        Tanggal Updated At: {{ $accident->updated_at }}
-
-
 
         {{-- Submit Button --}}
         <div>

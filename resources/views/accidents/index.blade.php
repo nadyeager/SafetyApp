@@ -35,13 +35,15 @@
                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Description</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                Date</th>
+                                Date of incident</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 File</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Status</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Action</th>
+                                 <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Created at</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-100">
@@ -51,7 +53,7 @@
                                 <td class="px-4 py-3 text-sm text-gray-700">{{ $accident->category }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-700">{{ $accident->type }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-700">{{ $accident->description }}</td>
-                                <td class="px-4 py-3 text-sm text-gray-700">{{ $accident->date }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-700">{{ $accident->date->format('d-m-Y') }}</td>
 <td class="px-4 py-3 text-sm text-gray-700">
     @if($accident->file)
         @if(Str::endsWith($accident->file, ['.jpg', '.jpeg', '.png', '.gif']))
@@ -73,6 +75,9 @@
                                    class="text-blue-600 hover:text-blue-800 font-medium">
                                    Edit
                                 </a>
+                                <td>
+                                    {{ $accident->created_at->format('d-m-Y') }}
+                                </td>
                                 <!-- <a href="{{ route('accidents.show', $accident) }}"
                                    class="text-green-600 hover:text-green-800 font-medium">
                                    Detail

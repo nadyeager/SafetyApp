@@ -41,6 +41,7 @@
                 <th>Training Name</th>
                 <th>Type</th>
                 <th>Provider</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -52,6 +53,8 @@
             <td>{{ $c->name }}</td>
             <td>{{ $c->type }}</td>
             <td>{{ $c->provider }}</td>
+            <td>
+               <a href="{{ route('admin.training.edit', $c->id) }}" class="text-blue-500 hover:underline">Edit</a>
         </tr>
         @endforeach
         </tbody>

@@ -5,6 +5,8 @@
 
 <div class="bg-white shadow-md rounded p-6">
     <div class="mb-4">
+        <h2 class="text-xl font-semibold mb-2">Accident:</h2>
+        <p>{{ $investigation->accident->category }}</p>
         <h2 class="text-xl font-semibold mb-2">Investigator:</h2>
         <p>{{ $investigation->investigator }}</p>
     </div>

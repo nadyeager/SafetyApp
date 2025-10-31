@@ -21,6 +21,10 @@ class Inspections extends Model
         'close_date',
     ];
 
+    protected $casts = [
+        'date' => 'date',
+    ];
+
     public function site()
     {
         return $this->belongsTo(Sites::class);

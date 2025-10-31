@@ -33,6 +33,9 @@
             'Total Work Accidents' => $totalWorkAccidents,
             'Total Traffic Accidents' => $totalTrafficAccidents,
             'Total Non Work Accidents' => $totalNonWorkAccidents,
+];
+
+        $statsCard2 = [
             'Total Investigation' => $totalInvestigation,
             'Total Closed Accidents' => $totalClosedAccidents,
             'Total Opened Accidents' => $totalOpenedAccidents,
@@ -48,6 +51,14 @@
             </div>
             @endforeach
         </div>
+   <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+    @foreach($statsCard2 as $label => $value)
+        <div class="bg-white shadow rounded-xl p-4 text-center">
+            <h6>{{ $label }}</h6>
+            <h3>{{ $value }}</h3>
+        </div>
+    @endforeach
+</div>
     </div>
 
 
@@ -62,19 +73,19 @@
             <thead class="bg-gray-100">
                 <tr>
                     <th class="border px-4 py-2">No</th>
-                    <th class="border px-4 py-2">Site</th>
                     <th class="border px-4 py-2">Category</th>
                     <th class="border px-4 py-2">Type</th>
                     <th class="border px-4 py-2">Status</th>
-                    <th class="border px-4 py-2">Date</th>
+                    <th class="border px-4 py-2">Date of incident</th>
+                     <th class="border px-4 py-2">Created at</th>
                     <th class="border px-4 py-2">Action</th>
+                     <th class="border px-4 py-2">Updated at</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($items as $item)
                 <tr>
                     <td class="border px-4 py-2">{{ $loop->iteration }}</td>
-                    <td class="border px-4 py-2">{{ $item->site->name }}</td>
                      <td class="border px-4 py-2">{{ $item->category }}</td>
                     <td class="border px-4 py-2">{{ $item->type }}</td>
                       <td class="border px-4 py-2">
@@ -82,12 +93,14 @@
                             {{ $item->status ?? '-' }}
                         </span>
                     </td>
-                    <td class="border px-4 py-2">{{ $item->date }}</td>
+                    <td class="border px-4 py-2">{{ $item->date->format('d-m-Y') }}</td>
+                    <td class="border px-4 py-2">{{ $item->created_at->format('d-m-Y') }}</td>
                     <td class="border px-4 py-2">
                         <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">Detail</a>
                         <a href="{{ route('investigations.index', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
                         <a href="{{ route('admin.accident.edit', $item->id) }}" class="btn btn-sm btn-info">Edit</a>
                     </td>
+                    <td class="border px-4 py-2">{{ $item->updated_at->format('d-m-Y') }}</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -103,28 +116,30 @@
             
             <tr>
                 <th class="border px-4 py-2">No</th>
-                <th class="border px-4 py-2">Site</th>
                 <th class="border px-4 py-2">Category</th>
                  <th class="border px-4 py-2">Status</th>
-                <th class="border px-4 py-2">Date</th>
+                <th class="border px-4 py-2">Date of incident</th>
+                 <th class="border px-4 py-2">Created at</th>
                 <th class="border px-4 py-2">Action</th>
+                 <th class="border px-4 py-2">Updated at</th>
             </tr>
         </thead>
         <tbody>
              @foreach ($trafficAccidents as $item)
             <tr>
                 <td class="border px-4 py-2">{{ $loop->iteration }}</td>
-                <td class="border px-4 py-2">{{ $item->site->name }}</td>
-                 <td class="border px-4 py-2">{{ $item->category }}</td>
+             <td class="border px-4 py-2">{{ $item->category }}</td>
                <td class="border px-4 py-2">
                     <span class="status-btn" data-id="{{ $item->id }}" style="cursor:pointer; color:blue;">{{ $item->status ?? '-' }}</span>
                 </td>
-                <td class="border px-4 py-2">{{ $item->date }}</td>
+                <td class="border px-4 py-2">{{ $item->date->format('d-m-Y') }}</td>
+                <td class="border px-4 py-2">{{ $item->created_at->format('d-m-Y') }}</td>
                 <td class="border px-4 py-2">
                    <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">Detail</a>
                     <a href="{{ route('investigations.index', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
                     <a href="{{ route('admin.accident.edit', $item->id) }}" class="btn btn-sm btn-info">Edit</a>
                 </td>
+                <td class="border px-4 py-2">{{ $item->updated_at->format('d-m-Y') }}</td>
             </tr>
             @endforeach
         </tbody>
@@ -140,12 +155,14 @@
         <thead class="bg-gray-100">
             <tr>
                 <th class="border px-4 py-2">No</th>
-                <th class="border px-4 py-2">Site</th>
+               
                  <th class="border px-4 py-2">Category</th>
                 <th class="border px-4 py-2">Type</th>
                 <th class="border px-4 py-2">Status</th>
-                <th class="border px-4 py-2">Date</th>
+                <th class="border px-4 py-2">Date of incident</th>
+                 <th class="border px-4 py-2">Created at</th>
                 <th class="border px-4 py-2">Action</th>
+                <th class="border px-4 py-2">Updated at</th>
             </tr>
         </thead>
         <tbody>
@@ -153,18 +170,19 @@
                 
             <tr>
                 <td class="border px-4 py-2">{{ $loop->iteration }}</td>
-                <td class="border px-4 py-2">{{ $item->site->name }}</td>
                   <td class="border px-4 py-2">{{ $item->category }}</td>
                 <td class="border px-4 py-2">{{ $item->type }}</td>
                  <td class="border px-4 py-2">
                     <span class="status-btn" data-id="{{ $item->id }}" style="cursor:pointer; color:blue;">{{ $item->status ?? '-' }}</span>
                 </td>
-                <td class="border px-4 py-2">{{ $item->date }}</td>
+                <td class="border px-4 py-2">{{ $item->date->format('d-m-Y') }}</td>
+                <td class="border px-4 py-2">{{ $item->created_at->format('d-m-Y') }}</td>
                 <td class="border px-4 py-2">
-                   <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">Detaik</a>
+                   <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-500 hover:underline">Detail</a>
                     <a href="{{ route('investigations.index', $item->id) }}" class="btn btn-sm btn-warning">Investigate</a>
                     <a href="{{ route('admin.accident.edit', $item->id) }}" class="btn btn-sm btn-info">Edit</a>
                 </td>
+                <td class="border px-4 py-2">{{ $item->updated_at->format('d-m-Y') }}</td>
             </tr>
             @endforeach
             

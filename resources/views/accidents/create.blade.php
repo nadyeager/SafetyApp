@@ -51,7 +51,7 @@
 
         {{-- Date --}}
         <div>
-            <x-input-label for="date" :value="__('Date')" class="text-black" />
+            <x-input-label for="date" :value="__('Date Accident')" class="text-black" />
             <x-text-input id="date" class="block mt-1 w-full" type="date" name="date" :value="old('date')" required
                 autofocus autocomplete="date" />
             <x-input-error :messages="$errors->get('date')" class="mt-2" />

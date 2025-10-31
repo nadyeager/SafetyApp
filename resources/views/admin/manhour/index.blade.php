@@ -13,6 +13,7 @@
             <th class="py-2 px-4 border-b">Total Hours</th>
             <th class="py-2 px-4 border-b">Month</th>
             <th class="py-2 px-4 border-b">Year</th>
+            <th class="py-2 px-4 border-b">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -24,6 +25,9 @@
             <td class="py-2 px-4 border-b">{{ $m->total_hours }}</td>
             <td class="py-2 px-4 border-b">{{ $m->month }}</td>
             <td class="py-2 px-4 border-b">{{ $m->year }}</td>
+            <td class="py-2 px-4 border-b">
+                <a href="{{ route('admin.manhour.edit', $m->id) }}" class="text-blue-500 hover:underline">Edit</a>
+            </td>
         </tr>
           @endforeach
     </tbody>

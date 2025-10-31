@@ -48,7 +48,7 @@
 
         {{-- Date --}}
         <div>
-            <x-input-label for="date" :value="__('Date')" />
+            <x-input-label for="date" :value="__('Date Accident')" />
             <x-text-input id="date" name="date" type="date" class="block mt-1 w-full" :value="old('date', $accident->date)"
                 required />
             <x-input-error :messages="$errors->get('date')" class="mt-2" />

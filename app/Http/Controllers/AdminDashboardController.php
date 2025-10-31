@@ -216,34 +216,38 @@ public function filteredAccident(Request $request) {
     ));
 }
 
-public function editAccident(Request $request, Accident $accident) {
-
-          $request->validate([
-            'category' => 'required|in:work accident,traffic accident,non-work accident',
-            'type' => $request->category === 'traffic accident' ? 'nullable' : 'required',
-            'description' => 'required|string',
-            'date' => 'required|date',
-            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:10000',
-            'status' => 'required|in:open,close',
-        ]);
-
-        $filePath = $accident->file;
-
-        if ($request->hasFile('file')) {
-            $filePath = $request->file('file') ?  $request->file('file')->store('accidents_file', 'public') : $accident->file;
-        }
-
-        $accident->update([
-            'category' => $request->category,
-            'type' => $request->type,
-            'description' => $request->description,
-            'date' => $request->date,
-            'file' => $request->file('file') ? $request->file('file')->store('accidents_file', 'public') : $accident->file,
-            'status' => $request->status,
-        ]);
-
-    return redirect()->route('admin.accident.index')->with('success', 'Accident updated successfully.');
+public function editAccident(Accident $accident) {
+    return view('admin.accident.update', compact('accident'));
 }
+
+public function updateAccident(Request $request, Accident $accident)
+{
+    // Validasi
+    $validated = $request->validate([
+        'category' => 'required|in:work accident,traffic accident,non-work accident',
+        'type' => $request->category === 'traffic accident' ? 'nullable' : 'required',
+        'description' => 'required|string',
+        'date' => 'nullable|date',
+        'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:10000',
+        'status' => 'required|in:open,close',
+    ]);
+
+    // Tangani file
+    if ($request->hasFile('file')) {
+        $validated['file'] = $request->file('file')->store('accidents_file', 'public');
+    } else {
+        $validated['file'] = $accident->file; // tetap pakai file lama
+    }
+
+    // Update accident
+    $accident->update($validated);
+
+    // Redirect ke index
+    return redirect()->route('admin.accident.index')
+        ->with('success', 'Accident updated successfully.');
+}
+
+
 
 
     
@@ -321,14 +325,29 @@ public function editAccident(Request $request, Accident $accident) {
         return view('admin.inspection.show', compact('inspection'));
     }
 
+    public function updateNotes(Request $request, $id)
+{
+    $request->validate([
+        'notes' => 'nullable|string|max:2000',
+    ]);
+
+    $inspection = \App\Models\Inspections::findOrFail($id);
+    $inspection->notes = $request->notes;
+    $inspection->save();
+
+    return redirect()->back()->with('success', 'Catatan berhasil diperbarui!');
+}
+
+    public function editInspection(Inspections $inspection) {
+        return view('admin.inspection.update', compact('inspection'));            
+    }
+
     public function updateInspection(Request $request, Inspections $inspection) {
         $request->validate([
             'type' => 'required|in:management,routine',
             'notes' => 'required|string',
             'corrective_action' => 'required|string',
             'date' => 'required|date',
-            'status'=> 'required|in:open,close',
-            'close_date' => 'required|date',
         ]);
 
         $inspection->update([
@@ -336,10 +355,11 @@ public function editAccident(Request $request, Accident $accident) {
             'notes' => $request->notes,
             'corrective_action' => $request->corrective_action,
             'date' => $request->date,
-            'status' => $request->status,
-            'close_date' => $request->close_date,
             
         ]);
+        
+        dd($inspection->getChanges());
+;
 
         return redirect()->route('admin.inspection.index')->with('success', 'Inspection updated successfully.');
     }
@@ -361,11 +381,57 @@ public function editAccident(Request $request, Accident $accident) {
 
     }
 
+    public function editAssessment(Assessments $assessment) {
+        return view('admin.assessment.update', compact('assessment'));
+    }
+
+    public function updateAssessment(Request $request, Assessments $assessment) {
+        $request->validate([
+            'type' => 'required|in:SMK3,SMKP,AGC,MKA,CSMS',
+            'score' => 'required|numeric|min:0|max:100',
+            'date' => 'required|date',
+        ]);
+
+        $assessment->update([
+            'site_id' => Auth::user()->site_id,
+            'user_id' => Auth::id(),
+            'type' => $request->type,
+            'score' => $request->score,
+            'date' => $request->date,
+        ]);
+
+
+
+        return redirect()->route('admin.assessment.index')->with('success', 'Assessment updated successfully.');
+    }
+
     public function indexManhour() {
 
         $manhour = Manhours::with('site')->get(); 
 
         return view('admin.manhour.index', compact('manhour'));
+    }
+
+    public function editManhour(Manhours $manhour) {
+        return view('admin.manhour.update', compact('manhour'));            
+    }
+
+    public function updateManhour(Request $request, Manhours $manhour) {
+        $request->validate([
+            'type' => 'required|in:organik,partner',
+            'total_hours' => 'required|numeric|min:0',
+            'month' => 'required|date',
+            'year' => 'required|date',
+        ]);
+
+        $manhour->update([
+            'site_id' => auth()->user()->site_id,
+            'type' => $request->type,
+            'total_hours' => $request->total_hours,
+            'month' => $request->month,
+            'year' => $request->year,
+        ]);
+        return redirect()->route('admin.manhour.index')->with('success', 'Manhour updated successfully.');
     }
 
     public function indexManpower() {
@@ -375,99 +441,62 @@ public function editAccident(Request $request, Accident $accident) {
         return view('admin.manpower.index', compact('manpower'));
     }
 
-    public function indexSafetyActivity() {
-
-        $data = SafetyActivities::select('type', DB::raw('count(*) as total'))
-        ->groupBy('type')
-        ->get();
-
-        $labels = [
-            'safety_talk' => 'Safety Talk',
-            'p5m' => 'P5M',
-            'meeting' => 'Safety Meeting',
-            'campaign' => 'Safety Campaign',
-        ];
-
-        return view('admin.safetyActivity.index', compact('data', 'labels'));
+    public function editManpower(Manpower $manpower) {
+        return view('admin.manpower.update', compact('manpower'));            
     }
 
-//     public function indexTraining(Request $request, Trainings $training) {
+    public function updateManpower(Request $request, Manpower $manpower) {
+        $request->validate([
+            'type' => 'required|in:organik,partner',
+            'gender' => 'required|in:male,female',
+            'total' => 'required|numeric|min:0',
+            'month' => 'required|date',
+            'year' => 'required|date',
+        ]);
 
-//         $training = Trainings::with(['site', 'user'])->get();
+        $manpower->update([
+            'site_id' => auth()->user()->site_id,
+            'type' => $request->type,
+            'gender' => $request->gender,   
+            'total' => $request->total,
+            'month' => $request->month,
+            'year' => $request->year,
+        ]);
+        return redirect()->route('admin.manpower.index')->with('success', 'Manpower updated successfully.');
+    }
 
-       
-//         $total_mandatory = $training->where('type', 'mandatory')->count();
-//         $total_non_mandatory = $training->where('type', 'non-mandatory')->count();
-      
-//         $mandatory = $training->where('type', 'mandatory');
+    public function indexSafetyActivity() {
 
-//         $non_mandatory = $training->where('type', 'non-mandatory');
+$safetyActivity = SafetyActivities::query()
+    ->select('type')
+    ->selectRaw('COUNT(*) as total')
+    ->groupBy('type')
+    ->get();
 
-//         return view('admin.training.index', compact('mandatory', 'non_mandatory', 'total_mandatory', 'total_non_mandatory', 'training'));
-//     }
 
-//     public function filteredTraining(Request $request) {
-//         $type = $request->query('type');
+        return view('admin.safetyActivity.index', compact('safetyActivity'));
+    }
 
-//         $training = Trainings::with(['site', 'user'])
-//             ->when($type, fn($q) => $q->where('type', $type))
-//             ->get();
+    public function editSafetyActivity(SafetyActivities $safetyActivity) {
+        return view('admin.safetyActivity.update', compact('safetyActivity'));            
+    }
 
-//         $total_mandatory = $training->where('type', 'mandatory')->count();
-//         $total_non_mandatory = $training->where('type', 'non-mandatory')->count();
-
-//         $mandatory = $training->where('type', 'mandatory');
-
-//         $non_mandatory = $training->where('type', 'non-mandatory');
-
-//         return view('admin.training.index', compact(
-//             'training',
-//             'mandatory',
-//             'non_mandatory',
-//             'total_mandatory',
-//             'total_non_mandatory'
-//         ));
-//     }
-
-//     public function indexCertification(Request $request, Certifications $certification) {
-
-//         $certification = Certifications::with(['site', 'user'])->get();
-
-      
-//             $total_mandatory = $certification->where('type', 'mandatory')->count();
-//             $total_non_mandatory = $certification->where('type', 'non-mandatory')->count();
-
-//            $mandatory = $certification->where('type', 'mandatory');
-
-//               $non_mandatory = $certification->where('type', 'non-mandatory');
-
-//         return view('admin.certification.index', compact( 'mandatory', 'non_mandatory', 'total_mandatory', 'total_non_mandatory', 'certification'));
-//     }
-
-//     public function filteredCertification(Request $request) {
-//         $type = $request->query('type');
-
-//         $certification = Certifications::with(['site', 'user'])
-//             ->when($type, fn($q) => $q->where('type', $type))
-//             ->get();
-
-//         $total_mandatory = $certification->where('type', 'mandatory')->count();
-//         $total_non_mandatory = $certification->where('type', 'non-mandatory')->count();
-
-//         $mandatory = $certification->where('type', 'mandatory');
-
-//         $non_mandatory = $certification->where('type', 'non-mandatory');
-
-//         return view('admin.certification.index', compact(
-//             'certification',
-//             'mandatory',
-//             'non_mandatory',
-//             'total_mandatory',
-//             'total_non_mandatory'
-//         ));
-//     }
-
-// }
+    public function updateSafetyActivity(Request $request, SafetyActivities $safetyActivity) {
+        $request->validate([
+            'type' => 'required|in:safety_talk,p5m,meeting,campaign',
+            'date' => 'required|date',
+            'notes' => 'required|string',
+        ]);
+          
+        $safetyActivity->update([
+            'site_id' => auth()->user()->site_id,
+            'user_id' => auth()->id(),
+            'type' => $request->type,
+            'date' => $request->date,
+            'notes' => $request->notes,
+        ]);
+        return redirect()->route('admin.safetyActivity.index')->with('success', 'Safety Activity updated successfully.');
+    }
 
 private function getSummaryData($model, $typeFilter = null) {
 
@@ -518,6 +547,29 @@ public function filteredTraining(Request $request) {
    
 }
 
+public function editTraining(Trainings $training) {
+    return view('admin.training.update', compact('training'));            
+
+}
+public function updateTraining(Request $request, Trainings $training) {
+    $request->validate([
+        'name' => 'required|string',
+        'type' => 'required|in:mandatory,non-mandatory',
+        'provider' => 'nullable|string',
+        'expired_date' => 'nullable|date',
+    ]);
+
+    $training->update([
+        'site_id' => auth()->user()->site_id,
+        'user_id' => auth()->id(),
+        'name' => $request->name,
+        'type' => $request->type,
+        'provider' => $request->provider,
+        'expired_date' => $request->expired_date,
+    ]);
+    return redirect()->route('admin.training.index')->with('success', 'Training updated successfully.');
+}
+
 public function indexCertification(Request $request) {
     $summary = $this->getSummaryData(Certifications::class);
 
@@ -549,4 +601,27 @@ public function filteredCertification(Request $request) {
    
 }
 
+public function editCertification(Certifications $certification) {
+    return view('admin.certification.update', compact('certification'));            
+
+}
+
+public function updateCertification(Request $request, Certifications $certification) {
+    $request->validate([
+      'name' => 'required|string',
+        'type' => 'required|in:mandatory,non-mandatory',
+        'provider' => 'nullable|string',
+        'expired_date' => 'nullable|date',
+    ]);
+
+    $certification->update([
+        'site_id' => auth()->user()->site_id,
+        'user_id' => auth()->id(),
+        'name' => $request->name,
+        'type' => $request->type,
+        'provider' => $request->provider,
+        'expired_date' => $request->expired_date,
+    ]);
+    return redirect()->route('admin.certification.index')->with('success', 'Certification updated successfully.');
+}
 }

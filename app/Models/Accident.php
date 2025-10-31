@@ -22,6 +22,10 @@ class Accident extends Model
         'status',
     ];
 
+    protected $casts = [
+        'date' => 'date',
+    ];
+
     public function investigation()
 {
     return $this->hasOne(Accident_Investigations::class, 'accident_id');

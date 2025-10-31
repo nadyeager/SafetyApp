@@ -39,7 +39,7 @@ Safety Audit & Assessment <span class="text-gray-900">Information </span></h1>
                 <td>{{ $a->site->name }}</td>
                 <td>{{ $a->user->name }}</td>
                 <td>
-                    {{-- <a href="{{ route('admin.assessment.show', $a->id) }}" class="btn btn-sm btn-info">View</a> --}}
+                   <a href="{{ route('admin.assessment.edit', $a->id) }}" class="text-blue-500 hover:underline">Edit</a>
                 </td>
             </tr>  
             @endforeach

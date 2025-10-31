@@ -2,12 +2,13 @@
 
 @section('content')
 <div class="space-y-6">
-    <div class="bg-white rounded-xl shadow p-6 flex items-center justify-between mb-6">
+  <div class="bg-white shadow-md rounded-2xl p-6 border border-gray-100 justify-between items-center text-center max-w-sm">
+
         <div>
             <form action="{{ route('admin.dashboard') }}" method="GET">
                 <h2 class="text-xl font-semibold mb-3">Data Terakhir Diperbarui</h2>
-                <label for="month">Pilih Bulan</label>
-                <input type="month" id="month" name="month" value="{{ $month }}" onchange="this.form.submit()" class="border border-gray-300 rounded-md p-2">
+                <label for="month" class="font-semibold">Pilih Bulan</label>
+                <input type="month" id="month" name="month" value="{{ $month }}" onchange="this.form.submit()" class="border border-gray-300 rounded-md p-2 ml-4">
             </form>
         </div>
     </div>
