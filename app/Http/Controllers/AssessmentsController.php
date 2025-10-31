@@ -49,8 +49,13 @@ class AssessmentsController extends Controller
             'type' => 'required|in:SMK3,SMKP,AGC,MKA,CSMS',
             'score' => 'required|numeric|between:0,100',
             'date' => 'required|date',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
         ];
 
+    $filePath = null;
+    if ($request->hasFile('file')) {
+        $filePath = $request->file('file')->store('assessment_files', 'public');
+    }
         if (Auth::user()->role === 'admin') {
             $rules['site_id'] = 'required|exists:sites,id';
         }
@@ -66,6 +71,7 @@ class AssessmentsController extends Controller
             // simpan sebagai numeric; DB decimal(5,2) akan menyesuaikan
             'score' => number_format((float)$validated['score'], 2, '.', ''),
             'date' => $validated['date'],
+            'file' => $filePath,
         ]);
 
         return redirect()->route('assessments.index')->with('success', 'Assessment created successfully.');
@@ -101,7 +107,13 @@ class AssessmentsController extends Controller
             'type' => 'required|in:SMK3,SMKP,AGC,MKA,CSMS',
             'score' => 'required|numeric|between:0,100',
             'date' => 'required|date',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
         ];
+
+        $filePath = $assessment->file;
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('assessment_files', 'public');
+        }
 
         if (Auth::user()->role === 'admin') {
             $rules['site_id'] = 'required|exists:sites,id';
@@ -116,6 +128,7 @@ class AssessmentsController extends Controller
             'type' => $validated['type'],
             'score' => number_format((float)$validated['score'], 2, '.', ''),
             'date' => $validated['date'],
+            'file' => $filePath,
         ]);
 
         return redirect()->route('assessments.index')->with('success', 'Assessment updated successfully.');

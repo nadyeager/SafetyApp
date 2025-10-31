@@ -30,6 +30,7 @@
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Score</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Site</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Inspector</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">File</th>
                     <!-- <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th> -->
                 </tr>
             </thead>
@@ -55,15 +56,19 @@
                         <td class="px-4 py-3 text-sm text-gray-700">
                             {{ optional($assessment->user)->name ?? '-' }}
                         </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                            @if($assessment->file)
+                                <a href="{{ asset('storage/' . $assessment->file) }}" target="_blank" class="text-blue-600 hover:underline">
+                                    Lihat File
+                                </a>
+                            @else
+                                -
+                            @endif      
                         <!-- <td class="px-4 py-3 text-sm">
                             <div class="flex space-x-3">
-                                <a href="{{ route('assessments.edit', $assessment) }}" 
-                                   class="text-blue-600 hover:text-blue-800 font-medium">
-                                   Edit
+                                <a href="{{ route('assessments.edit', $assessment) }}" class="text-blue-600 hover:text-blue-800 font-medium">Edit
                                 </a>
-                                <form action="{{ route('assessments.destroy', $assessment) }}" 
-                                      method="POST" 
-                                      onsubmit="return confirm('Hapus assessment ini?');">
+                                <form action="{{ route('assessments.destroy', $assessment) }}" method="POST" onsubmit="return confirm('Hapus assessment ini?');">
                                     @csrf
                                     @method('DELETE')
                                     <button class="text-red-600 hover:text-red-800 font-medium">

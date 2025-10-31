@@ -15,6 +15,7 @@ class Assessments extends Model
         'type',
         'score',
         'date',
+        'file',
     ];
 
     public function site()

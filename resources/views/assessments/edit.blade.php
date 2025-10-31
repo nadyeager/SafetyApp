@@ -50,6 +50,11 @@
                 <input type="date" name="date" value="{{ old('date', \Carbon\Carbon::parse($assessment->date)->format('Y-m-d')) }}" class="mt-1 block w-full border-gray-300 rounded" required>
             </div>
 
+            <div class="mb-4">
+                <label class="block text-sm font-medium">File</label>
+                <input type="file" name="file" class="mt-1 block w-full border-gray-300 rounded">
+            </div>
+
             <div class="flex items-center space-x-2">
                 <button class="px-4 py-2 bg-blue-600 text-white rounded">Update</button>
                 <a href="{{ route('assessments.index') }}" class="px-4 py-2 bg-gray-100 rounded">Batal</a>

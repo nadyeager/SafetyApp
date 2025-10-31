@@ -14,7 +14,7 @@
     @endif
 
     <div class="bg-white p-6 rounded shadow">
-        <form action="{{ route('assessments.store') }}" method="POST">
+        <form action="{{ route('assessments.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             @if(!empty($sites) && auth()->user()->role === 'admin')
@@ -49,6 +49,11 @@
             <div class="mb-4">
                 <label class="block text-sm font-medium">Date</label>
                 <input type="date" name="date" value="{{ old('date', date('Y-m-d')) }}" class="mt-1 block w-full border-gray-300 rounded" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium">File</label>
+                <input type="file" name="file" class="mt-1 block w-full border-gray-300 rounded">
             </div>
 
             <div class="flex items-center space-x-2">
