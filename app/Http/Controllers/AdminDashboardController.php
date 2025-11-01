@@ -467,12 +467,7 @@ public function updateAccident(Request $request, Accident $accident)
 
     public function indexSafetyActivity() {
 
-$safetyActivity = SafetyActivities::query()
-    ->select('type')
-    ->selectRaw('COUNT(*) as total')
-    ->groupBy('type')
-    ->get();
-
+        $safetyActivity = SafetyActivities::with(['site', 'user'])->get();
 
         return view('admin.safetyActivity.index', compact('safetyActivity'));
     }
@@ -484,16 +479,19 @@ $safetyActivity = SafetyActivities::query()
     public function updateSafetyActivity(Request $request, SafetyActivities $safetyActivity) {
         $request->validate([
             'type' => 'required|in:safety_talk,p5m,meeting,campaign',
+            'frequency' => 'required|in:daily,weekly,monthly',
             'date' => 'required|date',
             'notes' => 'required|string',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:10000',
         ]);
           
         $safetyActivity->update([
-            'site_id' => auth()->user()->site_id,
-            'user_id' => auth()->id(),
             'type' => $request->type,
+            'frequency' => $request->frequency,
             'date' => $request->date,
             'notes' => $request->notes,
+            'file' => $request->file('file') ? $request->file('file')->store('safety-activity') : $safetyActivity->file
+
         ]);
         return redirect()->route('admin.safetyActivity.index')->with('success', 'Safety Activity updated successfully.');
     }

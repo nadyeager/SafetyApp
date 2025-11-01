@@ -1,200 +1,192 @@
-@extends('layouts.navbar-admin')
+@extends('layouts.navbar')
 
 @section('content')
+<div class="container mx-auto px-4 py-6">
 
-<h1 class="text-2xl font-bold mb-4">
-    <span class="text-blue-600">Inspection</span> Information
-</h1>
-
-{{-- 🔹 Filter Bulan --}}
-<form action="{{ route('admin.inspection.index') }}" method="GET">
-    <div class="d-flex align-items-center gap-2 mb-4">
-        <label for="month">Pilih Bulan</label>
-        <input type="month" name="month" id="month" 
-               value="{{ request('month', now()->format('Y-m')) }}" 
-               class="form-control w-auto">
-        <button class="btn btn-primary">Tampilkan</button>
+   
+    <div class="flex flex-col sm:flex-row items-center justify-between mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">
+            <span class="text-blue-600">Inspection</span> Information
+        </h1>
     </div>
-</form>
 
-{{-- 🔹 Statistik Ringkas --}}
-<div class="space-y-6">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="bg-white shadow rounded-xl p-4">
-            <h6>Management - Open</h6>
-            <h3>{{ $managementOpen }}</h3>
+  
+    <form action="{{ route('admin.inspection.index') }}" method="GET" class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6">
+        <div class="flex flex-wrap items-center gap-3">
+            <label for="month" class="text-gray-600 font-medium">Filter by Month:</label>
+            <input type="month" name="month" id="month"
+                value="{{ request('month', now()->format('Y-m')) }}"
+                class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition">Show</button>
         </div>
-        <div class="bg-white shadow rounded-xl p-4">
-            <h6>Management - Closed</h6>
-            <h3>{{ $managementClose }}</h3>
+    </form>
+
+ 
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white p-3 rounded-2xl shadow-md border border-gray-100 text-center hover:shadow-lg transition">
+            <p class="text-gray-500 text-sm mb-2">Management - Open</p>
+            <h3 class="text-2xl font-bold text-blue-700">{{ $managementOpen }}</h3>
         </div>
-        <div class="bg-white shadow rounded-xl p-4">
-            <h6>Routine - Open</h6>
-            <h3>{{ $routineOpen }}</h3>
+        <div class="bg-white p-3 rounded-2xl shadow-md border border-gray-100 text-center hover:shadow-lg transition">
+            <p class="text-gray-500 text-sm mb-2">Management - Closed</p>
+            <h3 class="text-2xl font-bold text-green-700">{{ $managementClose }}</h3>
         </div>
-        <div class="bg-white shadow rounded-xl p-4">
-            <h6>Routine - Closed</h6>
-            <h3>{{ $routineClose }}</h3>
+        <div class="bg-white p-3 rounded-2xl shadow-md border border-gray-100 text-center hover:shadow-lg transition">
+            <p class="text-gray-500 text-sm mb-2">Routine - Open</p>
+            <h3 class="text-2xl font-bold text-blue-700">{{ $routineOpen }}</h3>
+        </div>
+        <div class="bg-white p-3 rounded-2xl shadow-md border border-gray-100 text-center hover:shadow-lg transition">
+            <p class="text-gray-500 text-sm mb-2">Routine - Closed</p>
+            <h3 class="text-2xl font-bold text-green-700">{{ $routineClose }}</h3>
         </div>
     </div>
-</div>
 
-{{-- 🔹 Alert Sukses --}}
-@if (session('success'))
-    <div class="alert alert-success mt-4">
-        {{ session('success') }}
-    </div>
-@endif
+   
+    @if (session('success'))
+        <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-lg mb-6">
+            {{ session('success') }}
+        </div>
+    @endif
 
-{{-- 🔹 Tabel Management Inspection --}}
-<div>
-    <h1 class="text-xl font-bold mb-4 mt-4">Management Inspection</h1>
-    <table class="w-full border mb-6 text-sm">
-        <thead class="bg-gray-200">
-            <tr>
-                <th>No</th>
-                <th>Type</th>
-                <th>Corrective Action</th>
-                <th>Inspection Date</th>
-                <th>Created at</th>
-                <th>Status</th>
-                <th>Notes</th>
-                <th>Action</th>
-                <th>Updated at</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($management as $m)
-            <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $m->type }}</td>
-                <td>{{ $m->corrective_action }}</td>
-                <td>{{ $m->date->format('d-m-Y') }}</td>
-                <td>{{ $m->created_at->format('d-m-Y') }}</td>
-                <td>{{ $m->status }}</td>
-                <td>{{ Str::limit($m->notes, 40) }}</td>
-                <td>
-                    <button class="btn btn-sm btn-secondary" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#editNotesModal{{ $m->id }}">
-                        Edit Notes
-                    </button>
-                    <a href="{{ route('admin.inspection.show', $m->id) }}" class="btn btn-sm btn-info">Detail</a>
-                    <a href="{{ route('admin.inspection.edit', $m->id) }}" class="btn btn-sm btn-primary">Edit</a>
-                </td>
-                <td>{{ $m->updated_at->format('d-m-Y') }}</td>
-            </tr>
 
-            {{-- Modal Edit Notes --}}
-            <div class="modal fade" id="editNotesModal{{ $m->id }}" tabindex="-1" aria-labelledby="editNotesLabel{{ $m->id }}" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="{{ route('admin.inspection.updateNotes', $m->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
+    <section class="mb-10">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Management Inspection</h2>
+        <div class="overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-sm">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-gray-100 text-gray-600">
+                    <tr>
+                        @foreach(['No', 'Type', 'Corrective Action', 'Inspection Date', 'Created at', 'Status', 'Notes', 'Action', 'Updated at'] as $head)
+                            <th class="px-4 py-2 border">{{ $head }}</th>
+                        @endforeach
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($management as $m)
+                        <tr class="hover:bg-gray-50">
+                            <td class="border px-4 py-2">{{ $loop->iteration }}</td>
+                            <td class="border px-4 py-2">{{ $m->type }}</td>
+                            <td class="border px-4 py-2">{{ $m->corrective_action }}</td>
+                            <td class="border px-4 py-2">{{ $m->date->format('d-m-Y') }}</td>
+                            <td class="border px-4 py-2">{{ $m->created_at->format('d-m-Y') }}</td>
+                            <td class="border px-4 py-2 font-medium {{ $m->status == 'Open' ? 'text-blue-600' : 'text-green-600' }}">{{ ucfirst($m->status) }}</td>
+                            <td class="border px-4 py-2 text-gray-600">{{ Str::limit($m->notes, 40) }}</td>
+                            <td class="border px-4 py-2 space-x-2">
+                                <button class="text-yellow-600 hover:underline"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editNotesModal{{ $m->id }}">
+                                    Edit Notes
+                                </button>
+                                <a href="{{ route('admin.inspection.show', $m->id) }}" class="text-blue-600 hover:underline">Detail</a>
+                                <a href="{{ route('admin.inspection.edit', $m->id) }}" class="text-green-600 hover:underline">Edit</a>
+                            </td>
+                            <td class="border px-4 py-2 text-gray-500">{{ $m->updated_at->format('d-m-Y') }}</td>
+                        </tr>
 
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editNotesLabel{{ $m->id }}">Edit Notes - {{ $m->type }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
+                       
+                        <div class="modal fade" id="editNotesModal{{ $m->id }}" tabindex="-1" aria-labelledby="editNotesLabel{{ $m->id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form action="{{ route('admin.inspection.updateNotes', $m->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
 
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label for="notes{{ $m->id }}" class="form-label">Notes</label>
-                                    <textarea name="notes" id="notes{{ $m->id }}" class="form-control" rows="4">{{ $m->notes }}</textarea>
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editNotesLabel{{ $m->id }}">Edit Notes - {{ $m->type }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="notes{{ $m->id }}" class="form-label">Notes</label>
+                                                <textarea name="notes" id="notes{{ $m->id }}" class="form-control" rows="4">{{ $m->notes }}</textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
+                        </div>
+                    @empty
+                        <tr><td colspan="9" class="text-center text-gray-500 py-3">No data available</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            {{-- End Modal --}}
+   
+    <section>
+        <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Routine Inspection</h2>
+        <div class="overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-sm">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-gray-100 text-gray-600">
+                    <tr>
+                        @foreach(['No', 'Type', 'Corrective Action', 'Inspection Date', 'Created at', 'Status', 'Notes', 'Action', 'Updated at'] as $head)
+                            <th class="px-4 py-2 border">{{ $head }}</th>
+                        @endforeach
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($routine as $r)
+                        <tr class="hover:bg-gray-50">
+                            <td class="border px-4 py-2">{{ $loop->iteration }}</td>
+                            <td class="border px-4 py-2">{{ $r->type }}</td>
+                            <td class="border px-4 py-2">{{ $r->corrective_action }}</td>
+                            <td class="border px-4 py-2">{{ $r->date->format('d-m-Y') }}</td>
+                            <td class="border px-4 py-2">{{ $r->created_at->format('d-m-Y') }}</td>
+                            <td class="border px-4 py-2 font-medium {{ $r->status == 'Open' ? 'text-blue-600' : 'text-green-600' }}">{{ ucfirst($r->status) }}</td>
+                            <td class="border px-4 py-2 text-gray-600">{{ Str::limit($r->notes, 40) }}</td>
+                            <td class="border px-4 py-2 space-x-2">
+                                <button class="text-yellow-600 hover:underline"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editNotesModalR{{ $r->id }}">
+                                    Edit Notes
+                                </button>
+                                <a href="{{ route('admin.inspection.show', $r->id) }}" class="text-blue-600 hover:underline">Detail</a>
+                                <a href="{{ route('admin.inspection.edit', $r->id) }}" class="text-green-600 hover:underline">Edit</a>
+                            </td>
+                            <td class="border px-4 py-2 text-gray-500">{{ $r->updated_at->format('d-m-Y') }}</td>
+                        </tr>
 
-            @empty
-            <tr><td colspan="9" class="text-center">No data available</td></tr>
-            @endforelse
-        </tbody>
-    </table>
-</div>
+                        {{-- Modal Edit Notes --}}
+                        <div class="modal fade" id="editNotesModalR{{ $r->id }}" tabindex="-1" aria-labelledby="editNotesLabelR{{ $r->id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form action="{{ route('admin.inspection.updateNotes', $r->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
 
-{{-- 🔹 Tabel Routine Inspection --}}
-<div>
-    <h1 class="text-xl font-bold mb-4 mt-8">Routine Inspection</h1>
-    <table class="w-full border mb-6 text-sm">
-        <thead class="bg-gray-200">
-            <tr>
-                <th>No</th>
-                <th>Type</th>
-                <th>Corrective Action</th>
-                <th>Inspection Date</th>
-                <th>Created at</th>
-                <th>Status</th>
-                <th>Notes</th>
-                <th>Action</th>
-                <th>Updated at</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($routine as $r)
-            <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $r->type }}</td>
-                <td>{{ $r->corrective_action }}</td>
-                <td>{{ $r->date->format('d-m-Y') }}</td>
-                <td>{{ $r->created_at->format('d-m-Y') }}</td>
-                <td>{{ $r->status }}</td>
-                <td>{{ Str::limit($r->notes, 40) }}</td>
-                <td>
-                    <button class="btn btn-sm btn-secondary" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#editNotesModalR{{ $r->id }}">
-                        Edit Notes
-                    </button>
-                    <a href="{{ route('admin.inspection.show', $r->id) }}" class="btn btn-sm btn-info">Detail</a>
-                    <a href="{{ route('admin.inspection.edit', $r->id) }}" class="btn btn-sm btn-primary">Edit</a>
-                </td>
-                <td>{{ $r->updated_at->format('d-m-Y') }}</td>
-            </tr>
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editNotesLabelR{{ $r->id }}">Edit Notes - {{ $r->type }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
 
-            {{-- Modal Edit Notes Routine --}}
-            <div class="modal fade" id="editNotesModalR{{ $r->id }}" tabindex="-1" aria-labelledby="editNotesLabelR{{ $r->id }}" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="{{ route('admin.inspection.updateNotes', $r->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="notesR{{ $r->id }}" class="form-label">Notes</label>
+                                                <textarea name="notes" id="notesR{{ $r->id }}" class="form-control" rows="4">{{ $r->notes }}</textarea>
+                                            </div>
+                                        </div>
 
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editNotesLabelR{{ $r->id }}">Edit Notes - {{ $r->type }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label for="notesR{{ $r->id }}" class="form-label">Notes</label>
-                                    <textarea name="notes" id="notesR{{ $r->id }}" class="form-control" rows="4">{{ $r->notes }}</textarea>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
+                        </div>
+                    @empty
+                        <tr><td colspan="9" class="text-center text-gray-500 py-3">No data available</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            {{-- End Modal --}}
-            @empty
-            <tr><td colspan="9" class="text-center">No data available</td></tr>
-            @endforelse
-        </tbody>
-    </table>
 </div>
-
 @endsection

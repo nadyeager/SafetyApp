@@ -18,6 +18,10 @@ class Certifications extends Model
         'expired_date',
     ];
 
+     protected $casts = [
+        'expired_date' => 'date',
+    ];
+
     public function site()
     {
         return $this->belongsTo(Sites::class);

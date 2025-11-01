@@ -7,9 +7,16 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
-                'resources/js/user-chart.js'
+                'resources/js/user-chart.js',
             ],
-            refresh: true,
+            refresh: [
+                'resources/views/**/*.blade.php', // hanya Blade asli
+            ],
         }),
     ],
+    server: {
+        watch: {
+            ignored: ['**/storage/**', '**/node_modules/**'], // abaikan storage & node_modules
+        },
+    },
 });

@@ -17,6 +17,10 @@ class Assessments extends Model
         'date',
     ];
 
+    protected $casts = [
+        'date' => 'date',
+    ];
+
     public function site()
     {
         return $this->belongsTo(Sites::class);

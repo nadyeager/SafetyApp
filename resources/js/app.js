@@ -4,11 +4,15 @@ import Alpine from 'alpinejs';
 window.Alpine = Alpine;
 Alpine.start();
 
-document.addEventListener('DOMContentLoaded', () => {
+import { createIcons } from "lucide";
 
-  // ====================================================
-  // 🏢 1. DISTRIBUSI SITE / CABANG
-  // ====================================================
+document.addEventListener("DOMContentLoaded", () => {
+    createIcons(); 
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  
   const siteChart = document.getElementById('siteDistributionChart');
   if (siteChart) {
     new Chart(siteChart, {
@@ -29,9 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ====================================================
-  // 👷‍♂️ 2. TOTAL MANPOWER (Organik vs Partner)
-  // ====================================================
+
   const manpowerChart = document.getElementById('manpowerChart');
   if (manpowerChart) {
     const labels = JSON.parse(manpowerChart.dataset.labels || '[]');
@@ -55,9 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ====================================================
-  // 🚻 3. GENDER MANPOWER (Organik vs Partner)
-  // ====================================================
+
 const genderChart = document.getElementById('genderChart');
 if (genderChart) {
   const labels = JSON.parse(genderChart.dataset.labels || '[]');
@@ -92,9 +92,7 @@ if (genderChart) {
   });
 }
 
-  // ====================================================
-  // ⏱️ 4. TOTAL MANHOURS (Organik vs Partner)
-  // ====================================================
+
   const manhoursChart = document.getElementById('manhoursChart');
   if (manhoursChart) {
     const labels = JSON.parse(manhoursChart.dataset.labels || '[]');

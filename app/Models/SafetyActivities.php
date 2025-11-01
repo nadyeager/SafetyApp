@@ -22,6 +22,10 @@ class SafetyActivities extends Model
         'file',
     ];
 
+     protected $casts = [
+        'date' => 'date',
+    ];
+
     public function site()
     {
         return $this->belongsTo(Sites::class, 'site_id');
