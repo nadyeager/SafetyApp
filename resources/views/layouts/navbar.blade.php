@@ -143,6 +143,9 @@
   lucide.createIcons();
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ asset('js/charts.js') }}"></script> 
+
 </body>
 
 </html>
