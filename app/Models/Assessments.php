@@ -16,10 +16,13 @@ class Assessments extends Model
         'score',
         'date',
         'file',
+<<<<<<< HEAD
     ];
 
     protected $casts = [
         'date' => 'date',
+=======
+>>>>>>> c0a895371887804cea5632d3437331bc8c795b89
     ];
 
     public function site()

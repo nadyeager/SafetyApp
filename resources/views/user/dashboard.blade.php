@@ -3,8 +3,21 @@
 @section('title', 'Dashboard')
 
 @section('content')
+<div class="ml-0 md:ml-18 -mt-8 p-4">
+    <h2 class="text-3xl md:text-4xl text-center font-bold text-green-600 mb-4">Safety Dashboard</h2>
+    <p class="text-center text-base md:text-xl text-gray-700 mb-6">
+        Selamat datang di sistem <span class="font-semibold">SafetyApp</span>. Pastikan semua aktivitas kerja
+        berlangsung aman dan sesuai prosedur.
+    </p>
 
+    {{-- ✅ Info Cards (Responsive 1-3 kolom) --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="bg-blue-50 p-6 sm:p-8 rounded-xl shadow hover:shadow-lg transition">
+            <h3 class="text-base md:text-lg font-bold text-blue-800">Pentingnya APD</h3>
+            <p class="text-sm text-gray-700 mt-2">Gunakan Alat Pelindung Diri untuk menghindari risiko cedera.</p>
+        </div>
 
+<<<<<<< HEAD
   <div class="relative w-screen left-[50%] right-[50%] ml-[-50vw] mr-[-50vw] overflow-hidden">
     <img src="{{ asset('images/poto.png') }}" alt="poto image"
       class="w-full h-[450px] md:h-[550px] object-cover brightness-75">
@@ -385,6 +398,15 @@
             </p>
         </div>
 
+=======
+        <div class="bg-blue-50 p-6 sm:p-8 rounded-xl shadow hover:shadow-lg transition">
+            <h3 class="text-base md:text-lg font-bold text-blue-800">Area Aman</h3>
+            <p class="text-sm text-gray-700 mt-2">
+                Pastikan area kerja bersih dari hambatan dan tanda peringatan terlihat.
+            </p>
+        </div>
+
+>>>>>>> c0a895371887804cea5632d3437331bc8c795b89
         <div class="bg-blue-50 p-6 sm:p-8 rounded-xl shadow hover:shadow-lg transition">
             <h3 class="text-base md:text-lg font-bold text-blue-800">Inspeksi Rutin</h3>
             <p class="text-sm text-gray-700 mt-2">
@@ -453,4 +475,8 @@
         </canvas>
     </div>
 </div>
+<<<<<<< HEAD
 @endsection
+=======
+@endsection
+>>>>>>> c0a895371887804cea5632d3437331bc8c795b89
