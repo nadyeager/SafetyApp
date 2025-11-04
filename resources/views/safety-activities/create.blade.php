@@ -1,9 +1,9 @@
 @extends('layouts.navbar-user')
 
-@section('title', 'Buat Safety Activity')
+@section('title', 'Add Safety Activity')
 
 @section('content')
-    <h2 class="text-xl font-semibold mb-4">Buat Safety Activity</h2>
+    <h2 class="text-xl font-semibold mb-4">Add Safety Activity</h2>
 
     @if ($errors->any())
         <div class="mb-4 p-3 bg-red-50 text-red-700 rounded">
@@ -19,7 +19,7 @@
         <form action="{{ route('safety-activities.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            @if(!empty($sites) && auth()->user()->role === 'admin')
+            <!-- @if(!empty($sites) && auth()->user()->role === 'admin')
                 <div class="mb-4">
                     <label class="block text-sm font-medium">Site</label>
                     <select name="site_id" class="mt-1 block w-full border-gray-300 rounded">
@@ -31,13 +31,13 @@
                         @endforeach
                     </select>
                 </div>
-            @endif
+            @endif -->
 
             {{-- Type --}}
             <div class="mb-4">
                 <label class="block text-sm font-medium">Type</label>
                 <select id="type_select" name="type" class="mt-1 block w-full border-gray-300 rounded" required>
-                    <option value="">-- pilih --</option>
+                    <!-- <option value="">-- pilih --</option> -->
                     <option value="safety_talk" {{ old('type') == 'safety_talk' ? 'selected' : '' }}>Safety Talk</option>
                     <option value="p5m" {{ old('type') == 'p5m' ? 'selected' : '' }}>P5M</option>
                     <option value="meeting" {{ old('type') == 'meeting' ? 'selected' : '' }}>Meeting</option>
@@ -58,7 +58,7 @@
             <div class="mb-4">
                 <label class="block text-sm font-medium">Frequency</label>
                 <select name="frequency" class="mt-1 block w-full border-gray-300 rounded" required>
-                    <option value="">-- pilih --</option>
+                    <!-- <option value="">-- pilih --</option> -->
                     <option value="daily" {{ old('frequency') == 'daily' ? 'selected' : '' }}>Daily</option>
                     <option value="weekly" {{ old('frequency') == 'weekly' ? 'selected' : '' }}>Weekly</option>
                     <option value="monthly" {{ old('frequency') == 'monthly' ? 'selected' : '' }}>Monthly</option>
@@ -86,8 +86,8 @@
 
             {{-- Tombol --}}
             <div class="flex items-center space-x-2">
-                <button class="px-4 py-2 bg-green-600 text-white rounded">Simpan</button>
-                <a href="{{ route('safety-activities.index') }}" class="px-4 py-2 bg-gray-100 rounded">Batal</a>
+                <button class="px-4 py-2 bg-green-600 text-white rounded">Save</button>
+                <a href="{{ route('safety-activities.index') }}" class="px-4 py-2 bg-gray-100 rounded">Cancel</a>
             </div>
         </form>
     </div>

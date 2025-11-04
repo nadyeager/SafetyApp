@@ -7,14 +7,27 @@
         <h1 class="text-2xl font-semibold">Certifications</h1>
         <a href="{{ route('certifications.create') }}"
             class="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition">
-            + Buat Certification
+            + Create Certification
         </a>
     </div>
 
-    @if (session('success'))
-        <div class="mb-4 p-3 bg-green-100 text-green-800 rounded-lg shadow-sm">
+    @if(session('success'))
+        <div id="success-alert"
+            class="mb-4 p-3 bg-green-100 text-green-800 rounded-lg shadow-sm transition-opacity duration-500">
             {{ session('success') }}
         </div>
+        <script>
+            // Setelah 3 detik, fade out dan refresh halaman
+            setTimeout(() => {
+                const alert = document.getElementById('success-alert');
+                alert.classList.add('opacity-0');
+
+                // Setelah efek hilang (0.5 detik), reload halaman
+                setTimeout(() => {
+                    location.reload();
+                }, 500);
+            }, 3000);
+        </script>
     @endif
 
     {{-- WRAPPER UNTUK RESPONSIVE TABLE --}}

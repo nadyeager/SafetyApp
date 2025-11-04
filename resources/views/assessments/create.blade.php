@@ -1,9 +1,9 @@
 @extends('layouts.navbar-user')
 
-@section('title', 'Buat Assessment')
+@section('title', ' Add New Assessment')
 
 @section('content')
-    <h2 class="text-xl font-semibold mb-4">Buat Assessment</h2>
+    <h2 class="text-xl font-semibold mb-4">Add New Assessment</h2>
 
     @if ($errors->any())
         <div class="mb-4 p-3 bg-red-50 text-red-700 rounded">
@@ -72,8 +72,8 @@
             </div>
 
             <div class="flex items-center space-x-2">
-                <button class="px-4 py-2 bg-green-600 text-white rounded">Simpan</button>
-                <a href="{{ route('assessments.index') }}" class="px-4 py-2 bg-gray-100 rounded">Batal</a>
+                <button class="px-4 py-2 bg-green-600 text-white rounded">Save</button>
+                <a href="{{ route('assessments.index') }}" class="px-4 py-2 bg-gray-100 rounded">Cancel</a>
             </div>
         </form>
     </div>

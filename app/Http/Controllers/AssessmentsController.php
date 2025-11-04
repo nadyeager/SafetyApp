@@ -46,7 +46,8 @@ class AssessmentsController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'type' => 'required|in:SMK3,SMKP,AGC,MKA,CSMS',
+            'type' => 'required|in:SMK3,SMKP,AGC,MKA,CSMS,Others',
+            'other_name' => 'required_if:type,Others|string|max:255',
             'score' => 'required|numeric|between:0,100',
             'date' => 'required|date',
             'file' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
@@ -67,7 +68,7 @@ class AssessmentsController extends Controller
         Assessments::create([
             'site_id' => $siteId,
             'user_id' => Auth::id(),
-            'type' => $validated['type'],
+            'type' => $validated['type'] === 'Others' ? $validated['other_name'] : $validated['type'],
             // simpan sebagai numeric; DB decimal(5,2) akan menyesuaikan
             'score' => number_format((float)$validated['score'], 2, '.', ''),
             'date' => $validated['date'],
