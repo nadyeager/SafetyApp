@@ -72,7 +72,7 @@
             <table class="w-full text-sm text-left border-collapse">
                 <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                     <tr>
-                        @foreach(['No', 'Site', 'User', 'Certification Name', 'Type', 'Provider', 'Expired Date', 'Action'] as $head)
+                        @foreach(['No', 'Site', 'User', 'Certification Name', 'Type', 'Provider', 'Expired Date', 'Created at', 'Updated at', 'Action'] as $head)
                             <th class="px-4 py-3 border">{{ $head }}</th>
                         @endforeach
                     </tr>
@@ -97,11 +97,16 @@
                                     {{ $c->expired_date->format('d-m-Y') }}
                                 </span>
                             </td>
+                            <td class="border px-4 py-2">{{ $c->created_at->format('d-m-Y') }}</td>
+                            <td class="border px-4 py-2">{{ $c->updated_at->format('d-m-Y') }}</td>
                             <td class="border px-4 py-2">
                                 <a href="{{ route('admin.certification.edit', $c->id) }}" 
                                    class="text-blue-600 hover:text-blue-800 font-medium">
                                    Edit
                                 </a>
+                                <a href="{{ route('admin.certification.show', $c->id) }}"
+                                    class="text-yellow-600 hover:text-yellow-800 font-medium p-2">
+                                    Detail</a>
                             </td>
                         </tr>
                     @empty
@@ -122,7 +127,7 @@
             <table class="w-full text-sm text-left border-collapse">
                 <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                     <tr>
-                        @foreach(['No', 'Site', 'User', 'Certification Name', 'Type', 'Provider', 'Expired Date'] as $head)
+                        @foreach(['No', 'Site', 'User', 'Certification Name', 'Type', 'Provider', 'Expired Date', 'Created at', 'Updated at', 'Action'] as $head)
                             <th class="px-4 py-3 border">{{ $head }}</th>
                         @endforeach
                     </tr>
@@ -146,6 +151,17 @@
                                              @else text-gray-700 @endif">
                                     {{ $c->expired_date->format('d-m-Y') }}
                                 </span>
+                            </td>
+                            <td class="border px-4 py-2">{{ $c->created_at->format('d-m-Y') }}</td>
+                            <td class="border px-4 py-2">{{ $c->updated_at->format('d-m-Y') }}</td>
+                              <td class="border px-4 py-2">
+                                <a href="{{ route('admin.certification.edit', $c->id) }}" 
+                                   class="text-blue-600 hover:text-blue-800 font-medium">
+                                   Edit
+                                </a>
+                                <a href="{{ route('admin.certification.show', $c->id) }}"
+                                    class="text-yellow-600 hover:text-yellow-800 font-medium p-2">
+                                    Detail</a>
                             </td>
                         </tr>
                     @empty

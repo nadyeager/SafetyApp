@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
             this.classList.remove('text-blue-600');
             this.classList.add('text-gray-400');
 
-            fetch(`/update-status/${id}`, {
+            fetch(`/update-status-accident/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

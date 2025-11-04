@@ -68,7 +68,11 @@
                             <td class="border px-4 py-2">{{ $m->corrective_action }}</td>
                             <td class="border px-4 py-2">{{ $m->date->format('d-m-Y') }}</td>
                             <td class="border px-4 py-2">{{ $m->created_at->format('d-m-Y') }}</td>
-                            <td class="border px-4 py-2 font-medium {{ $m->status == 'Open' ? 'text-blue-600' : 'text-green-600' }}">{{ ucfirst($m->status) }}</td>
+                             <td class="border px-4 py-2">
+                                    <span class="status-btn cursor-pointer font-medium {{ $m->status == 'open' ? 'text-blue-600' : 'text-gray-400' }}" data-id="{{ $m->id }}">
+                                        {{ ucfirst($m->status ?? '-') }}
+                                    </span>
+                                </td>
                             <td class="border px-4 py-2 text-gray-600">{{ Str::limit($m->notes, 40) }}</td>
                             <td class="border px-4 py-2 space-x-2">
                                 <button class="text-yellow-600 hover:underline"
@@ -138,7 +142,11 @@
                             <td class="border px-4 py-2">{{ $r->corrective_action }}</td>
                             <td class="border px-4 py-2">{{ $r->date->format('d-m-Y') }}</td>
                             <td class="border px-4 py-2">{{ $r->created_at->format('d-m-Y') }}</td>
-                            <td class="border px-4 py-2 font-medium {{ $r->status == 'Open' ? 'text-blue-600' : 'text-green-600' }}">{{ ucfirst($r->status) }}</td>
+                            <td class="border px-4 py-2">
+                                    <span class="status-btn cursor-pointer font-medium {{ $r->status == 'open' ? 'text-blue-600' : 'text-gray-400' }}" data-id="{{ $r->id }}">
+                                        {{ ucfirst($r->status ?? '-') }}
+                                    </span>
+                                </td>
                             <td class="border px-4 py-2 text-gray-600">{{ Str::limit($r->notes, 40) }}</td>
                             <td class="border px-4 py-2 space-x-2">
                                 <button class="text-yellow-600 hover:underline"
@@ -189,4 +197,43 @@
     </section>
 
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.status-btn').forEach(el => {
+        el.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const currentStatus = this.textContent.trim().toLowerCase();
+            if (currentStatus !== 'open') return;
+
+            const newStatus = 'close';
+            this.textContent = newStatus;
+            this.classList.remove('text-blue-600');
+            this.classList.add('text-gray-400');
+
+            fetch(`/update-status/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ status: newStatus })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success) {
+                    alert('Gagal update status!');
+                    this.textContent = 'Open';
+                    this.classList.add('text-blue-600');
+                }
+            })
+            .catch(() => {
+                alert('Terjadi kesalahan!');
+                this.textContent = 'Open';
+                this.classList.add('text-blue-600');
+            });
+        });
+    });
+});
+</script>
 @endsection

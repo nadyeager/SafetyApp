@@ -48,7 +48,7 @@
            class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-600 transition-colors"
            :class="{ 'bg-blue-900 font-semibold': '{{ request()->routeIs('admin.accident.*') }}' }">
             <i data-lucide="alert-triangle" class="w-5 h-5"></i>
-            Accident Investigation
+             Accident
         </a>
 
         <a href="{{ route('admin.inspection.index') }}" 

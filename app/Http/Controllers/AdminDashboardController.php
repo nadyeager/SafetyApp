@@ -99,6 +99,32 @@ $dataManhoursPartner = $manhoursBySites
     return view('admin.users.index', compact('users'));
 }
 
+public function editUser(User $user) {
+
+    $sites = Sites::all();
+    return view('admin.users.edit', compact('user', 'sites'));
+}
+    
+
+    // Update site user
+   public function updateUser(Request $request, User $user)
+{
+    $this->authorizeAdmin();
+
+    $request->validate([
+        'site_id' => ['required', 'exists:sites,id'],
+    ]);
+
+    $user->update([
+        'site_id' => $request->site_id,
+    ]);
+
+    return redirect()
+        ->route('admin.user.index', $user->id)
+        ->with('success', 'Site user berhasil diubah.');
+}
+
+
 // Daftar accident
 public function indexAccident() {
 
@@ -120,7 +146,7 @@ private function getAccidentStats() {
 
     return [
         'totalAccidents' => $accidents->count(),
-        'totalWorkAccidents' => $accidents->whereIn('type', ['Fatality', 'Major injury', 'Minor injury'])->count(),
+        'totalWorkAccidents' => $accidents->whereIn('type', ['Fatality', 'Mayor injury', 'Minor injury'])->count(),
         'totalTrafficAccidents' => $accidents->where('category', 'traffic accident')->count(),
         'totalNonWorkAccidents' => $accidents->whereIn('type', ['Property damage', 'Non Work Accident', 'Occupational disease'])->count(),
         'totalInvestigation' => $investigation,
@@ -132,7 +158,7 @@ private function getAccidentStats() {
 private function getAccidentsSec() {
     $accidents = Accident::with(['site', 'user'])->get();
 
-    $orderedtypes = ['Fatality', 'Major injury', 'Minor injury'];
+    $orderedtypes = ['Fatality', 'Mayor injury', 'Minor injury'];
 
     $orderedtypes2 = ['Property damage', 'Non Work Accident', 'Occupational disease'];
 
@@ -168,7 +194,7 @@ public function filteredAccident(Request $request) {
         ->get();
 
     // Urutan yang kamu inginkan
-    $orderedTypes = ['Fatality', 'Major injury', 'Minor injury', 'Traffic Accident', 'Non Work Accident'];
+    $orderedTypes = ['Fatality', 'Mayor injury', 'Minor injury', 'Traffic Accident', 'Non Work Accident'];
     $orderedTypes2 = ['Property damage', 'Non Work Accident', 'Occupational disease'];
 
     // === Group + Sort Berdasarkan Urutan ===
@@ -223,51 +249,33 @@ public function editAccident(Accident $accident) {
 public function updateAccident(Request $request, Accident $accident)
 {
     // Validasi
-    $validated = $request->validate([
+    $request->validate([
         'category' => 'required|in:work accident,traffic accident,non-work accident',
         'type' => $request->category === 'traffic accident' ? 'nullable' : 'required',
         'description' => 'required|string',
-        'date' => 'nullable|date',
         'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:10000',
-        'status' => 'required|in:open,close',
+        
     ]);
 
     // Tangani file
-    if ($request->hasFile('file')) {
-        $validated['file'] = $request->file('file')->store('accidents_file', 'public');
-    } else {
-        $validated['file'] = $accident->file; // tetap pakai file lama
-    }
+   $filePath = $accident->file; // default file lama
 
-    // Update accident
-    $accident->update($validated);
-
-    // Redirect ke index
-    return redirect()->route('admin.accident.index')
-        ->with('success', 'Accident updated successfully.');
+if ($request->hasFile('file')) {
+    $filePath = $request->file('file')->store('accidents_file', 'public');
 }
 
 
 
+$accident->update([
+    'category' => $request->category,
+    'type' => $request->type,
+    'description' => $request->description,
+    'file' => $filePath,
+]);
 
-    
-
-    // Update site user
-   public function update(Request $request, User $user)
-{
-    $this->authorizeAdmin();
-
-    $request->validate([
-        'site_id' => ['required', 'exists:sites,id'],
-    ]);
-
-    $user->update([
-        'site_id' => $request->site_id,
-    ]);
-
-    return redirect()
-        ->route('admin.user.edit', $user->id)
-        ->with('success', 'Site user berhasil diubah.');
+    // Redirect ke index
+    return redirect()->route('admin.accident.index')
+        ->with('success', 'Accident updated successfully.');
 }
 
 
@@ -345,25 +353,38 @@ public function updateAccident(Request $request, Accident $accident)
     public function updateInspection(Request $request, Inspections $inspection) {
         $request->validate([
             'type' => 'required|in:management,routine',
-            'notes' => 'required|string',
             'corrective_action' => 'required|string',
             'date' => 'required|date',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:10000',
         ]);
+
+        $filePath = $inspection->file; // default file lama
+
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('inspection_files', 'public');
+        }
 
         $inspection->update([
             'type' => $request->type,
-            'notes' => $request->notes,
             'corrective_action' => $request->corrective_action,
             'date' => $request->date,
+            'file' => $filePath,
             
         ]);
-        
-        dd($inspection->getChanges());
-;
 
         return redirect()->route('admin.inspection.index')->with('success', 'Inspection updated successfully.');
     }
 
+    public function updateStatusInspection(Request $request, $id)
+    {
+         $inspection = Inspections::findOrFail($id);
+
+    // Ubah statusnya
+    $inspection->status = $request->status;
+    $inspection->save();
+
+    return response()->json(['success' => true]);
+    }
     public function indexAssessment(Request $request, Assessments $assessments) {
 
         $assessments = Assessments::with(['site', 'user'])->latest()->paginate(10);
@@ -387,17 +408,24 @@ public function updateAccident(Request $request, Accident $accident)
 
     public function updateAssessment(Request $request, Assessments $assessment) {
         $request->validate([
-            'type' => 'required|in:SMK3,SMKP,AGC,MKA,CSMS',
+            'type' => 'required|in:SMK3,SMKP,AGC,MKA,CSMS,Others',
+            'other_name' => 'required_if:name,Others|string|max:255',
             'score' => 'required|numeric|min:0|max:100',
             'date' => 'required|date',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:10000',
         ]);
 
+        $filePath = $assessment->file; // default file lama
+
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('assessment_files', 'public');
+        }
+
         $assessment->update([
-            'site_id' => Auth::user()->site_id,
-            'user_id' => Auth::id(),
-            'type' => $request->type,
+            'type' => $request->type === 'Others' ? $request->other_name : $request->type,
             'score' => $request->score,
             'date' => $request->date,
+            'file' => $filePath,
         ]);
 
 
@@ -405,6 +433,10 @@ public function updateAccident(Request $request, Accident $accident)
         return redirect()->route('admin.assessment.index')->with('success', 'Assessment updated successfully.');
     }
 
+    public function showAssessment(Assessments $assessment) {
+        
+        return view('admin.assessment.show', compact('assessment'));
+    }
     public function indexManhour() {
 
         $manhour = Manhours::with('site')->get(); 
@@ -420,18 +452,23 @@ public function updateAccident(Request $request, Accident $accident)
         $request->validate([
             'type' => 'required|in:organik,partner',
             'total_hours' => 'required|numeric|min:0',
-            'month' => 'required|date',
-            'year' => 'required|date',
+'month' => 'required|integer|between:1,12',
+'year' => 'required|integer|min:1900|max:2100',
+
         ]);
 
         $manhour->update([
-            'site_id' => auth()->user()->site_id,
             'type' => $request->type,
             'total_hours' => $request->total_hours,
             'month' => $request->month,
             'year' => $request->year,
         ]);
         return redirect()->route('admin.manhour.index')->with('success', 'Manhour updated successfully.');
+    }
+
+    public function showManhour(Manhours $manhour) {
+        
+        return view('admin.manhour.show', compact('manhour'));
     }
 
     public function indexManpower() {
@@ -450,12 +487,11 @@ public function updateAccident(Request $request, Accident $accident)
             'type' => 'required|in:organik,partner',
             'gender' => 'required|in:male,female',
             'total' => 'required|numeric|min:0',
-            'month' => 'required|date',
-            'year' => 'required|date',
+            'month' => 'required|integer|between:1,12',
+            'year' => 'required|integer|min:1900|max:2100',
         ]);
 
         $manpower->update([
-            'site_id' => auth()->user()->site_id,
             'type' => $request->type,
             'gender' => $request->gender,   
             'total' => $request->total,
@@ -465,6 +501,11 @@ public function updateAccident(Request $request, Accident $accident)
         return redirect()->route('admin.manpower.index')->with('success', 'Manpower updated successfully.');
     }
 
+    public function showManpower(Manpower $manpower) {
+        
+        return view('admin.manpower.show', compact('manpower'));
+    }
+
     public function indexSafetyActivity() {
 
         $safetyActivity = SafetyActivities::with(['site', 'user'])->get();
@@ -472,25 +513,37 @@ public function updateAccident(Request $request, Accident $accident)
         return view('admin.safetyActivity.index', compact('safetyActivity'));
     }
 
+
+    public function showSafetyActivity(SafetyActivities $safetyActivity) {
+        
+        return view('admin.safetyActivity.show', compact('safetyActivity'));
+    }
     public function editSafetyActivity(SafetyActivities $safetyActivity) {
         return view('admin.safetyActivity.update', compact('safetyActivity'));            
     }
 
     public function updateSafetyActivity(Request $request, SafetyActivities $safetyActivity) {
         $request->validate([
-            'type' => 'required|in:safety_talk,p5m,meeting,campaign',
+            'type' => 'required|in:safety_talk,p5m,meeting,campaign,Others',
+            'other_type' => 'required_if:type,Others|string|max:255',
             'frequency' => 'required|in:daily,weekly,monthly',
             'date' => 'required|date',
             'notes' => 'required|string',
             'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:10000',
         ]);
+
+        $filePath = $safetyActivity->file; // default file lama
+
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('safety_activity_files', 'public');
+        }
           
         $safetyActivity->update([
-            'type' => $request->type,
+            'type' => $request->type === 'Others' ? $request->other_type : $request->type,
             'frequency' => $request->frequency,
             'date' => $request->date,
             'notes' => $request->notes,
-            'file' => $request->file('file') ? $request->file('file')->store('safety-activity') : $safetyActivity->file
+            'file' => $filePath,
 
         ]);
         return redirect()->route('admin.safetyActivity.index')->with('success', 'Safety Activity updated successfully.');
@@ -551,21 +604,25 @@ public function editTraining(Trainings $training) {
 }
 public function updateTraining(Request $request, Trainings $training) {
     $request->validate([
-        'name' => 'required|string',
+        'name' => 'required|in:Training POP,Training POM,Training POU,Others',
+        'other_name' => 'required_if:name,Others|string|max:255',
         'type' => 'required|in:mandatory,non-mandatory',
         'provider' => 'nullable|string',
         'expired_date' => 'nullable|date',
     ]);
 
     $training->update([
-        'site_id' => auth()->user()->site_id,
-        'user_id' => auth()->id(),
-        'name' => $request->name,
+        'name' => $request->name === 'Others' ? $request->other_name : $request->name,
         'type' => $request->type,
         'provider' => $request->provider,
         'expired_date' => $request->expired_date,
     ]);
     return redirect()->route('admin.training.index')->with('success', 'Training updated successfully.');
+}
+
+public function showTraining(Trainings $training) {
+
+    return view('admin.training.show', compact('training'));
 }
 
 public function indexCertification(Request $request) {
@@ -606,20 +663,24 @@ public function editCertification(Certifications $certification) {
 
 public function updateCertification(Request $request, Certifications $certification) {
     $request->validate([
-      'name' => 'required|string',
+      'name' => 'required|in:Certification AK3U,Certification AK3 Listrik,Certification First Aid,Certification Accident Investigation,Others',
+            'other_name' => 'required_if:name,Others|string|max:255',
         'type' => 'required|in:mandatory,non-mandatory',
         'provider' => 'nullable|string',
         'expired_date' => 'nullable|date',
     ]);
 
     $certification->update([
-        'site_id' => auth()->user()->site_id,
-        'user_id' => auth()->id(),
-        'name' => $request->name,
+         'name' => $request->name === 'Others' ? $request->other_name : $request->name,
         'type' => $request->type,
         'provider' => $request->provider,
         'expired_date' => $request->expired_date,
     ]);
     return redirect()->route('admin.certification.index')->with('success', 'Certification updated successfully.');
+}
+
+public function showCertification(Certifications $certification) {
+
+    return view('admin.certification.show', compact('certification'));
 }
 }

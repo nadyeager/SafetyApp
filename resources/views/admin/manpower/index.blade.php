@@ -42,6 +42,10 @@
                                  class="text-blue-600 hover:text-blue-800 font-medium">
                                 Edit
                             </a>
+                            <a href="{{ route('admin.manpower.show', $person->id) }}"
+                                 class="text-pink-600 hover:text-pink-800 font-medium">
+                                Detail
+                            </a>
                         </td>
                     </tr>
                 @empty

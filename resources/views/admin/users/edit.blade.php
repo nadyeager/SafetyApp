@@ -1,38 +1,42 @@
-@extends('layouts.app')
+@extends('layouts.navbar')
 
 @section('content')
-<h2 class="text-2xl font-semibold mb-4">Edit Site User</h2>
 
-@if(session('success'))
-<div class="bg-green-100 border border-green-400 text-green-800 px-4 py-2 rounded mb-4">
-    {{ session('success') }}
-</div>
-@endif
-
-<form method="POST" action="{{ route('admin.user.update', $user->id) }}">
+<form action="{{ route('admin.user.update', $user->id) }}" method="POST">
     @csrf
     @method('PUT')
 
-    <!-- Nama user readonly -->
-    <div class="mb-4">
-        <label class="block font-medium">Nama User:</label>
-        <input type="text" value="{{ $user->name }}" class="border rounded w-full px-3 py-2 bg-gray-100" readonly>
+    <div>
+        <x-input-label for="name" :value="__('Name')" />
+        <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name', $user->name)" />
+        <x-input-error :messages="$errors->get('name')" class="mt-2" />
     </div>
 
-    <!-- Pilih site -->
-    <div class="mb-4">
-        <label class="block font-medium">Pilih Site:</label>
-      <select name="site_id" class="border rounded w-full px-3 py-2">
-    @foreach($sites as $site)
-        <option value="{{ $site->id }}" {{ $user->site_id == $site->id ? 'selected' : '' }}>
-            {{ $site->name }}
-        </option>
-    @endforeach
-</select>
-
-
+    <div>
+        <x-input-label for="email" :value="__('Email')" />
+        <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $user->email)" />
+        <x-input-error :messages="$errors->get('email')" class="mt-2" />
     </div>
 
-    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Simpan</button>
+<div> 
+    <x-input-label for="site_id" :value="__('Sites')" />
+    <select id="site_id" name="site_id" class="block mt-1 w-full border-gray-300 rounded">
+        <option value="">-- Pilih Site --</option>
+        @foreach ($sites as $site)
+            <option value="{{ $site->id }}" 
+                {{ old('site_id', $user->site_id ?? '') == $site->id ? 'selected' : '' }}>
+                {{ $site->name }}
+            </option>
+        @endforeach
+    </select>
+    <x-input-error :messages="$errors->get('site_id')" class="mt-2" />
+</div>
+
+<div>
+    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded mt-4">Update</button>
+    <a href="{{ route('admin.user.index') }}" class="btn btn-secondary">Back</a>
+</div>
+
 </form>
+
 @endsection

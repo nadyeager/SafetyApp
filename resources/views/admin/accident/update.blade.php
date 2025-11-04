@@ -1,11 +1,9 @@
-@extends('layouts.navbar-admin')
+@extends('layouts.navbar')
 
 @section('title', 'Tambah Accidents')
 
 @section('content')
     <h1 class="text-2xl font-bold mb-4">Edit Laporan Accidents User</h1>
-
-<p>Form action: {{ route('admin.accident.update', $accident->id) }}</p>
 
   <form action="{{ route('admin.accident.update', $accident->id) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
     @csrf
@@ -32,7 +30,7 @@
             <select name="type" id="type" class="mt-1 block w-full border-gray-300 rounded">
                 <option value="">-- pilih --</option>
                 <option value="Fatality" {{ old('type', $accident->type) == 'Fatality' ? 'selected' : '' }}>Fatality</option>
-                <option value="Major injury" {{ old('type', $accident->type) == 'Major injury' ? 'selected' : '' }}>Major injury</option>
+                <option value="Mayor injury" {{ old('type', $accident->type) == 'Mayor injury' ? 'selected' : '' }}>Mayor injury</option>
                 <option value="Minor injury" {{ old('type', $accident->type) == 'Minor injury' ? 'selected' : '' }}>Minor injury</option>
                 <option value="Property damage" {{ old('type', $accident->type) == 'Property damage' ? 'selected' : '' }}>Property damage
                 </option>
@@ -70,6 +68,7 @@
             <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
                 Update Accidents
             </button>
+            <a href="{{ route('admin.accident.index') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Back</a>
         </div>
     </form>
 
@@ -94,7 +93,7 @@
 
             categorySelect.addEventListener('change', function () {
                 const selectedCategory = this.value;
-                typeSelect.innerHTML = '<option value="">-- pilih --</option>'; // reset dulu
+                typeSelect.innerHTML = '<option value="">-- pilih --</option>'; 
 
                 // Kalau traffic accident, sembunyikan dropdown type
                 if (selectedCategory === 'traffic accident') {

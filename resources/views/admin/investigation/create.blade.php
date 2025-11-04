@@ -1,4 +1,4 @@
-@extends('layouts.navbar-admin')
+@extends('layouts.navbar')
 @section('content')
 <h1 class="text-2xl font-bold mb-4">Create Investigation</h1>
 
@@ -24,9 +24,13 @@
                 <x-input-error :messages="$errors->get('corrective_action')" class="mt-2" />
             </div>
 
+            <div> 
             <button type="submit" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded">
                 Submit
-            </button>
+                </button>
+
+                <a href="{{ route('admin.accident.index') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Back</a>
+            </div>
         </form>
 
 </div>

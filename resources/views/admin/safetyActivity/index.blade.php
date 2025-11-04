@@ -17,6 +17,8 @@
                     <th class="border px-4 py-3">Date</th>
                     <th class="border px-4 py-3">Notes</th>
                     <th class="border px-4 py-3">File</th>
+                    <th class="border px-4 py-3">Created at</th>
+                    <th class="border px-4 py-3">Updated at</th>
                     <th class="border px-4 py-3 text-center">Action</th>
                 </tr>
             </thead>
@@ -41,10 +43,16 @@
                                 <span class="text-gray-400 italic">No file</span>
                             @endif
                         </td>
+                        <td class="border px-4 py-2 text-gray-700">{{ $s->created_at->format('d-m-Y') }}</td>
+                        <td class="border px-4 py-2 text-gray-700">{{ $s->updated_at->format('d-m-Y') }}</td>
                         <td class="border px-4 py-2 text-center">
                             <a href="{{ route('admin.safetyActivity.edit', $s->id) }}" 
                                class="text-blue-600 hover:text-blue-800 font-medium">
                                Edit
+                            </a>
+                            <a href="{{ route('admin.safetyActivity.show', $s->id) }}" 
+                               class="text-pink-600 hover:text-pink-800 font-medium">
+                               Detail
                             </a>
                         </td>
                     </tr>

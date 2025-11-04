@@ -35,7 +35,6 @@
 
             <div class="mb-4">
                 <label class="block text-sm font-medium">Type</label>
-                <!-- ✅ Tambahkan id="select" -->
                 <select id="select" name="type" class="mt-1 block w-full border-gray-300 rounded" required>
                     <option value="SMK3" {{ old('type') == 'SMK3' ? 'selected' : '' }}>SMK3</option>
                     <option value="SMKP" {{ old('type') == 'SMKP' ? 'selected' : '' }}>SMKP</option>
@@ -45,7 +44,6 @@
                     <option value="Others" {{ old('type') == 'Others' ? 'selected' : '' }}>Others</option>
                 </select>
 
-                <!-- Input muncul kalau pilih "Others" -->
                 <div id="others" style="display: none; margin-top: 10px;">
                     <x-input-label for="other_name" :value="__('another assessment name')" />
                     <x-text-input id="other_name" class="block mt-1 w-full" type="text" name="other_name"

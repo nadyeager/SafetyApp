@@ -49,13 +49,13 @@ Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name
 Route::resource('/sites', SitesController::class);
 
 Route::get('/admin/users', [AdminDashboardController::class, 'indexUser'])->name('admin.user.index');
-Route::get('/admin/users/{user}/edit', [AdminDashboardController::class, 'edit'])->name('admin.user.edit');
-Route::put('/admin/users/{user}', [AdminDashboardController::class, 'update'])->name('admin.user.update');
+Route::get('/admin/users/edit/{user}', [AdminDashboardController::class, 'editUser'])->name('admin.user.edit');
+Route::put('/admin/users/{user}', [AdminDashboardController::class, 'updateUser'])->name('admin.user.update');
 
 Route::get('/admin/dashboard/accident',[AdminDashboardController::class, 'indexAccident'] )->name('admin.accident.index');
 Route::get('/admin/accidents/show/{accident}', [AdminDashboardController::class, 'show'])->name('admin.accident.show');
 Route::get('/admin/accident/filtered', [AdminDashboardController::class, 'filteredAccident'])->name('admin.accident.filter');
-Route::post('/update-status/{id}', [AdminDashboardController::class, 'updateStatus'])->name('update.status');
+Route::post('/update-status-accident/{id}', [AdminDashboardController::class, 'updateStatus'])->name('update.status');
 Route::get('/admin/accident/edit/{accident}', [AdminDashboardController::class, 'editAccident'])->name('admin.accident.edit');
 Route::put('/admin/accident/update/{accident}', [AdminDashboardController::class, 'updateAccident'])->name('admin.accident.update');
 
@@ -65,6 +65,7 @@ Route::get('/admin/inspection/show/{inspection}', [AdminDashboardController::cla
 Route::get('/admin/inspection/edit/{inspection}', [AdminDashboardController::class, 'editInspection'])->name('admin.inspection.edit');
 Route::put('/admin/inspection/update/{inspection}', [AdminDashboardController::class, 'updateInspection'])->name('admin.inspection.update');
 Route::put('/admin/inspection/{id}/notes', [AdminDashboardController::class, 'updateNotes'])->name('admin.inspection.updateNotes');
+Route::post('/update-status/{id}', [AdminDashboardController::class, 'updateStatusInspection'])->name('update.status');
 
 
 Route::get('/admin/investigations/{accident}', [InvestigationController::class, 'index'])->name('investigations.index');
@@ -77,29 +78,35 @@ Route::delete('/admin/investigations/{investigation}', [InvestigationController:
 
 Route::get('/admin/assessment/index', [AdminDashboardController::class, 'indexAssessment'])->name('admin.assessment.index');
 Route::get('/admin/assessment/adit/{assessment}', [AdminDashboardController::class, 'editAssessment'])->name('admin.assessment.edit');
-Route::put('/admin/assessment/update/{assessment}', [AdminDashboardController::class, 'updateAssessment'])->name('admin.assessment.update');
+Route::put('/admin/assessment/{assessment}', [AdminDashboardController::class, 'updateAssessment'])->name('admin.assessment.update');
+Route::get('/admin/assessment/show/{assessment}', [AdminDashboardController::class, 'showAssessment'])->name('admin.assessment.show');
 
 Route::get('/admin/manhour/index', [AdminDashboardController::class, 'indexManhour'])->name('admin.manhour.index');
 Route::get('/admin/manhour/edit/{manhour}', [AdminDashboardController::class, 'editManhour'])->name('admin.manhour.edit');
-Route::put('/admin/manhour/update/{manhour}', [AdminDashboardController::class, 'updateManhour'])->name('admin.manhour.update');
+Route::put('/admin/manhour/{manhour}', [AdminDashboardController::class, 'updateManhour'])->name('admin.manhour.update');
+Route::get('/admin/manhour/show/{manhour}', [AdminDashboardController::class, 'showManhour'])->name('admin.manhour.show');
 
 Route::get('/admin/manpower/index', [AdminDashboardController::class, 'indexManpower'])->name('admin.manpower.index');
 Route::get('/admin/manpower/edit/{manpower}', [AdminDashboardController::class, 'editManpower'])->name('admin.manpower.edit');
-Route::put('/admin/manpower/update/{manpower}', [AdminDashboardController::class, 'updateManpower'])->name('admin.manpower.update');
+Route::put('/admin/manpower/{manpower}', [AdminDashboardController::class, 'updateManpower'])->name('admin.manpower.update');
+Route::get('/admin/manpower/show/{manpower}', [AdminDashboardController::class, 'showManpower'])->name('admin.manpower.show');
 
 Route::get('/admin/safetyActivity/index', [AdminDashboardController::class, 'indexSafetyActivity'])->name('admin.safetyActivity.index');
-Route::get('/admin/safetyActivity/edit/{type}', [AdminDashboardController::class, 'editSafetyActivity'])->name('admin.safetyActivity.edit');
-Route::put('/admin/safetyActivity/update/{type}', [AdminDashboardController::class, 'updateSafetyActivity'])->name('admin.safetyActivity.update');
+Route::get('/admin/safetyActivity/edit/{safetyActivity}', [AdminDashboardController::class, 'editSafetyActivity'])->name('admin.safetyActivity.edit');
+Route::put('/admin/safetyActivity/{safetyActivity}', [AdminDashboardController::class, 'updateSafetyActivity'])->name('admin.safetyActivity.update');
+Route::get('/admin/safetyActivity/show/{safetyActivity}', [AdminDashboardController::class, 'showSafetyActivity'])->name('admin.safetyActivity.show');
 
 Route::get('/admin/training/index', [AdminDashboardController::class, 'indexTraining'])->name('admin.training.index');
 Route::get('/admin/training/filtered', [AdminDashboardController::class, 'filteredTraining'])->name('admin.training.filter');
 Route::get('/admin/training/edit/{training}', [AdminDashboardController::class, 'editTraining'])->name('admin.training.edit');
-Route::put('/admin/training/update/{training}', [AdminDashboardController::class, 'updateTraining'])->name('admin.training.update');
+Route::put('/admin/training/{training}', [AdminDashboardController::class, 'updateTraining'])->name('admin.training.update');
+Route::get('/admin/training/show/{training}', [AdminDashboardController::class, 'showTraining'])->name('admin.training.show');
 
 Route::get('/admin/certification/index', [AdminDashboardController::class, 'indexCertification'])->name('admin.certification.index');
 Route::get('/admin/certification/filtered', [AdminDashboardController::class, 'filteredCertification'])->name('admin.certification.filter');
 Route::get('/admin/certification/edit/{certification}', [AdminDashboardController::class, 'editCertification'])->name('admin.certification.edit');
 Route::put('/admin/certification/update/{certification}', [AdminDashboardController::class, 'updateCertification'])->name('admin.certification.update');
+Route::get('/admin/certification/show/{certification}', [AdminDashboardController::class, 'showCertification'])->name('admin.certification.show');
 
 });
 

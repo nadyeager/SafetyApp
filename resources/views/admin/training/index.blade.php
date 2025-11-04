@@ -55,7 +55,7 @@
             <table class="w-full text-sm text-left border-collapse">
                 <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                     <tr>
-                        @foreach(['No', 'Site', 'User', 'Training Name', 'Type', 'Provider', 'Action'] as $head)
+                        @foreach(['No', 'Site', 'User', 'Training Name', 'Type', 'Provider', 'Date Created', 'Updated At', 'Action'] as $head)
                             <th class="px-4 py-3 border">{{ $head }}</th>
                         @endforeach
                     </tr>
@@ -69,10 +69,15 @@
                             <td class="border px-4 py-2 font-medium text-gray-800">{{ $c->name }}</td>
                             <td class="border px-4 py-2 text-green-700 font-semibold capitalize">{{ $c->type }}</td>
                             <td class="border px-4 py-2 text-gray-600">{{ $c->provider }}</td>
+                            <td class="border px-4 py-2 text-gray-600">{{ $c->created_at->format('d-m-Y') }}</td>
+                            <td class="border px-4 py-2 text-gray-600">{{ $c->updated_at->format('d-m-Y') }}</td>
                             <td class="border px-4 py-2">
                                 <a href="{{ route('admin.training.edit', $c->id) }}" 
                                    class="text-blue-600 hover:text-blue-800 font-medium">
                                    Edit
+                                </a>
+                                <a href="{{ route('admin.training.show', $c->id) }}"
+                                    class="text-yellow-600 hover:text-yellow-800 font-medium p-2">Detail
                                 </a>
                             </td>
                         </tr>
@@ -94,7 +99,7 @@
             <table class="w-full text-sm text-left border-collapse">
                 <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                     <tr>
-                        @foreach(['No', 'Site', 'User', 'Training Name', 'Type', 'Provider', 'Action'] as $head)
+                        @foreach(['No', 'Site', 'User', 'Training Name', 'Type', 'Provider', 'Date Created', 'Updated At', 'Action'] as $head)
                             <th class="px-4 py-3 border">{{ $head }}</th>
                         @endforeach
                     </tr>
@@ -108,10 +113,15 @@
                             <td class="border px-4 py-2 font-medium text-gray-800">{{ $c->name }}</td>
                             <td class="border px-4 py-2 text-blue-700 font-semibold capitalize">{{ $c->type }}</td>
                             <td class="border px-4 py-2 text-gray-600">{{ $c->provider }}</td>
+                            <td class="border px-4 py-2 text-gray-600">{{ $c->created_at->format('d-m-Y') }}</td>
+                            <td class="border px-4 py-2 text-gray-600">{{ $c->updated_at->format('d-m-Y') }}</td>
                             <td class="border px-4 py-2">
                                 <a href="{{ route('admin.training.edit', $c->id) }}" 
                                    class="text-blue-600 hover:text-blue-800 font-medium">
                                    Edit
+                                </a>
+                                 <a href="{{ route('admin.training.show', $c->id) }}"
+                                    class="text-yellow-600 hover:text-yellow-800 font-medium p-2">Detail
                                 </a>
                             </td>
                         </tr>

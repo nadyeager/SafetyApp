@@ -48,7 +48,7 @@ class InvestigationController extends Controller
             'corrective_action' => $request->corrective_action,
         ]);
 
-        return redirect()->route('investigations.index')->with('success', 'Investigation created successfully.');
+        return redirect()->route('investigations.index', ['accident' => $request->accident_id])->with('success', 'Investigation created successfully.');
     }
 
     /**

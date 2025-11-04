@@ -38,6 +38,8 @@
                 <th class="px-4 py-3 border">Score</th>
                 <th class="px-4 py-3 border">Site</th>
                 <th class="px-4 py-3 border">User</th>
+                <th class="px-4 py-3 border">Created at</th>
+                <th class="px-4 py-3 border">Updated at</th>
                 <th class="px-4 py-3 border">Action</th>
             </tr>
         </thead>
@@ -45,15 +47,21 @@
             @forelse ($assessments as $a)
                 <tr class="hover:bg-gray-50 transition">
                     <td class="border px-4 py-2">{{ $loop->iteration }}</td>
-                    <td class="border px-4 py-2">{{ $a->date }}</td>
+                    <td class="border px-4 py-2">{{ $a->date->format('d-m-Y') }}</td>
                     <td class="border px-4 py-2 font-medium text-gray-800">{{ $a->type }}</td>
                     <td class="border px-4 py-2 text-pink-700 font-semibold">{{ $a->score }}</td>
                     <td class="border px-4 py-2">{{ $a->site->name }}</td>
                     <td class="border px-4 py-2">{{ $a->user->name }}</td>
+                    <td class="border px-4 py-2">{{ $a->created_at->format('d-m-Y') }}</td>
+                    <td class="border px-4 py-2">{{ $a->updated_at->format('d-m-Y') }}</td>
                     <td class="border px-4 py-2">
                         <a href="{{ route('admin.assessment.edit', $a->id) }}" 
                            class="text-blue-600 hover:text-blue-800 font-medium">
                            Edit
+                        </a>
+                        <a href="{{ route('admin.assessment.show', $a->id) }}" 
+                           class="text-pink-600 hover:text-pink-800 font-medium">
+                           Detail
                         </a>
                     </td>
                 </tr>

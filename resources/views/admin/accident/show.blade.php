@@ -1,4 +1,4 @@
-@extends('layouts.navbar-admin')
+@extends('layouts.navbar')
 
 @section('content')
 <div class="max-w-2xl mx-auto mt-10">
@@ -30,7 +30,7 @@
             <p><span class="font-semibold text-gray-700">Category:</span> {{ $accident->category }}</p>
             <p><span class="font-semibold text-gray-700">Tipe:</span> {{ ucfirst($accident->type) }}</p>
             <p><span class="font-semibold text-gray-700">Deskripsi:</span> {{ $accident->description }}</p>
-            <p><span class="font-semibold text-gray-700">Tanggal:</span> {{ $accident->date }}</p>
+            <p><span class="font-semibold text-gray-700">Tanggal:</span> {{ $accident->date->format('d-m-Y') }}</p>
 
             <p>
                 <span class="font-semibold text-gray-700">Status Accident:</span>
