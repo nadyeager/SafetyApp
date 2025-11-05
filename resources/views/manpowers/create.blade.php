@@ -43,11 +43,10 @@
                     <x-input-error :messages="$errors->get('year')" class="mt-2" />
         </div>
 
-        <div>
-                       <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                Simpan
-            </button>
-        </div>
+            <div class="flex items-center space-x-2">
+                <button class="px-4 py-2 bg-green-600 text-white rounded">Save</button>
+                <a href="{{ route('safety-activities.index') }}" class="px-4 py-2 bg-gray-100 rounded">Cancel</a>
+            </div>
     </form>
 
     @endsection
