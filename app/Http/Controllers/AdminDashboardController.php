@@ -35,7 +35,7 @@ public function index(Request $request)
 
     $labelsSiteCategory = $siteByCategory->pluck('category')->toArray();
     $dataSiteCategory = $siteByCategory->pluck('total')->toArray();
-
+   
     // Total manpower
     $manpowerBySites = manpower::selectRaw('site_id, type, SUM(total) as total')
         ->whereMonth('created_at', $monthNumber)

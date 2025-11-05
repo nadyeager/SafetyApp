@@ -71,139 +71,169 @@
     </div>
 
     {{-- WORK ACCIDENT SECTION --}}
-    <div class="mt-10">
-        <h2 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">Work Accident</h2>
+ 
+<div class="mt-10">
+    <h2 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">Work Accident</h2>
 
-        @foreach ($workAccidents as $type => $items)
-            <div class="mt-6">
-                <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-lg font-semibold text-gray-700">{{ $type }}</h3>
-                    <span class="text-sm text-gray-500">{{ count($items ?? []) }} Cases</span>
-                </div>
-
-                <div class="overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-sm">
-                    <table class="w-full text-sm text-left">
-                        <thead class="bg-gray-100 text-gray-600">
-                            <tr>
-                                @foreach(['No', 'Category', 'Type', 'Status', 'Date of Incident', 'Created At', 'Action', 'Updated At'] as $head)
-                                    <th class="px-4 py-2 border">{{ $head }}</th>
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($items as $item)
-                                <tr class="hover:bg-gray-50">
-                                    <td class="border px-4 py-2">{{ $loop->iteration }}</td>
-                                    <td class="border px-4 py-2">{{ $item->category }}</td>
-                                    <td class="border px-4 py-2">{{ $item->type }}</td>
-                                    <td class="border px-4 py-2">
-                                        <span class="status-btn cursor-pointer font-medium {{ $item->status == 'open' ? 'text-blue-600' : 'text-gray-400' }}" data-id="{{ $item->id }}">
-                                            {{ ucfirst($item->status ?? '-') }}
-                                        </span>
-                                    </td>
-                                    <td class="border px-4 py-2">{{ $item->date->format('d-m-Y') }}</td>
-                                    <td class="border px-4 py-2">{{ $item->created_at->format('d-m-Y') }}</td>
-                                    <td class="border px-4 py-2 space-x-2">
-                                        <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-600 hover:underline">Detail</a>
-                                        <a href="{{ route('investigations.index', $item->id) }}" class="text-yellow-600 hover:underline">Investigate</a>
-                                        <a href="{{ route('admin.accident.edit', $item->id) }}" class="text-green-600 hover:underline">Edit</a>
-                                    </td>
-                                    <td class="border px-4 py-2">{{ $item->updated_at->format('d-m-Y') }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+    @foreach ($workAccidents as $type => $items)
+        <div class="mt-6">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-lg font-semibold text-gray-700">{{ $type }}</h3>
+                <span class="text-sm text-gray-500">{{ count($items ?? []) }} Cases</span>
             </div>
-        @endforeach
-    </div>
 
-    {{-- TRAFFIC ACCIDENT --}}
-    <div class="mt-10">
-        <h2 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">Traffic Accident</h2>
-        @if(!empty($trafficAccidents) && count($trafficAccidents) > 0)
-            <p class="text-sm text-gray-500 mb-2">{{ count($trafficAccidents) }} Cases</p>
             <div class="overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-sm">
-                <table class="w-full text-sm text-left">
+              
+                <table class="w-full text-sm text-left table-fixed">
                     <thead class="bg-gray-100 text-gray-600">
                         <tr>
-                            @foreach(['No', 'Category', 'Status', 'Date of Incident', 'Created At', 'Action', 'Updated At'] as $head)
-                                <th class="px-4 py-2 border">{{ $head }}</th>
-                            @endforeach
+                            
+                            <th class="px-4 py-2 text-center border w-12">No</th>
+                            <th class="px-4 py-2 text-center border w-1/6">Site</th>
+                            <th class="px-4 py-2 text-center border w-20">Name</th>
+                            <th class="px-4 py-2 text-center border w-28">Category</th>
+                            <th class="px-4 py-2 text-center border w-20">Type</th>
+                            <th class="px-4 py-2 text-center border w-1/6">Date of Accident</th>
+                            <th class="px-4 py-2 text-center border w-20">Status</th>
+                            <th class="px-4 py-2 text-center border w-48">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($trafficAccidents as $item)
+                        @foreach ($items as $item)
                             <tr class="hover:bg-gray-50">
-                                <td class="border px-4 py-2">{{ $loop->iteration }}</td>
+                                <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
+                                <td class="border px-4 py-2">{{ $item->site->name }}</td>
+                                <td class="border px-4 py-2">{{ $item->user->name }}</td>
                                 <td class="border px-4 py-2">{{ $item->category }}</td>
-                                <td class="border px-4 py-2">
-                                    <span class="status-btn cursor-pointer font-medium {{ $item->status == 'open' ? 'text-blue-600' : 'text-gray-400' }}" data-id="{{ $item->id }}">
+                                <td class="border px-4 py-2">{{ $item->type }}</td>
+                                <td class="border px-4 py-2">{{ $item->date->format('d-m-Y') }}</td>
+                                <td class="border px-4 py-2 text-center"> 
+                                    <span class="px-3 py-1 rounded-full text-sm {{ $item->status == 'open' ? 'bg-yellow-200 text-yellow-800' : 'bg-green-200 text-green-800' }}" data-id="{{ $item->id }}">
                                         {{ ucfirst($item->status ?? '-') }}
                                     </span>
-                                </td>
-                                <td class="border px-4 py-2">{{ $item->date->format('d-m-Y') }}</td>
-                                <td class="border px-4 py-2">{{ $item->created_at->format('d-m-Y') }}</td>
-                                <td class="border px-4 py-2 space-x-2">
-                                    <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-600 hover:underline">Detail</a>
-                                    <a href="{{ route('investigations.index', $item->id) }}" class="text-yellow-600 hover:underline">Investigate</a>
-                                    <a href="{{ route('admin.accident.edit', $item->id) }}" class="text-green-600 hover:underline">Edit</a>
-                                </td>
-                                <td class="border px-4 py-2">{{ $item->updated_at->format('d-m-Y') }}</td>
+                               <td class="border px-4 py-2 text-center"> 
+   
+    <div class="flex justify-center space-x-2"> 
+        <a href="{{ route('investigations.index', $item->id) }}" class="px-3 py-1 rounded-lg bg-amber-500 text-white hover:bg-amber-600 text-sm">Investigate</a>
+        <a href="{{ route('admin.accident.edit', $item->id) }}" class="px-3 py-1 rounded-lg bg-slate-600 text-white hover:bg-slate-700 text-sm">Edit</a>
+        <a href="{{ route('admin.accident.show', $item->id) }}" class="px-3 py-1 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm">Detail</a>
+    </div>
+</td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-        @endif
+        </div>
+    @endforeach
+</div>
+
+{{-- TRAFFIC ACCIDENT --}}
+<div class="mt-10">
+    <h2 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">Traffic Accident</h2>
+    @if(!empty($trafficAccidents) && count($trafficAccidents) > 0)
+
+        <p class="text-sm text-gray-500 mb-2">{{ count($trafficAccidents) }} Cases</p>
+                   <div class="overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-sm">
+              
+                <table class="w-full text-sm text-left table-fixed">
+                    <thead class="bg-gray-100 text-gray-600">
+                        <tr>
+                            
+                            <th class="px-4 py-2 text-center border w-12">No</th>
+                            <th class="px-4 py-2 text-center border w-1/6">Site</th>
+                            <th class="px-4 py-2 text-center border w-20">Name</th>
+                            <th class="px-4 py-2 text-center border w-28">Category</th>
+                            <th class="px-4 py-2 text-center border w-20">Type</th>
+                            <th class="px-4 py-2 text-center border w-1/6">Date of Accident</th>
+                            <th class="px-4 py-2 text-center border w-20">Status</th>
+                            <th class="px-4 py-2 text-center border w-48">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($items as $item)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
+                                <td class="border px-4 py-2">{{ $item->site->name }}</td>
+                                <td class="border px-4 py-2">{{ $item->user->name }}</td>
+                                <td class="border px-4 py-2">{{ $item->category }}</td>
+                                <td class="border px-4 py-2">{{ $item->type }}</td>
+                                <td class="border px-4 py-2">{{ $item->date->format('d-m-Y') }}</td>
+                                <td class="border px-4 py-2 text-center"> 
+                                    <span class="px-3 py-1 rounded-full text-sm {{ $item->status == 'open' ? 'bg-yellow-200 text-yellow-800' : 'bg-green-200 text-green-800' }}" data-id="{{ $item->id }}">
+                                        {{ ucfirst($item->status ?? '-') }}
+                                    </span>
+                               <td class="border px-4 py-2 text-center"> 
+   
+    <div class="flex justify-center space-x-2"> 
+        <a href="{{ route('investigations.index', $item->id) }}" class="px-3 py-1 rounded-lg bg-amber-500 text-white hover:bg-amber-600 text-sm">Investigate</a>
+        <a href="{{ route('admin.accident.edit', $item->id) }}" class="px-3 py-1 rounded-lg bg-slate-600 text-white hover:bg-slate-700 text-sm">Edit</a>
+        <a href="{{ route('admin.accident.show', $item->id) }}" class="px-3 py-1 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm">Detail</a>
     </div>
+</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+</div>
 
-    {{-- NON WORK ACCIDENT --}}
-    <div class="mt-10">
-        <h2 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">Non Work Accident</h2>
-        @foreach ($nonWorkAccidents as $type => $items)
-            <div class="mt-6">
-                <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-lg font-semibold text-gray-700">{{ $type }}</h3>
-                    <span class="text-sm text-gray-500">{{ count($items) }} Cases</span>
-                </div>
+{{-- NON WORK ACCIDENT --}}
+<div class="mt-10">
+    <h2 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">Non Work Accident</h2>
 
-                <div class="overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-sm">
-                    <table class="w-full text-sm text-left">
-                        <thead class="bg-gray-100 text-gray-600">
-                            <tr>
-                                @foreach(['No', 'Category', 'Type', 'Status', 'Date of Incident', 'Created At', 'Action', 'Updated At'] as $head)
-                                    <th class="px-4 py-2 border">{{ $head }}</th>
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($items as $item)
-                                <tr class="hover:bg-gray-50">
-                                    <td class="border px-4 py-2">{{ $loop->iteration }}</td>
-                                    <td class="border px-4 py-2">{{ $item->category }}</td>
-                                    <td class="border px-4 py-2">{{ $item->type }}</td>
-                                    <td class="border px-4 py-2">
-                                        <span class="status-btn cursor-pointer font-medium {{ $item->status == 'open' ? 'text-blue-600' : 'text-gray-400' }}" data-id="{{ $item->id }}">
-                                            {{ ucfirst($item->status ?? '-') }}
-                                        </span>
-                                    </td>
-                                    <td class="border px-4 py-2">{{ $item->date->format('d-m-Y') }}</td>
-                                    <td class="border px-4 py-2">{{ $item->created_at->format('d-m-Y') }}</td>
-                                    <td class="border px-4 py-2 space-x-2">
-                                        <a href="{{ route('admin.accident.show', $item->id) }}" class="text-blue-600 hover:underline">Detail</a>
-                                        <a href="{{ route('investigations.index', $item->id) }}" class="text-yellow-600 hover:underline">Investigate</a>
-                                        <a href="{{ route('admin.accident.edit', $item->id) }}" class="text-green-600 hover:underline">Edit</a>
-                                    </td>
-                                    <td class="border px-4 py-2">{{ $item->updated_at->format('d-m-Y') }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+    @foreach ($nonWorkAccidents as $type => $items)
+        <div class="mt-6">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-lg font-semibold text-gray-700">{{ $type }}</h3>
+                <span class="text-sm text-gray-500">{{ count($items) }} Cases</span>
             </div>
-        @endforeach
+
+                      <div class="overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-sm">
+              
+                <table class="w-full text-sm text-left table-fixed">
+                    <thead class="bg-gray-100 text-gray-600">
+                        <tr>
+                            
+                            <th class="px-4 py-2 text-center border w-12">No</th>
+                            <th class="px-4 py-2 text-center border w-1/6">Site</th>
+                            <th class="px-4 py-2 text-center border w-20">Name</th>
+                            <th class="px-4 py-2 text-center border w-28">Category</th>
+                            <th class="px-4 py-2 text-center border w-20">Type</th>
+                            <th class="px-4 py-2 text-center border w-1/6">Date of Accident</th>
+                            <th class="px-4 py-2 text-center border w-20">Status</th>
+                            <th class="px-4 py-2 text-center border w-48">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($items as $item)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
+                                <td class="border px-4 py-2">{{ $item->site->name }}</td>
+                                <td class="border px-4 py-2">{{ $item->user->name }}</td>
+                                <td class="border px-4 py-2">{{ $item->category }}</td>
+                                <td class="border px-4 py-2">{{ $item->type }}</td>
+                                <td class="border px-4 py-2">{{ $item->date->format('d-m-Y') }}</td>
+                                <td class="border px-4 py-2 text-center"> 
+                                    <span class="px-3 py-1 rounded-full text-sm {{ $item->status == 'open' ? 'bg-yellow-200 text-yellow-800' : 'bg-green-200 text-green-800' }}" data-id="{{ $item->id }}">
+                                        {{ ucfirst($item->status ?? '-') }}
+                                    </span>
+                               <td class="border px-4 py-2 text-center"> 
+   
+    <div class="flex justify-center space-x-2"> 
+        <a href="{{ route('investigations.index', $item->id) }}" class="px-3 py-1 rounded-lg bg-amber-500 text-white hover:bg-amber-600 text-sm">Investigate</a>
+        <a href="{{ route('admin.accident.edit', $item->id) }}" class="px-3 py-1 rounded-lg bg-slate-600 text-white hover:bg-slate-700 text-sm">Edit</a>
+        <a href="{{ route('admin.accident.show', $item->id) }}" class="px-3 py-1 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm">Detail</a>
     </div>
+</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endforeach
 </div>
 
 
